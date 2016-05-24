@@ -46,6 +46,21 @@ module Marc_Cleanup
     end
   end
 
+  def combining_chars
+    Dir.glob('./../parsed/*.mrc.parsed') do |file|
+      File.open("#{file}", 'r') do |input|
+        puts "Processing #{file}..."
+        File.open('./../marctofix/combining_chars.mrc', 'a') do |output|
+          while line = input.gets
+            if line.match(/\P{L}\p{M}+/)
+              output.write(line.gsub(/(\P{L}\p{M}+)/, '░\1░').chomp)
+            end
+          end
+        end
+      end
+    end
+  end
+
   def invalid_chars
     good_chars = Marc_Cleanup::CHARSET.keys
     Dir.glob('./../parsed/*.mrc.parsed') do |file|
