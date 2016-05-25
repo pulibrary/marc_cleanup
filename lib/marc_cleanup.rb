@@ -1,0 +1,12 @@
+require File.dirname(__FILE__) + '/marc_cleanup/authorities'
+require File.dirname(__FILE__) + '/marc_cleanup/constants'
+require File.dirname(__FILE__) + '/marc_cleanup/unicode_repertoire'
+require File.dirname(__FILE__) + '/marc_cleanup/marc_methods'
+require File.dirname(__FILE__) + '/marc_cleanup/marc_parsing'
+require File.dirname(__FILE__) + '/marc_cleanup/xml_methods'
+require File.dirname(__FILE__) + '/marc_cleanup/record_dump'
+require File.dirname(__FILE__) + '/marc_cleanup/version'
+require File.dirname(__FILE__) + '/marc_cleanup/credentials'
+require File.dirname(__FILE__) + '/marc_cleanup/oracle_connection'
+require 'marc'
+include Marc_Cleanup
