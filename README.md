@@ -28,6 +28,8 @@ invalid_subfield_code - Identify bibliographic MARC records with subfield codes 
 
 tab_char - Identify MARC records that have a tab character instead of a space.
 
+combining_chars - Identify MARC records that have combining diacritics not attached to letters.
+
 ### Within xml_methods.rb:
 no_245 - Identify records by bib ID that do not have a 245 field.
 
