@@ -1,6 +1,6 @@
 # marc_cleanup
 A collection of Ruby methods to identify errors in MARC records and correct them automatically when possible.
-It also includes some methods to extract records from Voyager. Update 'credentials.rb' with the ODBC credentials to your database.
+It also includes some methods to extract records from Voyager. Create 'credentials.rb' with the ODBC credentials to your database and place it in lib/marc_cleanup.
 
 ## Included methods
 ### Within record_dump.rb:
