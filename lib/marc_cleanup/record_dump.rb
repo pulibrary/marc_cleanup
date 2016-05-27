@@ -10,11 +10,10 @@ module Marc_Cleanup
     last_record = row['MAX'].to_i
     last_file_num = (last_record.to_f/500000).ceil
     file_num = 0
-
     loop do
       file_num += 1
       break if file_num > last_file_num
-      File.open("./../marc/#{file_num}.mrc", 'a') do |output|
+      File.open("#{ROOT_DIR}/marc/#{file_num}.mrc", 'a') do |output|
         conn.exec("SELECT RECORD_SEGMENT FROM BIB_DATA JOIN BIB_MASTER ON BIB_DATA.BIB_ID = BIB_MASTER.BIB_ID WHERE BIB_DATA.BIB_ID >= 1+((#{file_num}-1)*500000) AND BIB_DATA.BIB_ID <= 500000+((#{file_num}-1)*500000) AND BIB_MASTER.SUPPRESS_IN_OPAC = 'N'ORDER BY BIB_DATA.BIB_ID,SEQNUM") do |r|
           output.write(r.join(''))
         end
@@ -28,7 +27,7 @@ module Marc_Cleanup
     puts "What is the date cutoff (records after this date and time should be exported)? ('mm/dd/yyyy hh:mm:ss')"
     from_date = gets.chomp
 
-    File.open("./../marctofix/changed_since.mrc", 'a') do |output|
+    File.open("#{ROOT_DIR}/marctofix/changed_since.mrc", 'a') do |output|
       conn.exec("select record_segment from (bib_data join bib_master on bib_data.bib_id = bib_master.bib_id) join bib_history on bib_data.bib_id = bib_history.bib_id where action_date > to_date('#{from_date}', 'mm/dd/yyyy  hh:mi:ss') group by bib_data.bib_id, record_segment, seqnum order by bib_data.bib_id,seqnum") do |r|
         output.write(r.join(''))
       end
