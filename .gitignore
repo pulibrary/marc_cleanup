@@ -1,4 +1,4 @@
 *.mrc
 *.xml
 *.mrc.parsed
-/lib/marc_cleanup/credentials.rb
+lib/marc_cleanup/credentials.rb
