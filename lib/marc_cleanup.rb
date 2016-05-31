@@ -8,5 +8,6 @@ require File.dirname(__FILE__) + '/marc_cleanup/record_dump'
 require File.dirname(__FILE__) + '/marc_cleanup/version'
 require File.dirname(__FILE__) + '/marc_cleanup/credentials'
 require File.dirname(__FILE__) + '/marc_cleanup/oracle_connection'
+require File.dirname(__FILE__) + '/marc_cleanup/bib_marc_fixes'
 require 'marc'
 include Marc_Cleanup
