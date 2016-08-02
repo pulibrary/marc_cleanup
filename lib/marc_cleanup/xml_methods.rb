@@ -8,7 +8,7 @@ module Marc_Cleanup
             if line.match(/^<record>/)
               bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
               matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='245'>)/)
-              if matchdata.to_s == "[]"        
+              if matchdata.to_s == "[]"
                 output.puts(bib_id)
               end
             end
@@ -25,7 +25,7 @@ module Marc_Cleanup
           while line = input.gets
             bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
             matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='...'>)(<\/datafield>)/)
-            unless matchdata.to_s == "[]"        
+            unless matchdata.to_s == "[]"
               bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
               output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, ""))
             end
@@ -42,7 +42,7 @@ module Marc_Cleanup
           while line = input.gets
             bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
             matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='...'>)((?:<subfield code='.'><\/subfield>)+)(?:(?:<subfield code='.'>[^<]*<\/subfield>)*)(<\/datafield>)/)
-            unless matchdata.to_s == "[]"        
+            unless matchdata.to_s == "[]"
               bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
               output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, ""))
             end
@@ -59,7 +59,7 @@ module Marc_Cleanup
           while line = input.gets
             bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
             matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='...'>)(?:(?:<subfield code='.'>[^<]*<\/subfield>)*)((?:<subfield code='[^a-z0-9]'>[^<]*<\/subfield>)+)(?:(?:<subfield code='.'>[^<]*<\/subfield>)*)(<\/datafield>)/)
-            unless matchdata.to_s == "[]"        
+            unless matchdata.to_s == "[]"
               bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
               output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, ""))
             end
@@ -76,7 +76,7 @@ module Marc_Cleanup
           while line = input.gets
             bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
             matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='[167]00'>)(?:(?:<subfield code='[^a]'>[^<]*<\/subfield>)*)(<subfield code='a'>[^<]*[^,]<\/subfield><subfield code='d'>[^<]*<\/subfield>)(?:(?:<subfield code='.'>[^<]*<\/subfield>)*)(<\/datafield>)/)
-            unless matchdata.to_s == "[]"        
+            unless matchdata.to_s == "[]"
               bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
               output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, ""))
             end
@@ -93,11 +93,79 @@ module Marc_Cleanup
           while line = input.gets
             bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
             matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='[167]..'>)(?:(?:<subfield code='[^a]'>[^<]*<\/subfield>)*)(<subfield code='a'>[a-z]{3,}[^<]*<\/subfield>)((?:<subfield code='.'>[^<]*<\/subfield>)*)(<\/datafield>)/)
-            unless matchdata.to_s == "[]"        
+            unless matchdata.to_s == "[]"
               bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
               if bibmatch.to_s.match("<subfield code='a'>ebrary, Inc.</subfield>") == nil
                 output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, ""))
               end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def x00_subfq
+    Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
+      File.open("#{file}", 'r') do |input|
+        File.open("#{ROOT_DIR}/logs/x00_subfq.log", 'a') do |output|
+          while line = input.gets
+            bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
+            matchdata = line.scan(/((?:<datafield ind1='.' ind2='.' tag='[167]00'>)(?:<subfield code='[^q]'>[^<]*<\/subfield>)*(?:<subfield code='q'>[^\(][^\)<]*<\/subfield>)(?:<subfield code='.'>[^<]*<\/subfield>)*(?:<\/datafield>))/)
+            unless matchdata.to_s == "[]"
+              bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
+              output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, "").gsub(/░\[/, "░"))
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def heading_end_punct
+    Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
+      File.open("#{file}", 'r') do |input|
+        File.open("#{ROOT_DIR}/logs/heading_end_punct.log", 'a') do |output|
+          while line = input.gets
+            bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
+            matchdata = line.scan(/((?:<datafield ind1='.' ind2='.' tag='[1678][013][01]'>)(?:<subfield code='[a-z8]'>[^<]*<\/subfield>)*(?:<subfield code='[a-z8]'>[^<]*[^\).\?\-]<\/subfield>)(?:<subfield code='[^a-z8]'>[^<]<\/subfield>)*(?:<\/datafield>))/)
+            unless matchdata.to_s == "[]"
+              bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
+              output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, "").gsub(/░\[/, "░"))
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def relator_comma
+    Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
+      File.open("#{file}", 'r') do |input|
+        File.open("#{ROOT_DIR}/logs/relator_comma.log", 'a') do |output|
+          while line = input.gets
+            bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
+            matchdata = line.scan(/((?:<datafield ind1='.' ind2='.' tag='[17][01]0'>)(?:<subfield code='[^e]'>[^<]*<\/subfield>)*(?:<subfield code='[^e]'>[^<]*[^\-,]<\/subfield>)(?:<subfield code='e'>[^<]*<\/subfield>)(?:<subfield code='.'>[^<]*<\/subfield>)*(?:<\/datafield>))|((?:<datafield ind1='.' ind2='.' tag='[17]11'>)(?:<subfield code='[^j]'>[^<]*<\/subfield>)*(?:<subfield code='[^j]'>[^<]*[^\-,]<\/subfield>)(?:<subfield code='j'>[^<]*<\/subfield>)(?:<subfield code='.'>[^<]*<\/subfield>)*(?:<\/datafield>))/)
+            unless matchdata.to_s == "[]"
+              bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
+              output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, "").gsub(/░\[/, "░").gsub(/>, nil$/, ">").gsub(/░nil, /, "░"))
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def relator_case
+    Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
+      File.open("#{file}", 'r') do |input|
+        File.open("#{ROOT_DIR}/logs/relator_case.log", 'a') do |output|
+          while line = input.gets
+            bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
+            matchdata = line.scan(/((?:<datafield ind1='.' ind2='.' tag='[17][01]0'>)(?:<subfield code='[^e]'>[^<]*<\/subfield>)*(?:<subfield code='e'>[^<]*[A-Z0-9]+[^<]*<\/subfield>)(?:<subfield code='.'>[^<]*<\/subfield>)*(?:<\/datafield>))|((?:<datafield ind1='.' ind2='.' tag='[17]11'>)(?:<subfield code='[^j]'>[^<]*<\/subfield>)*(?:<subfield code='j'>[A-Z0-9]+[^<]*<\/subfield>)(?:<subfield code='.'>[^<]*<\/subfield>)*(?:<\/datafield>))/)
+            unless matchdata.to_s == "[]"
+              bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
+              output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, "").gsub(/░\[/, "░").gsub(/>, nil$/, ">").gsub(/░nil, /, "░"))
             end
           end
         end
@@ -112,7 +180,7 @@ module Marc_Cleanup
           while line = input.gets
             bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
             matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='...'>)(?:<subfield code='.'>[^<]*<\/subfield>)*((?:<subfield code='.'>[^<]\x09[^<]*<\/subfield>)+)(?:(?:<subfield code='.'>[^<]*<\/subfield>)*)(<\/datafield>)/)
-            unless matchdata.to_s == "[]"        
+            unless matchdata.to_s == "[]"
               bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
               output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, ""))
             end
@@ -128,7 +196,7 @@ module Marc_Cleanup
         File.open("#{ROOT_DIR}/logs/heading_spaces_bibs.log", 'a') do |output|
           while line = input.gets
             bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
-            matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='[167][0-5].'>)(?:<subfield code='.'>[^<]*<\/subfield>)*((?:<subfield code='.'>[^<]*[\s]{2,}[^<]*<\/subfield>)+)((?:<subfield code='.'>[^<]*<\/subfield>)*)(<\/datafield>)|(<datafield ind1='.' ind2='.' tag='240'>)(?:<subfield code='.'>[^<]*<\/subfield>)*((?:<subfield code='.'>[^<]*[\s]{2,}[^<]*<\/subfield>)+)(?:<subfield code='.'>[^<]*<\/subfield>)*(<\/datafield>)/)
+            matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='[167][0-5].'>)(?:<subfield code='.'>[^<]*<\/subfield>)*((?:<subfield code='.'>[^<]*[\s]{2,}[^<]*<\/subfield>)+)((?:<subfield code='.'>[^<]*<\/subfield>)*)(<\/datafield>)|(<datafield ind1='.' ind2='.' tag='[167][0-5].'>)(?:<subfield code='.'>[^<]*<\/subfield>)*((?:<subfield code='.'>[^<]*\s+<\/subfield>)+)((?:<subfield code='.'>[^<]*<\/subfield>)*)(<\/datafield>)|(<datafield ind1='.' ind2='.' tag='240'>)(?:<subfield code='.'>[^<]*<\/subfield>)*((?:<subfield code='.'>[^<]*[\s]{2,}[^<]*<\/subfield>)+)(?:<subfield code='.'>[^<]*<\/subfield>)*(<\/datafield>)/)
             unless matchdata.to_s == "[]"
   	    output.puts(bib_id)
             end
