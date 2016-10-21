@@ -37,7 +37,7 @@ module Marc_Cleanup
         puts "Processing #{file}..."
         File.open("#{ROOT_DIR}/marctofix/invalid_indicators.mrc", 'a') do |output|
           while line = input.gets
-            if line.match(/\x1e[0-9 ][^0-9 ]{1}\x1f/) || line.match(/\x1e[^0-9 ][0-9 ]\x1f/)
+            if line.match(/\x1e(?![0-9 ]{2})\x1f/)
               output.write(line.chomp)
             end
           end
@@ -115,6 +115,22 @@ module Marc_Cleanup
     end
   end
 
+  def invalid_xml_chars
+    Dir.glob("#{ROOT_DIR}/parsed/*.mrc.parsed") do |file|
+      File.open("#{file}", 'r') do |input|
+        puts "Processing #{file}..."
+        File.open("#{ROOT_DIR}/marctofix/invalid_xml_chars_marked.mrc", 'a') do |output|
+          while line = input.gets
+            if line.match(/[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/)
+              line.chomp!
+              output.write(line.gsub(/([\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF])/, '░\1░'))
+            end
+          end
+        end
+      end
+    end
+  end
+
   def invalid_subfield_code
     Dir.glob("#{ROOT_DIR}/parsed/*.mrc.parsed") do |file|
       File.open("#{file}", 'r') do |input|
@@ -145,4 +161,64 @@ module Marc_Cleanup
     end
   end
 
+  def subfield_count
+    Dir.glob("#{ROOT_DIR}/marc/*.mrc") do |file|
+      File.open("#{file}", 'r') do |input|
+        puts "Processing #{file}..."
+        controlfield_tag_array = []
+        datafield_tag_array = []
+        subfield_array = []
+        records = input.gets.scrub(' ').split(END_OF_RECORD)
+        records.each do |record|
+          leader = record.slice(0..23)
+          base_address = leader[12..16].to_i
+          directory = record[LEADER_LENGTH..base_address-1]
+          num_fields = directory.length / DIRECTORY_ENTRY_LENGTH
+          mba = record.bytes.to_a
+          0.upto(num_fields - 1) do |field_num|
+            entry_start = field_num * DIRECTORY_ENTRY_LENGTH
+            entry_end = entry_start + DIRECTORY_ENTRY_LENGTH
+            entry = directory[entry_start..entry_end]
+            tag = entry[0..2]
+            field_data = ''
+            length = entry[3..6].to_i
+            offset = entry[7..11].to_i
+            field_start = base_address + offset
+            field_end = field_start + length - 1
+            field_data = mba[field_start..field_end].pack("c*")
+            field_data.delete!(END_OF_FIELD)
+            if MARC::ControlField.control_tag?(tag)
+              controlfield_tag_array.push(tag)
+            else
+              datafield_tag_array.push(tag)
+              field_data.slice!(0..2)
+              subfields = field_data.split(SUBFIELD_INDICATOR)
+              next if subfields.length() < 2
+              subfields.each do |data|
+                subfield_array.push(tag + '|' + data[0].to_s)
+              end
+            end
+          end
+        end
+        controlfield_tag_tally = controlfield_tag_array.sort.group_by { |w| w }.map {|k,v| [k, v.length]}
+        datafield_tag_tally = datafield_tag_array.sort.group_by { |w| w }.map {|k,v| [k, v.length]}
+        subfield_tally = subfield_array.sort.group_by { |w| w }.map {|k,v| [k, v.length]}
+        File.open("#{ROOT_DIR}/logs/field_counts.txt", 'a') do |output|
+          output.puts("File: #{file}")
+          controlfield_tag_tally.each do |row|
+            output.puts(row[0] + "\t" + row[1].to_s)
+          end
+          datafield_tag_tally.each do |row|
+            output.puts(row[0] + "\t" + row[1].to_s)
+          end
+        end
+        File.open("#{ROOT_DIR}/logs/subfield_counts.txt", 'a') do |output|
+          output.puts("File: #{file}")
+          subfield_tally.each do |row|
+            output.puts(row[0] + "\t" + row[1].to_s)
+          end
+        end
+      end
+    end
+  end
 end

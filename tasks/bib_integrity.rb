@@ -5,5 +5,6 @@ leader_errors
 directory_errors
 invalid_indicators
 invalid_subfield_code
-no_245
-empty_subfield
+invalid_xml_chars
+#no_245
+#empty_subfield
