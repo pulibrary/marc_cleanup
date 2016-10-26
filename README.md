@@ -20,15 +20,19 @@ directory_errors - Identify bibliographic MARC records with faulty directory ent
 
 invalid_indicators - Identify bibliographic MARC records with characters other than a space or a number in the field indicators.
 
-invalid_chars - Identify bibliographic MARC records with characters outside the valid Unicode repertoire (warning: this method takes several hours).
+combining_chars - Identify MARC records that have combining diacritics not attached to letters.
+
+invalid_chars - Identify bibliographic MARC records with characters outside the valid Unicode repertoire (warning: this method may take several hours).
 
 invalid_chars_separate_files - Identify MARC records within a particular file that have characters outside the valid Unicode repertoire.
+
+invalid_xml_chars - Identify MARC records with characters outside of the XML 1.0 specifications that would crash any MARCXML parsers that don't account for these characters (i.e. Blacklight).
 
 invalid_subfield_code - Identify bibliographic MARC records with subfield codes that are not alphanumeric.
 
 tab_char - Identify MARC records that have a tab character instead of a space.
 
-combining_chars - Identify MARC records that have combining diacritics not attached to letters.
+subfield_count - Provide a count of all subfields and fields found within the records from the './marc' directory.
 
 ### Within xml_methods.rb:
 no_245 - Identify records by bib ID that do not have a 245 field.
@@ -41,6 +45,14 @@ no_comma_x00 - Find x00 headings (personal names) in MARCXML records where there
 
 lowercase_headings - Find records with headings that begin with 3 or more lowercase letters, excluding matches for ebrary.
 
+x00_subfq - Identify records with x00 headings that have no parentheses around the subfield q data.
+
+heading_end_punct - Identify records that do not have proper punctuation at the end of the heading.
+
+relator_comma - Identify records that do not have a comma before the subfield e relator where there should be one.
+
+relator_case - Identify records that have relators in headings that are not lowercase.
+
 tab_char_xml - Find records with fields that contain a tab character. This is useful for diagnosing where tab characters are appearing, and why.
 
 heading_spaces - Find records with more than one space in a heading field. For indexes that do not normalize spaces, this will remove split headings.
@@ -50,6 +62,11 @@ extra_spaces - Find records with extra spaces in any field/subfield that does no
 error_match_user_input - Allows you to specify your own regular expression to search for in MARCXML records.
 
 error_match_user_input_with_holdings - Same as above, except includes holdings information. If your holdings information is integrated into your bibliographic records (this functionality will be included in this repository at a later date), this is useful for finding problems in specific branches or locations.
+
+### Within bib_marc_fixes.rb:
+leaderfix - Correct leader errors.
+
+tab_fix - Replace tab characters with single spaces.
 
 ### Within authorities.rb:
 auth_dump - Extract all authority MARC records from a Voyager database.
@@ -64,4 +81,3 @@ auth_invalid_indicators - Identify authority MARC records with characters other 
 
 auth_invalid_subfield_code - Identify authority MARC records with subfield codes that are not alphanumeric.
 
-auth_invalid_chars - Identify authority MARC records with characters outside the valid Unicode repertoire (warning: this method takes several hours).

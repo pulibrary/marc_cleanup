@@ -18,23 +18,6 @@ module Marc_Cleanup
     end
   end
 
-  def empty_field
-    Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
-      File.open("#{file}", 'r') do |input|
-        File.open("#{ROOT_DIR}/logs/empty_field.log", 'a') do |output|
-          while line = input.gets
-            bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
-            matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='...'>)(<\/datafield>)/)
-            unless matchdata.to_s == "[]"
-              bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
-              output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, ""))
-            end
-          end
-        end
-      end
-    end
-  end
-
   def empty_subfield
     Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
       File.open("#{file}", 'r') do |input|
