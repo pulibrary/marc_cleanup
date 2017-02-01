@@ -1933,6 +1933,7 @@ module Marc_Cleanup
           0x317f => [0x317f, false], # Korean hangul
           0x3181 => [0x3181, false], # Korean hangul
           0x3186 => [0x3186, false], # Korean hangul
+          0x318d => [0x318d, false], # Hangul Letter Araea
           0x318e => [0x318e, false], # Hangul Letter Araeae
           0x349e => [0x349e, false], # East Asian ideograph (not found in unified han)
           0x3761 => [0x3761, false], # East Asian ideograph (not found in unified han)
@@ -4584,6 +4585,7 @@ module Marc_Cleanup
           0x5df7 => [0x5df7, false], # East Asian ideograph
           0x5dfd => [0x5dfd, false], # East Asian ideograph
           0x5dfe => [0x5dfe, false], # East Asian ideograph
+          0x5dff => [0x5dff, false], # Revolve, make circuit, turn
           0x5e00 => [0x5e00, false], # East Asian ideograph
           0x5e01 => [0x5e01, false], # East Asian ideograph
           0x5e02 => [0x5e02, false], # East Asian ideograph
@@ -9662,6 +9664,7 @@ module Marc_Cleanup
           0x7d4f => [0x7d4f, false], # East Asian ideograph
           0x7d50 => [0x7d50, false], # East Asian ideograph
           0x7d53 => [0x7d53, false], # East Asian ideograph
+          0x7d55 => [0x7d55, false], # Cut, sever, break off, terminate
           0x7d56 => [0x7d56, false], # East Asian ideograph
           0x7d5a => [0x7d5a, false], # East Asian ideograph
           0x7d5b => [0x7d5b, false], # East Asian ideograph
@@ -14096,6 +14099,7 @@ module Marc_Cleanup
           0x9817 => [0x9817, false], # East Asian ideograph
           0x9818 => [0x9818, false], # East Asian ideograph
           0x981a => [0x981a, false], # East Asian ideograph
+          0x981c => [0x981c, false], # Mouth; jaw
           0x981e => [0x981e, false], # East Asian ideograph
           0x981f => [0x981f, false], # East Asian ideograph
           0x9820 => [0x9820, false], # East Asian ideograph
@@ -15926,6 +15930,7 @@ module Marc_Cleanup
           0xbb88 => [0xbb88, false], # Korean hangul
           0xbb8c => [0xbb8c, false], # Korean hangul
           0xbba4 => [0xbba4, false], # Korean hangul
+          0xbbac => [0xbbac, false], # Korean hangul
           0xbbb4 => [0xbbb4, false], # Korean hangul
           0xbbc0 => [0xbbc0, false], # Korean hangul
           0xbbc4 => [0xbbc4, false], # Korean hangul
@@ -16142,6 +16147,7 @@ module Marc_Cleanup
           0xc0e8 => [0xc0e8, false], # Korean hangul
           0xc0ec => [0xc0ec, false], # Korean hangul
           0xc0f4 => [0xc0f4, false], # Korean hangul
+          0xc0f5 => [0xc0f5, false], # Korean hangul
           0xc0f7 => [0xc0f7, false], # Korean hangul
           0xc0f9 => [0xc0f9, false], # Korean hangul
           0xc11c => [0xc11c, false], # Korean hangul
@@ -16171,6 +16177,7 @@ module Marc_Cleanup
           0xc151 => [0xc151, false], # Korean hangul
           0xc154 => [0xc154, false], # Korean hangul
           0xc158 => [0xc158, false], # Korean hangul
+          0xc15c => [0xc15c, false], # Korean hangul
           0xc167 => [0xc167, false], # Korean hangul
           0xc168 => [0xc168, false], # Korean hangul
           0xc170 => [0xc170, false], # Korean hangul

@@ -9,7 +9,6 @@ record_dump - Extract all bibliographic MARC records from a Voyager database.
 changed_since_prompt - Extract all bibliographic MARC records changed since a specified date from a Voyager database.
 
 ### Within marc_parsing.rb:
-separate_lines - Add a line break to each bibliographic MARC record, for the purpose of easily extracting individual records with an error while retaining any coding errors within the raw MARC.
 
 to_xml - Convert all bibliographic MARC records from the './marc' directory to MARCXML, using Ruby Marc.
 

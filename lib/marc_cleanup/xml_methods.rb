@@ -1,58 +1,38 @@
 module Marc_Cleanup
 
-  def no_245
-    Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
-      File.open("#{file}", 'r') do |input|
-        File.open("#{ROOT_DIR}/logs/no_245.log", 'a') do |output|
-          while line = input.gets
-            if line.match(/^<record>/)
-              bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
-              matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='245'>)/)
-              if matchdata.to_s == "[]"
-                output.puts(bib_id)
-              end
-            end
-          end
-        end
-      end
+  def no_245_xml(record)
+    bib_id = record.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
+    matchdata = record.scan(/(<datafield ind1='.' ind2='.' tag='245'>)/)
+    if matchdata.to_s == "[]"
+      bib_id
+    else
+      bad_record = nil
+    end
+  end      
+
+  def empty_subfield_xml(record)
+    bib_id = record.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
+    matchdata = record.scan(/(<datafield ind1='.' ind2='.' tag='...'>)((?:<subfield code='.'><\/subfield>)+)(?:(?:<subfield code='.'>[^<]*<\/subfield>)*)(<\/datafield>)/)
+    if matchdata.to_s != "[]"
+      bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
+      bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, "")
+    else
+      bad_record = nil
     end
   end
 
-  def empty_subfield
-    Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
-      File.open("#{file}", 'r') do |input|
-        File.open("#{ROOT_DIR}/logs/empty_subfield.log", 'a') do |output|
-          while line = input.gets
-            bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
-            matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='...'>)((?:<subfield code='.'><\/subfield>)+)(?:(?:<subfield code='.'>[^<]*<\/subfield>)*)(<\/datafield>)/)
-            unless matchdata.to_s == "[]"
-              bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
-              output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, ""))
-            end
-          end
-        end
-      end
+  def invalid_subfield_code_xml(record)
+    bib_id = record.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
+    matchdata = record.scan(/(<datafield ind1='.' ind2='.' tag='...'>)(?:(?:<subfield code='.'>[^<]*<\/subfield>)*)((?:<subfield code='[^a-z0-9]'>[^<]*<\/subfield>)+)(?:(?:<subfield code='.'>[^<]*<\/subfield>)*)(<\/datafield>)/)
+    if matchdata.to_s != "[]"
+      bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
+      bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, "")
+    else
+      bad_record = nil
     end
   end
 
-  def invalid_subfield_code_xml
-    Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
-      File.open("#{file}", 'r') do |input|
-        File.open("#{ROOT_DIR}/logs/invalid_subfield_code.log", 'a') do |output|
-          while line = input.gets
-            bib_id = line.gsub(/(^<record><leader>[^<]*<\/leader>)(<controlfield tag='001'>)([0-9]*)(<.+$)/, '\3')
-            matchdata = line.scan(/(<datafield ind1='.' ind2='.' tag='...'>)(?:(?:<subfield code='.'>[^<]*<\/subfield>)*)((?:<subfield code='[^a-z0-9]'>[^<]*<\/subfield>)+)(?:(?:<subfield code='.'>[^<]*<\/subfield>)*)(<\/datafield>)/)
-            unless matchdata.to_s == "[]"
-              bibmatch = matchdata.map{|item| bib_id.chomp + "░" + item.to_s }
-              output.puts(bibmatch.to_s.gsub(/\\\"/,"").gsub(/(\"\,) /,"\"\,\n").gsub(/\"\,/, "").gsub(/\"\]/, "").gsub(/\[\"/, "").gsub(/\]/, "").gsub(/^\"/, ""))
-            end
-          end
-        end
-      end
-    end
-  end
-
-  def no_comma_x00
+  def no_comma_x00_xml
     Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
       File.open("#{file}", 'r') do |input|
         File.open("#{ROOT_DIR}/logs/no_comma_x00.log", 'a') do |output|
@@ -88,7 +68,7 @@ module Marc_Cleanup
     end
   end
 
-  def x00_subfq
+  def x00_subfq_xml
     Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
       File.open("#{file}", 'r') do |input|
         File.open("#{ROOT_DIR}/logs/x00_subfq.log", 'a') do |output|
@@ -105,7 +85,7 @@ module Marc_Cleanup
     end
   end
 
-  def heading_end_punct
+  def heading_end_punct_xml
     Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
       File.open("#{file}", 'r') do |input|
         File.open("#{ROOT_DIR}/logs/heading_end_punct.log", 'a') do |output|
@@ -122,7 +102,7 @@ module Marc_Cleanup
     end
   end
 
-  def relator_comma
+  def relator_comma_xml
     Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
       File.open("#{file}", 'r') do |input|
         File.open("#{ROOT_DIR}/logs/relator_comma.log", 'a') do |output|
@@ -189,7 +169,7 @@ module Marc_Cleanup
     end
   end
 
-  def extra_spaces
+  def extra_spaces_xml
     Dir.glob("#{ROOT_DIR}/xml/*.xml") do |file|
       File.open("#{file}", 'r') do |input|
         File.open("#{ROOT_DIR}/logs/extra_spaces_bibs.log", 'a') do |output|
