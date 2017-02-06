@@ -70,8 +70,6 @@ tab_fix - Replace tab characters with single spaces.
 ### Within authorities.rb:
 auth_dump - Extract all authority MARC records from a Voyager database.
 
-auth_separate_lines - Add a line break to each authority MARC record, for the purpose of easily extracting individual records with an error while retaining any coding errors within the raw MARC.
-
 auth_to_xml - Convert all authority MARC records from the './auth_marc' directory to MARCXML, using Ruby Marc.
 
 auth_directory_errors - Identify authority MARC records with faulty directory entries (i.e., a field label has non-numeric characters, or the field areas are not all multiples of 10).

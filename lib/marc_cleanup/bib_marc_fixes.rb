@@ -56,26 +56,27 @@ module Marc_Cleanup
     directory = record[LEADER_LENGTH..base_address-2]
     num_fields = directory.length / DIRECTORY_ENTRY_LENGTH
     marc_field_data = record[base_address..-1]
-    marc_field_data.force_encoding("binary")
     fixed_record << directory
     fixed_record << END_OF_FIELD
     new_directory = ''
     all_fields = marc_field_data.split(END_OF_FIELD)
+    all_fields.pop
     new_offset = 0
     0.upto(num_fields - 1) do |field_num|
       entry_start = field_num * DIRECTORY_ENTRY_LENGTH
-      entry_end = entry_start + DIRECTORY_ENTRY_LENGTH
+      entry_end = entry_start - 1 + DIRECTORY_ENTRY_LENGTH
       entry = directory[entry_start..entry_end]
       tag = entry[0..2]
       field_data = all_fields.shift()
-      field_data.delete!(END_OF_FIELD)
       if tag =~ /00[1-9]/
         field_data.force_encoding("UTF-8")
-        field_data << END_OF_FIELD
-        fixed_record << field_data
-        field_length = (field_data.respond_to?(:bytesize) ?
-          field_data.bytesize() :
-          field_data.length())
+        fixed_field = ''
+        fixed_field << field_data
+        fixed_field << END_OF_FIELD
+        fixed_record << fixed_field
+        field_length = (fixed_field.respond_to?(:bytesize) ?
+          fixed_field.bytesize() :
+          fixed_field.length())
         new_directory << sprintf("%03s", tag)
         new_directory << sprintf("%04i", field_length)
         new_directory << sprintf("%05i", new_offset)
@@ -87,9 +88,16 @@ module Marc_Cleanup
         fixed_field << indicators
         subfields.each() do |subfield|
           subfield = subfield.force_encoding("UTF-8")
-          subfield.unicode_normalize!(:nfd)
+          fixed_subfield = ''
+          subfield.each_codepoint do |c|
+            if c < 63744 || c > 64217
+              fixed_subfield << c.chr(Encoding::UTF_8).unicode_normalize(:nfd)
+            else
+              fixed_subfield << c.chr(Encoding::UTF_8)
+            end
+          end
           fixed_field << SUBFIELD_INDICATOR
-          fixed_field << subfield
+          fixed_field << fixed_subfield
         end
         fixed_field << END_OF_FIELD
         fixed_record << fixed_field
@@ -105,52 +113,52 @@ module Marc_Cleanup
     fixed_record << END_OF_RECORD
     fixed_length = (fixed_record.respond_to?(:bytesize) ?
             fixed_record.bytesize() :
-            field_record.length())
+            fixed_record.length())
     fixed_record[0..4] = sprintf("%05i", fixed_length)
     fixed_record[LEADER_LENGTH..base_address-2] = new_directory
     fixed_record
-  end    
-
+  end  
+  
   def extra_space_fix(record)
-    record.force_encoding("binary") if record.respond_to?(:force_encoding)
+    record.force_encoding("binary")
     fixed_record = ''
-    leader = record.slice(0..23)
+    leader = record.slice(0..LEADER_LENGTH-1)
     fixed_record << leader
     base_address = leader[12..16].to_i
     directory = record[LEADER_LENGTH..base_address-2]
+    num_fields = directory.length / DIRECTORY_ENTRY_LENGTH
+    marc_field_data = record[base_address..-1]
     fixed_record << directory
     fixed_record << END_OF_FIELD
     new_directory = ''
-    num_fields = directory.length / DIRECTORY_ENTRY_LENGTH
-    mba = record.bytes.to_a
+    all_fields = marc_field_data.split(END_OF_FIELD)
+    all_fields.pop
     new_offset = 0
     0.upto(num_fields - 1) do |field_num|
       entry_start = field_num * DIRECTORY_ENTRY_LENGTH
-      entry_end = entry_start + DIRECTORY_ENTRY_LENGTH
+      entry_end = entry_start - 1 + DIRECTORY_ENTRY_LENGTH
       entry = directory[entry_start..entry_end]
       tag = entry[0..2]
-      length = entry[3..6].to_i
-      offset = entry[7..11].to_i
-      fixed_field = ''
-      field_start = base_address + offset
-      field_end = field_start + length - 1
-      field_data = mba[field_start..field_end].pack("c*")
+      field_data = all_fields.shift()
       if tag =~ /00[1-9]/
-        field_data = field_data.force_encoding("UTF-8")
-        fixed_record << field_data
-        field_length = (field_data.respond_to?(:bytesize) ?
-          field_data.bytesize() :
-          field_data.length())
+        field_data.force_encoding("UTF-8")
+        fixed_field = ''
+        fixed_field << field_data
+        fixed_field << END_OF_FIELD
+        fixed_record << fixed_field
+        field_length = (fixed_field.respond_to?(:bytesize) ?
+          fixed_field.bytesize() :
+          fixed_field.length())
         new_directory << sprintf("%03s", tag)
         new_directory << sprintf("%04i", field_length)
         new_directory << sprintf("%05i", new_offset)
         new_offset += field_length
       else
         field_data = field_data.force_encoding("UTF-8")
-        indicators = field_data.slice!(0..2).gsub(/#{SUBFIELD_INDICATOR}/, '')
-        fixed_field << indicators
-        field_data.delete!(END_OF_FIELD)
+        fixed_field = ''
         subfields = field_data.split(SUBFIELD_INDICATOR)
+        indicators = subfields.shift()
+        fixed_field << indicators
         if tag =~ /[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
           subfields.each do |subfield|
             subfield.gsub!(/([[:blank:]]){2,}/, '\1')
@@ -256,7 +264,7 @@ module Marc_Cleanup
     fixed_record << END_OF_RECORD
     fixed_length = (fixed_record.respond_to?(:bytesize) ?
             fixed_record.bytesize() :
-            field_record.length())
+            fixed_record.length())
     fixed_record[0..4] = sprintf("%05i", fixed_length)
     fixed_record[LEADER_LENGTH..base_address-2] = new_directory
     fixed_record

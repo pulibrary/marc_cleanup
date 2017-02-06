@@ -6,12 +6,9 @@ Dir.glob("#{ROOT_DIR}/marc/*.mrc") do |file|
   File.open("#{file}", 'r') do |input|
     puts "Processing #{filename}..."
     while record = input.gets(sep=END_OF_RECORD)
+      record.scrub!{|bytes| '░'+bytes.unpack('H*')[0]+'░' }
       corrected = false
       fixed = record
-      if extra_spaces(fixed)
-        fixed = extra_space_fix(fixed)
-        corrected = true
-      end
       if tab_char(fixed)
         fixed = tab_fix(fixed)
         corrected = true
@@ -26,6 +23,10 @@ Dir.glob("#{ROOT_DIR}/marc/*.mrc") do |file|
       end
       if invalid_chars(fixed)
         fixed = invalid_chars(fixed)
+        corrected = true
+      end
+      if extra_spaces(fixed)
+        fixed = extra_space_fix(fixed)
         corrected = true
       end
       if corrected
