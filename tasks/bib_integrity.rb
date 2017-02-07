@@ -1,7 +1,7 @@
 require_relative './../lib/marc_cleanup'
 include Marc_Cleanup
 
-Dir.glob("#{ROOT_DIR}/marc/*.*") do |file|
+Dir.glob("#{ROOT_DIR}/marc/*.mrc") do |file|
   File.open("#{file}", 'r') do |input|
     puts "Processing #{file}..."
     while record = input.gets(sep="\x1d")

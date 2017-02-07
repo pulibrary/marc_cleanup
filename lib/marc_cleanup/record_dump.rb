@@ -22,6 +22,16 @@ module Marc_Cleanup
     conn.logoff
   end
 
+  def suppressed_dump
+    conn = OCI8.new(USER, PASS, NAME)
+    File.open("#{ROOT_DIR}/marc/suppressed/suppressed.mrc", 'a') do |output|
+      conn.exec("SELECT RECORD_SEGMENT FROM BIB_DATA JOIN BIB_MASTER ON BIB_DATA.BIB_ID = BIB_MASTER.BIB_ID WHERE BIB_MASTER.SUPPRESS_IN_OPAC = 'Y' ORDER BY BIB_DATA.BIB_ID,SEQNUM") do |r|
+        output.write(r.join(''))
+      end
+    end
+    conn.logoff
+  end
+
   def changed_since_prompt
     conn = OCI8.new(USER, PASS, NAME)
     puts "What is the date cutoff (records after this date and time should be exported)? ('mm/dd/yyyy hh:mm:ss')"
