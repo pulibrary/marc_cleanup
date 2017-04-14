@@ -47,6 +47,7 @@ module Marc_Cleanup
     good_chars = CHARSET.keys
     add_to_file = false
     bad_record = ""
+    record.force_encoding("UTF-8")
     record.each_char do |c|
       if good_chars.include?(c.ord)
         bad_record << c
@@ -76,6 +77,46 @@ module Marc_Cleanup
       bad_record = nil
     else
       record
+    end
+  end
+
+  def composed_chars(record)
+    bad_record = false
+    record.force_encoding("binary")
+    leader = record.slice(0..LEADER_LENGTH-1)
+    base_address = leader[12..16].to_i
+    directory = record[LEADER_LENGTH..base_address-2]
+    num_fields = directory.length / DIRECTORY_ENTRY_LENGTH
+    marc_field_data = record[base_address..-1]
+    all_fields = marc_field_data.split(END_OF_FIELD)
+    all_fields.pop
+    new_offset = 0
+    0.upto(num_fields - 1) do |field_num|
+      entry_start = field_num * DIRECTORY_ENTRY_LENGTH
+      entry_end = entry_start - 1 + DIRECTORY_ENTRY_LENGTH
+      entry = directory[entry_start..entry_end]
+      tag = entry[0..2]
+      field_data = all_fields.shift()
+      unless tag =~ /00[1-9]/
+        fixed_field = ''
+        subfields = field_data.split(SUBFIELD_INDICATOR)
+        indicators = subfields.shift()
+        subfields.each() do |subfield|
+          subfield = subfield.force_encoding("UTF-8")
+          subfield.each_codepoint do |c|
+            if c < 12364 || c > 64217
+              unless c.chr(Encoding::UTF_8).unicode_normalized?(:nfd)
+                bad_record = true
+              end
+            end
+          end
+        end
+      end
+    end
+    if bad_record
+      record
+    else
+      bad_record
     end
   end
 
@@ -271,6 +312,48 @@ module Marc_Cleanup
     end
   end
 
+  def controlchar(record)
+    controlchar = false
+    record.force_encoding("binary")
+    leader = record.slice(0..LEADER_LENGTH-1)
+    base_address = leader[12..16].to_i
+    directory = record[LEADER_LENGTH..base_address-2]
+    num_fields = directory.length / DIRECTORY_ENTRY_LENGTH
+    mba = record.bytes.to_a
+    0.upto(num_fields - 1) do |field_num|
+      entry_start = field_num * DIRECTORY_ENTRY_LENGTH
+      entry_end = entry_start + DIRECTORY_ENTRY_LENGTH
+      entry = directory[entry_start..entry_end]
+      next if entry.match(/[^0-9]/)
+      tag = entry[0..2]
+      length = entry[3..6].to_i
+      offset = entry[7..11].to_i
+      field_start = base_address + offset +1
+      field_end = field_start + length - 2
+      field_data = mba[field_start..field_end].pack("c*")
+      field_data.force_encoding("UTF-8")
+      if tag =~ /00[1-9]/
+        if field_data.match(/[#{END_OF_RECORD}#{SUBFIELD_INDICATOR}\n\r]/)
+          controlchar = true
+        end
+      else
+        field_data.gsub!(/[#{END_OF_FIELD}]/, '')
+        subfields = field_data.split(SUBFIELD_INDICATOR)
+        indicators = subfields.shift()
+        subfields.each() do |subfield|
+          if subfield.match(/[#{END_OF_RECORD}#{SUBFIELD_INDICATOR}\n\r]/)
+            controlchar = true
+          end
+        end
+      end
+    end
+    if controlchar == true
+      record
+    else
+      controlchar
+    end
+  end
+
   def heading_end_punct(record)
     end_punct_incorrect = false
     leader = record.slice(0..23)
@@ -311,71 +394,67 @@ module Marc_Cleanup
         
   def extra_spaces(record)
     extra_space = false
-    leader = record.slice(0..23)
+    record.force_encoding("binary")
+    leader = record.slice(0..LEADER_LENGTH-1)
     base_address = leader[12..16].to_i
     directory = record[LEADER_LENGTH..base_address-2]
     num_fields = directory.length / DIRECTORY_ENTRY_LENGTH
-    mba = record.bytes.to_a
+    marc_field_data = record[base_address..-1]
+    all_fields = marc_field_data.split(END_OF_FIELD)
+    all_fields.pop
     0.upto(num_fields - 1) do |field_num|
       entry_start = field_num * DIRECTORY_ENTRY_LENGTH
-      entry_end = entry_start + DIRECTORY_ENTRY_LENGTH
+      entry_end = entry_start - 1 + DIRECTORY_ENTRY_LENGTH
       entry = directory[entry_start..entry_end]
       tag = entry[0..2]
-      field_data = ''
-      length = entry[3..6].to_i
-      offset = entry[7..11].to_i
-      field_start = base_address + offset
-      field_end = field_start + length - 1
-      field_data = mba[field_start..field_end].pack("c*")
-      field_data.slice!(0..2)
-      field_data.delete!(END_OF_FIELD)
+      field_data = all_fields.shift()
+      next if tag =~ /^00[1-9]$|^010$/
+      field_data = field_data.force_encoding("UTF-8")
       subfields = field_data.split(SUBFIELD_INDICATOR)
-      if tag =~ /[1-469]..|01[1-9]|0[2-9].|7[0-5].|5[0-24-9].|53[0-24-9]/
-        next if subfields.length() < 2
+      indicators = subfields.shift()
+      if tag =~ /[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
         subfields.each do |subfield|
-          if subfield.match(/[\s]{2,}/)
+          if subfield.match(/[[:blank:]]{2,}|[[:blank:]]+$/)
             extra_space = true
           end
         end
-      end
-      if tag == '533'
-        next if subfields.length() < 2
+      elsif tag == '533'
         subfields.each do |subfield|
           subfield_code = subfield[0]
           if subfield_code =~ /[^7]/
-            if subfield.match(/[\s]{2,}/)
+            if subfield.match(/[[:blank:]]{2,}|[[:blank:]]+$/)
+              extra_space = true
+            end
+          else
+            if subfield.match(/[[:blank:]]+$/)
               extra_space = true
             end
           end
         end
-      end
-      if tag =~ /7[6-8]./
-        next if subfields.length() < 2
+      elsif tag =~ /7[6-8]./
         subfields.each do |subfield|
           subfield_code = subfield[0]
           if subfield_code =~ /[a-v3-8]/
-            if subfield.match(/[\s]{2,}/)
+            if subfield.match(/[[:blank:]]{2,}|[[:blank:]]+$/)
+              extra_space = true
+            end
+          else
+            if subfield.match(/[[:blank:]]+$/)
               extra_space = true
             end
           end
         end
-      end
-      if tag =~ /8../
-        next if subfields.length() < 2
+      elsif tag =~ /8../
         subfields.each do |subfield|
           subfield_code = subfield[0]
           if subfield_code =~ /[^w7]/
-            if subfield.match(/[\s]{2,}/)
+            if subfield.match(/[[:blank:]]{2,}|[[:blank:]]+$/)
               extra_space = true
             end
-          end
-        end
-      end
-      if tag =~ /[1-9]../
-        next if subfields.length() < 2
-        subfields.each do |subfield|
-          if subfield.match(/[\s]+$/)
-            extra_space = true
+          else
+            if subfield.match(/[[:blank:]]+$/)
+              extra_space = true
+            end
           end
         end
       end
