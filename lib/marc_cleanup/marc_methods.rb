@@ -8,7 +8,7 @@ module Marc_Cleanup
   end
 
   def directory_errors(record)
-    if record.scrub.match(/^.{24}([0-9]{12})+[\x1e]/) == nil
+    if record.scrub.match(/^.{24}(.{12})+[\x1e]/) == nil
       record
     end
   end
@@ -19,14 +19,20 @@ module Marc_Cleanup
     end
   end
 
+  def invalid_tag(record)
+    if record.scrub.match(/^.{24}([0-9]{12})+[\x1e]/) == nil
+      record
+    end
+  end
+
   def invalid_subfield_code(record)
     if record.match(/\x1f[^0-9a-z]/)
       record
     end
   end
 
-  def tab_char(record)
-    if record.match(/\x09/)
+  def tab_newline_char(record)
+    if record.match(/[\x09\n\r]/)
       record
     end
   end
@@ -44,7 +50,7 @@ module Marc_Cleanup
   end
 
   def invalid_chars(record)
-    good_chars = CHARSET.keys
+    good_chars = CHARSET
     add_to_file = false
     bad_record = ""
     record.force_encoding("UTF-8")
@@ -253,29 +259,32 @@ module Marc_Cleanup
 
   def relator_comma(record)
     relator_comma_incorrect = false
-    leader = record.slice(0..23)
+    record.force_encoding("binary")
+    leader = record.slice(0..LEADER_LENGTH-1)
     base_address = leader[12..16].to_i
     directory = record[LEADER_LENGTH..base_address-2]
     num_fields = directory.length / DIRECTORY_ENTRY_LENGTH
-    mba = record.bytes.to_a
+    marc_field_data = record[base_address..-1]
+    all_fields = marc_field_data.split(END_OF_FIELD)
+    all_fields.pop
     0.upto(num_fields - 1) do |field_num|
       entry_start = field_num * DIRECTORY_ENTRY_LENGTH
       entry_end = entry_start + DIRECTORY_ENTRY_LENGTH
       entry = directory[entry_start..entry_end]
       tag = entry[0..2]
+      field_data = all_fields.shift()
+      next unless tag =~ /[17][01][01]/
       if tag =~ /[17][01]0/
-        field_data = ''
-        length = entry[3..6].to_i
-        offset = entry[7..11].to_i
-        field_start = base_address + offset
-        field_end = field_start + length - 1
-        field_data = mba[field_start..field_end].pack("c*")
-        field_data.slice!(0..2)
-        field_data.delete!(END_OF_FIELD)
+        field_data = field_data.force_encoding("UTF-8")
         subfields = field_data.split(SUBFIELD_INDICATOR)
+        indicators = subfields.shift()
         subfield_string = ''
         subfields.each do |data|
-          subfield_string << data[0]
+          if data.nil?  || data[0] =~ /[^0-9a-z]/
+            subfield_string << " "
+          else
+            subfield_string << data[0]
+          end
         end
         subfx_e_index = subfield_string.index(/.e/)
         if subfx_e_index
@@ -284,15 +293,9 @@ module Marc_Cleanup
           end
         end
       elsif tag =~ /[17]11/
-        field_data = ''
-        length = entry[3..6].to_i
-        offset = entry[7..11].to_i
-        field_start = base_address + offset
-        field_end = field_start + length - 1
-        field_data = mba[field_start..field_end].pack("c*")
-        field_data.slice!(0..2)
-        field_data.delete!(END_OF_FIELD)
+        field_data = field_data.force_encoding("UTF-8")
         subfields = field_data.split(SUBFIELD_INDICATOR)
+        indicators = subfields.shift()
         subfield_string = ''
         subfields.each do |data|
           subfield_string << data[0]
@@ -306,7 +309,7 @@ module Marc_Cleanup
       end
     end
     if relator_comma_incorrect == true
-      record
+      record.force_encoding("UTF-8")
     else
       relator_comma_incorrect
     end

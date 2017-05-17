@@ -1,6 +1,6 @@
 # marc_cleanup
 A collection of Ruby methods to identify errors in MARC records and correct them automatically when possible.
-It also includes some methods to extract records from Voyager. Create 'credentials.rb' with the ODBC credentials to your database and place it in lib/marc_cleanup.
+It also includes some methods to extract raw MARC records from Voyager. Create 'credentials.rb' with the ODBC credentials to your database and place it in lib/marc_cleanup.
 
 ## Included methods
 ### Within record_dump.rb:
@@ -8,73 +8,66 @@ record_dump - Extract all bibliographic MARC records from a Voyager database.
 
 changed_since_prompt - Extract all bibliographic MARC records changed since a specified date from a Voyager database.
 
-### Within marc_parsing.rb:
+### Errors for raw MARC only:
+directory_errors - Faulty directory entries (i.e., the directory length is not a multiple of 12).
 
-to_xml - Convert all bibliographic MARC records from the './marc' directory to MARCXML, using Ruby Marc.
+controlchar - Extra end-of-field, end-of-subfield, or end-of-record characters.
 
-### Within marc_methods.rb:
-leader_errors - Identify MARC records with errors in the leader.
+### Errors for MARC records and rubymarc objects:
+no_001 - Record has no 001 field.
 
-directory_errors - Identify bibliographic MARC records with faulty directory entries (i.e., a field label has non-numeric characters, or the field areas are not all multiples of 10).
+leader_errors - Errors in the leader.
 
-invalid_indicators - Identify bibliographic MARC records with characters other than a space or a number in the field indicators.
+invalid_indicators - Characters other than a space or a number in the field indicators.
 
-combining_chars - Identify MARC records that have combining diacritics not attached to letters.
+invalid_tag - Tag does not consist of 3 numbers.
 
-invalid_chars - Identify bibliographic MARC records with characters outside the valid Unicode repertoire (warning: this method may take several hours).
+invalid_subfield_code - Subfield codes that are not alphanumeric.
 
-invalid_chars_separate_files - Identify MARC records within a particular file that have characters outside the valid Unicode repertoire.
+tab_char - Tab character instead of a space.
 
-invalid_xml_chars - Identify MARC records with characters outside of the XML 1.0 specifications that would crash any MARCXML parsers that don't account for these characters (i.e. Blacklight).
+invalid_xml_chars - Characters outside of the XML 1.0 specifications that would crash any parsers that don't account for these characters (e.g., Blacklight).
 
-invalid_subfield_code - Identify bibliographic MARC records with subfield codes that are not alphanumeric.
+combining_chars - Combining diacritics not attached to letters.
 
-tab_char - Identify MARC records that have a tab character instead of a space.
+invalid_chars - Characters outside the accepted Unicode repertoire for MARC21 cataloging.
+
+empty_subfield - Empty subfields.
+
+no_245 - No 245 title field.
+
+composed_chars - Not Unicode normalized according to the NFD specification.
+
+relator_chars - Relator terms in subfield e or j for headings do not consist solely of lowercase letters and a period.
+
+x00_subfq - Subfield q in x00 headings do not have opening and closing parentheses.
+
+no_comma_x00 - No comma before subfield d of x00 headings.
+
+relator_comma - No comma or dash before the relator term in subfield e or j.
+
+heading_end_punct - Heading does not have final punctuation (period, closing parens, question mark, or dash).
+
+extra_spaces - Extra spaces in any field/subfield that does not have positional data.
 
 subfield_count - Provide a count of all subfields and fields found within the records from the './marc' directory.
 
-### Within xml_methods.rb:
-no_245 - Identify records by bib ID that do not have a 245 field.
+### Fixes for raw MARC and rubymarc objects:
+leaderfix - Leader errors.
 
-empty_subfield - Identify which field in which MARCXML record has a subfield with no data inside it.
+extra_space_fix - Remove extra spaces in any field/subfield that does not have positional data.
 
-invalid_subfield_code_xml - Identify which field in which MARCXML record has a subfield code that is not alphanumeric. This is useful when you want to know where the problem is, but you don't want to just fix them.
+invalid_xml_fix - Scrub invalid XML 1.0 characters.
 
-no_comma_x00 - Find x00 headings (personal names) in MARCXML records where there is no comma between subfield a and subfield d (i.e., $aSmith, John$d1930-2015).
+composed_chars_fix - Make Unicode characters normalized according to the NFD specification.
 
-lowercase_headings - Find records with headings that begin with 3 or more lowercase letters, excluding matches for ebrary.
+tab_newline_fix - Replace tab characters and newline characters with single spaces.
 
-x00_subfq - Identify records with x00 headings that have no parentheses around the subfield q data.
+field_delete - Delete fields with specified tag.
 
-heading_end_punct - Identify records that do not have proper punctuation at the end of the heading.
+empty_subfield_fix - Remove all empty subfields.
 
-relator_comma - Identify records that do not have a comma before the subfield e relator where there should be one.
+### Fixes for raw MARC:
+controlcharfix - Remove extra end-of-field, end-of-subfield, or end-of-record characters.
 
-relator_case - Identify records that have relators in headings that are not lowercase.
-
-tab_char_xml - Find records with fields that contain a tab character. This is useful for diagnosing where tab characters are appearing, and why.
-
-heading_spaces - Find records with more than one space in a heading field. For indexes that do not normalize spaces, this will remove split headings.
-
-extra_spaces - Find records with extra spaces in any field/subfield that does not have positional data.
-
-error_match_user_input - Allows you to specify your own regular expression to search for in MARCXML records.
-
-error_match_user_input_with_holdings - Same as above, except includes holdings information. If your holdings information is integrated into your bibliographic records (this functionality will be included in this repository at a later date), this is useful for finding problems in specific branches or locations.
-
-### Within bib_marc_fixes.rb:
-leaderfix - Correct leader errors.
-
-tab_fix - Replace tab characters with single spaces.
-
-### Within authorities.rb:
-auth_dump - Extract all authority MARC records from a Voyager database.
-
-auth_to_xml - Convert all authority MARC records from the './auth_marc' directory to MARCXML, using Ruby Marc.
-
-auth_directory_errors - Identify authority MARC records with faulty directory entries (i.e., a field label has non-numeric characters, or the field areas are not all multiples of 10).
-
-auth_invalid_indicators - Identify authority MARC records with characters other than a space or a number in the field indicators.
-
-auth_invalid_subfield_code - Identify authority MARC records with subfield codes that are not alphanumeric.
 

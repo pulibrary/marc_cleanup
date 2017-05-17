@@ -112,11 +112,11 @@ module Marc_Cleanup
     end
   end
 
-  def tab_fix(record)
-    record.gsub(/\x09/, ' ')
+  def tab_newline_fix(record)
+    record.gsub(/[\x09\n\r]/, ' ')
   end
 
-  def composed_chars_fix(record)
+  def composed_chars_latin_fix(record)
     record.force_encoding("binary")
     fixed_record = ''
     leader = record.slice(0..LEADER_LENGTH-1)
@@ -155,11 +155,11 @@ module Marc_Cleanup
         subfields = field_data.split(SUBFIELD_INDICATOR)
         indicators = subfields.shift()
         fixed_field << indicators
-        subfields.each() do |subfield|
+        subfields.each do |subfield|
           subfield = subfield.force_encoding("UTF-8")
           fixed_subfield = ''
           subfield.each_codepoint do |c|
-            if c < 12364 || c > 64217
+            if c < 1570 || (7680..10792).include?(c)
               fixed_subfield << c.chr(Encoding::UTF_8).unicode_normalize(:nfd)
             else
               fixed_subfield << c.chr(Encoding::UTF_8)
@@ -337,6 +337,145 @@ module Marc_Cleanup
             fixed_record.length())
     fixed_record[0..4] = sprintf("%05i", fixed_length)
     fixed_record[LEADER_LENGTH..base_address-2] = new_directory
+    fixed_record
+  end
+
+  def empty_subfield_fix(record)
+    record.force_encoding("binary")
+    fixed_record = ''
+    leader = record.slice(0..LEADER_LENGTH-1)
+    fixed_record << leader
+    base_address = leader[12..16].to_i
+    directory = record[LEADER_LENGTH..base_address-2]
+    num_fields = directory.length / DIRECTORY_ENTRY_LENGTH
+    marc_field_data = record[base_address..-1]
+    fixed_record << END_OF_FIELD
+    new_directory = ''
+    all_fields = marc_field_data.split(END_OF_FIELD)
+    all_fields.pop
+    new_offset = 0
+    0.upto(num_fields - 1) do |field_num|
+      entry_start = field_num * DIRECTORY_ENTRY_LENGTH
+      entry_end = entry_start - 1 + DIRECTORY_ENTRY_LENGTH
+      entry = directory[entry_start..entry_end]
+      tag = entry[0..2]
+      field_data = all_fields.shift()
+      if tag =~ /00[1-9]/
+        field_data.force_encoding("UTF-8")
+        fixed_field = ''
+        fixed_field << field_data
+        fixed_field << END_OF_FIELD
+        fixed_record << fixed_field
+        field_length = (fixed_field.respond_to?(:bytesize) ?
+          fixed_field.bytesize() :
+          fixed_field.length())
+        new_directory << sprintf("%03s", tag)
+        new_directory << sprintf("%04i", field_length)
+        new_directory << sprintf("%05i", new_offset)
+        new_offset += field_length
+      else
+        field_data.force_encoding("UTF-8")
+        fixed_field = ''
+        subfields = field_data.split(SUBFIELD_INDICATOR)
+        indicators = subfields.shift()
+        fixed_field << indicators
+        subfields.each do |subfield|
+          if subfield[1..-1]
+            fixed_field << SUBFIELD_INDICATOR
+            fixed_field << subfield
+          end
+        end
+        unless fixed_field.length < 4
+          fixed_field << END_OF_FIELD
+          fixed_field.force_encoding("UTF-8")
+          fixed_record << fixed_field
+          field_length = (fixed_field.respond_to?(:bytesize) ?
+            fixed_field.bytesize() :
+            fixed_field.length())
+          new_directory << sprintf("%03s", tag)
+          new_directory << sprintf("%04i", field_length)
+          new_directory << sprintf("%05i", new_offset)
+          new_offset += field_length
+        end
+      end
+    end
+    fixed_record << END_OF_RECORD
+    fixed_record.insert(24, new_directory)
+    fixed_length = (fixed_record.respond_to?(:bytesize) ?
+      fixed_record.bytesize :
+      fixed_record.length)
+    fixed_record[0..4] = sprintf("%05i", fixed_length)
+    new_base = new_directory.length + LEADER_LENGTH + 1
+    fixed_record[12..16] = sprintf("%05i", new_base)
+    fixed_record
+  end
+
+  def field_delete(tag, record)
+    record.force_encoding("binary")
+    fixed_record = ''
+    leader = record.slice(0..LEADER_LENGTH-1)
+    fixed_record << leader
+    base_address = leader[12..16].to_i
+    directory = record[LEADER_LENGTH..base_address-2]
+    num_fields = directory.length / DIRECTORY_ENTRY_LENGTH
+    marc_field_data = record[base_address..-1]
+    fixed_record << END_OF_FIELD
+    new_directory = ''
+    all_fields = marc_field_data.split(END_OF_FIELD)
+    all_fields.pop
+    new_offset = 0
+    0.upto(num_fields - 1) do |field_num|
+      entry_start = field_num * DIRECTORY_ENTRY_LENGTH
+      entry_end = entry_start - 1 + DIRECTORY_ENTRY_LENGTH
+      entry = directory[entry_start..entry_end]
+      field_tag = entry[0..2]
+      field_data = all_fields.shift()
+      unless field_tag == tag
+        if tag =~ /00[1-9]/
+          field_data.force_encoding("UTF-8")
+          fixed_field = ''
+          fixed_field << field_data
+          fixed_field << END_OF_FIELD
+          fixed_record << fixed_field
+          field_length = (fixed_field.respond_to?(:bytesize) ?
+            fixed_field.bytesize() :
+            fixed_field.length())
+          new_directory << sprintf("%03s", tag)
+          new_directory << sprintf("%04i", field_length)
+          new_directory << sprintf("%05i", new_offset)
+          new_offset += field_length
+      else
+        field_data.force_encoding("UTF-8")
+        fixed_field = ''
+        subfields = field_data.split(SUBFIELD_INDICATOR)
+        indicators = subfields.shift()
+        fixed_field << indicators
+        subfields.each do |subfield|
+          subfield_code = subfield[0]
+          fixed_field << SUBFIELD_INDICATOR
+          fixed_field << subfield
+          end
+        end
+        fixed_field << END_OF_FIELD
+        fixed_field.force_encoding("UTF-8")
+        fixed_record << fixed_field
+        field_length = (fixed_field.respond_to?(:bytesize) ?
+          fixed_field.bytesize() :
+          fixed_field.length())
+        new_directory << sprintf("%03s", tag)
+        new_directory << sprintf("%04i", field_length)
+        new_directory << sprintf("%05i", new_offset)
+        new_offset += field_length
+      end
+    end
+    fixed_record << END_OF_RECORD
+    fixed_record.insert(24, new_directory)
+    fixed_length = (fixed_record.respond_to?(:bytesize) ?
+      fixed_record.bytesize :
+      fixed_record.length)
+    fixed_record[0..4] = sprintf("%05i", fixed_length)
+    new_base = new_directory.length + LEADER_LENGTH + 1
+    fixed_record[12..16] = sprintf("%05i", new_base)
     fixed_record
   end
 end
