@@ -1,5 +1,20 @@
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
 *.rb~
 *.mrc
 *.xml
 lib/marc_cleanup/credentials.rb
 *.log
+tasks/
+marctofix/
+fixed/
+marc/
+# rspec failure tracking
+.rspec_status
