@@ -69,32 +69,32 @@ module Marc_Cleanup
       if field.class == MARC::DataField && field.tag != '010'
         curr_subfield = 0
         if field.tag =~ /[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
-          field.subfields.each do |subfield|            
-            record.fields[field_index].subfields[curr_subfield].value = subfield.value.gsub(/([[:blank:]]){2,}/, '\1').gsub(/^(.*)[[:blank:]]+$/, '\1')
+          field.subfields.each do |subfield|
+            record.fields[field_index].subfields[curr_subfield].value = subfield.value.gsub(/([[:blank:]]){2,}/, '\1').gsub(/^(.*)[[:blank:]]+$/, '\1').gsub(/^[[:blank:]]+(.*)$/, '\1')
             curr_subfield += 1
           end
         elsif field.tag == '533'
           field.subfields.each do |subfield|
             if subfield.code =~ /[^7]/
-              record.fields[field_index].subfields[curr_subfield].value = subfield.value.gsub(/([[:blank:]]){2,}/, '\1').gsub(/^(.*)[[:blank:]]+$/, '\1')
+              record.fields[field_index].subfields[curr_subfield].value = subfield.value.gsub(/([[:blank:]]){2,}/, '\1').gsub(/^(.*)[[:blank:]]+$/, '\1').gsub(/^[[:blank:]]+(.*)$/, '\1')
             end
             curr_subfield += 1
           end
         elsif field.tag =~ /7[6-8]./
           field.subfields.each do |subfield|
             if subfield.code =~ /[a-v3-8]/
-              record.fields[field_index].subfields[curr_subfield].value = subfield.value.gsub(/([[:blank:]]){2,}/, '\1').gsub(/^(.*)[[:blank:]]+$/, '\1')
+              record.fields[field_index].subfields[curr_subfield].value = subfield.value.gsub(/([[:blank:]]){2,}/, '\1').gsub(/^(.*)[[:blank:]]+$/, '\1').gsub(/^[[:blank:]]+(.*)$/, '\1')
             else
-              record.fields[field_index].subfields[curr_subfield].value = subfield.value.gsub(/^(.*)[[:blank:]]+$/, '\1')
+              record.fields[field_index].subfields[curr_subfield].value = subfield.value
             end
             curr_subfield += 1
           end
         elsif field.tag =~ /8../
           field.subfields.each do |subfield|
             if subfield.code =~ /[^w7]/
-              record.fields[field_index].subfields[curr_subfield].value = subfield.value.gsub(/([[:blank:]]){2,}/, '\1').gsub(/^(.*)[[:blank:]]+$/, '\1')
+              record.fields[field_index].subfields[curr_subfield].value = subfield.value.gsub(/([[:blank:]]){2,}/, '\1').gsub(/^(.*)[[:blank:]]+$/, '\1').gsub(/^[[:blank:]]+(.*)$/, '\1')
             else
-              record.fields[field_index].subfields[curr_subfield].value = subfield.value.gsub(/^(.*)[[:blank:]]+$/, '\1')
+              record.fields[field_index].subfields[curr_subfield].value = subfield.value
             end
             curr_subfield += 1
           end
@@ -117,6 +117,34 @@ module Marc_Cleanup
         end
       else
         record.fields[field_index].value.gsub!(/[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/, ' ')
+      end
+      curr_field += 1
+    end
+    record
+  end
+
+  def composed_chars_normalize_fix_rubymarc(record)
+    curr_field = 0
+    record.fields.each do |field|
+      field_index = record.fields.index(field)
+      if field.class == MARC::DataField
+        curr_subfield = 0
+        field.subfields.each do |subfield|
+          fixed_subfield = ''
+          prevalue = subfield.value
+          if prevalue.match(/^.*[\u0653\u0654\u0655].*$/)
+            prevalue = prevalue.unicode_normalize(:nfc)
+          end
+          prevalue.each_codepoint do |c|
+            if c < 1570 || (7680..10792).include?(c)
+              fixed_subfield << c.chr(Encoding::UTF_8).unicode_normalize(:nfd)
+            else
+              fixed_subfield << c.chr(Encoding::UTF_8)
+            end
+          end
+          record.fields[field_index].subfields[curr_subfield].value = fixed_subfield
+          curr_subfield += 1
+        end
       end
       curr_field += 1
     end

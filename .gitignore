@@ -16,5 +16,6 @@ tasks/
 marctofix/
 fixed/
 marc/
+xml/
 # rspec failure tracking
 .rspec_status

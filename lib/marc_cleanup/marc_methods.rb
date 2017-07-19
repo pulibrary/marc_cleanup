@@ -86,6 +86,51 @@ module Marc_Cleanup
     end
   end
 
+  def composed_chars_latin(record)
+    bad_record = false
+    record.force_encoding("binary")
+    leader = record.slice(0..LEADER_LENGTH-1)
+    base_address = leader[12..16].to_i
+    directory = record[LEADER_LENGTH..base_address-2]
+    num_fields = directory.length / DIRECTORY_ENTRY_LENGTH
+    marc_field_data = record[base_address..-1]
+    all_fields = marc_field_data.split(END_OF_FIELD)
+    all_fields.pop
+    new_offset = 0
+    0.upto(num_fields - 1) do |field_num|
+      entry_start = field_num * DIRECTORY_ENTRY_LENGTH
+      entry_end = entry_start - 1 + DIRECTORY_ENTRY_LENGTH
+      entry = directory[entry_start..entry_end]
+      tag = entry[0..2]
+      field_data = all_fields.shift()
+      unless tag =~ /00[1-9]/
+        fixed_field = ''
+        subfields = field_data.split(SUBFIELD_INDICATOR)
+        indicators = subfields.shift()
+        subfields.each() do |subfield|
+          subfield = subfield.force_encoding("UTF-8")
+          subfield.each_codepoint do |c|
+            if c < 1570 || (7680..10792).include?(c)
+              unless c.chr(Encoding::UTF_8).unicode_normalized?(:nfd)
+                bad_record = true
+              end
+            end
+          end
+          if subfield =~ /^.*[\u0653\u0654\u0655].*$/
+            unless subfield.unicode_normalized?(:nfc)
+              bad_record = true
+            end
+          end
+        end
+      end
+    end
+    if bad_record
+      record
+    else
+      bad_record
+    end
+  end
+
   def composed_chars(record)
     bad_record = false
     record.force_encoding("binary")
