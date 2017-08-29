@@ -63,7 +63,7 @@ module MarcCleanup
       field_index = record.fields.index(field)
       if field.class == MARC::DataField
         field.subfields.each do |subfield|
-          subfield_index = record.fields.subfields.index(subfield)
+          subfield_index = record.fields[field_index].subfields.index(subfield)
           record.fields[field_index].subfields[subfield_index].value.scrub!('').force_encoding('UTF-8')
         end
       else
@@ -174,6 +174,18 @@ module MarcCleanup
         record.fields.delete_at(i)
       end
     end
+    record
+  end
+
+  def recap_fixes(record)
+    record = bad_utf8_fix(record)
+    record = field_delete(['856', '959'], record)
+    record = leaderfix(record)
+    record = extra_space_fix(record)
+    record = invalid_xml_fix(record)
+    record = composed_chars_normalize(record)
+    record = tab_newline_fix(record)
+    record = empty_subfield_fix(record)
     record
   end
 end
