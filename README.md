@@ -1,42 +1,46 @@
 # marc_cleanup
 A collection of Ruby methods to identify errors in MARC records and correct them automatically when possible.
-It also includes some methods to extract raw MARC records from Voyager. Create 'credentials.rb' with the ODBC credentials to your database and place it in lib/marc_cleanup.
 
 ## Included methods
-### Within record_dump.rb:
-record_dump - Extract all bibliographic MARC records from a Voyager database.
-
-changed_since_prompt - Extract all bibliographic MARC records changed since a specified date from a Voyager database.
-
-### Errors for raw MARC only:
+### Errors for raw MARC:
 directory_errors - Faulty directory entries (i.e., the directory length is not a multiple of 12).
 
-controlchar - Extra end-of-field, end-of-subfield, or end-of-record characters.
+controlchar_errors - Extra end-of-field, end-of-subfield, or end-of-record characters.
 
-### Errors for MARC records and rubymarc objects:
+### Errors for rubymarc objects:
 no_001 - Record has no 001 field.
 
 leader_errors - Errors in the leader.
 
-invalid_indicators - Characters other than a space or a number in the field indicators.
-
 invalid_tag - Tag does not consist of 3 numbers.
+
+invalid_indicators - Characters other than a space or a number in the field indicators.
 
 invalid_subfield_code - Subfield codes that are not alphanumeric.
 
-tab_char - Tab character instead of a space.
+empty_subfield - Empty subfields.
 
-invalid_xml_chars - Characters outside of the XML 1.0 specifications that would crash any parsers that don't account for these characters (e.g., Blacklight).
+extra_spaces - Extra spaces in any field/subfield that does not have positional data.
+
+multiple_no_245 - Record contains more than one 245 field, or no 245 field.
+
+pair_880_errors - Record contains a discrepancy with paired fields: the 880 fields do not have corresponding fields, or an 880 has no linkage.
+
+has_130_240 - Record contains a 130 and a 240, which conflict with each other.
+
+multiple_1xx - Record has multiple main entries.
+
+bad_utf8 - Record has invalid byte sequences.
+
+tab_newline_char - Record has a tab character or a newline instead of a space.
+
+invalid_xml_chars - Characters outside of the XML 1.0 specifications.
 
 combining_chars - Combining diacritics not attached to letters.
 
 invalid_chars - Characters outside the accepted Unicode repertoire for MARC21 cataloging.
 
-empty_subfield - Empty subfields.
-
-no_245 - No 245 title field.
-
-composed_chars - Not Unicode normalized according to the NFD specification.
+composed_chars_errors - Not Unicode normalized according to the NFD specification, with Arabic characters normalized to the NFC specification.
 
 relator_chars - Relator terms in subfield e or j for headings do not consist solely of lowercase letters and a period.
 
@@ -48,24 +52,22 @@ relator_comma - No comma or dash before the relator term in subfield e or j.
 
 heading_end_punct - Heading does not have final punctuation (period, closing parens, question mark, or dash).
 
-extra_spaces - Extra spaces in any field/subfield that does not have positional data.
-
-subfield_count - Provide a count of all subfields and fields found within the records from the './marc' directory.
-
-### Fixes for raw MARC and rubymarc objects:
+### Fixes for rubymarc objects:
 leaderfix - Leader errors.
 
 extra_space_fix - Remove extra spaces in any field/subfield that does not have positional data.
 
+bad_utf8_fix - Scrub out invalid byte sequences.
+
 invalid_xml_fix - Scrub invalid XML 1.0 characters.
 
-composed_chars_fix - Make Unicode characters normalized according to the NFD specification.
+composed_chars_normalize - Make Unicode characters normalized according to the NFD specification, with Arabic characters normalized to the NFC specification.
 
 tab_newline_fix - Replace tab characters and newline characters with single spaces.
 
-field_delete - Delete fields with specified tag.
-
 empty_subfield_fix - Remove all empty subfields.
+
+field_delete - Delete fields with specified tags.
 
 ### Fixes for raw MARC:
 controlcharfix - Remove extra end-of-field, end-of-subfield, or end-of-record characters.
