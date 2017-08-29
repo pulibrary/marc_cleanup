@@ -53,11 +53,11 @@ relator_comma - No comma or dash before the relator term in subfield e or j.
 heading_end_punct - Heading does not have final punctuation (period, closing parens, question mark, or dash).
 
 ### Fixes for rubymarc objects:
+bad_utf8_fix - Scrub out invalid byte sequences.
+
 leaderfix - Leader errors.
 
 extra_space_fix - Remove extra spaces in any field/subfield that does not have positional data.
-
-bad_utf8_fix - Scrub out invalid byte sequences.
 
 invalid_xml_fix - Scrub invalid XML 1.0 characters.
 
