@@ -177,9 +177,22 @@ module MarcCleanup
     record
   end
 
+  def subf_0_fix(record)
+    record.fields.each do |field|
+      next unless field.class == MARC::DataField && field.tag =~ /^[^9]/ && field['0']
+      field_index = record.fields.index(field)
+      field.subfields.each do |subfield|
+        next unless subfield.code == '0' && subfield.value =~ /^\(uri\)/
+        subfield_index = field.subfields.index(subfield)
+        record.fields[field_index].subfields[subfield_index].value = subfield.value.gsub(/^\(uri\)(.*)$/, '\1')
+      end
+    end
+    record
+  end
+
   def recap_fixes(record)
     record = bad_utf8_fix(record)
-    record = field_delete(['856', '959'], record)
+    record = field_delete(%w(856 959), record)
     record = leaderfix(record)
     record = extra_space_fix(record)
     record = invalid_xml_fix(record)

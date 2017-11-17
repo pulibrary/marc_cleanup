@@ -210,16 +210,16 @@ module MarcCleanup
           next if record.fields[field_num].subfields[subf_num].value.nil?
           temp_value = ''
           record.fields[field_num].subfields[subf_num].value.each_char do |c|
-            temp_value << good_chars.include?(c.ord) ? c : "░#{c}░"
+            good_chars.include?(c.ord) ? (temp_value <<  c) : (temp_value << '░'+c+'░')
           end
           record.fields[field_num].subfields[subf_num].value = temp_value
         end
       elsif record.fields[field_num].value
         temp_value = ''
-        field.value.each_char do |c|
-          temp_value << good_chars.include?(c.ord) ? c : "░#{c}░"
+        record.fields[field_num].value.each_char do |c|
+          good_chars.include?(c.ord) ? (temp_value <<  c) : (temp_value << '░'+c+'░')
         end
-        record.fields[curr_field].value = temp_value
+        record.fields[field_num].value = temp_value
       end
     end
     record
@@ -328,6 +328,16 @@ module MarcCleanup
     record.fields.each do |field|
       next unless field.tag =~ /[167]../
       return true if field['a'] =~ /^[a-z]{3,}/
+    end
+    false
+  end
+
+  def subf_0_uri?(record)
+    record.fields.each do |field|
+      next unless field.class == MARC::DataField && field.tag =~ /^[^9]/ && field['0']
+      field.subfields.each do |subfield|
+        return true if subfield.code == '0' && subfield.value =~ /^\(uri\)/
+      end
     end
     false
   end
