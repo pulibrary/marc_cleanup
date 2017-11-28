@@ -18,5 +18,6 @@ fixed/
 marc/
 xml/
 logs/
+json/
 # rspec failure tracking
 .rspec_status
