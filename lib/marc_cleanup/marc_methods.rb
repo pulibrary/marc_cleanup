@@ -1,5 +1,6 @@
 module MarcCleanup
   def directory_errors?(record)
+    record.force_encoding('binary')
     record.scrub =~ /^.{24}(.{12})+[\x1e]/ ? false : true
   end
 
@@ -21,8 +22,10 @@ module MarcCleanup
       offset = entry[7..11].to_i
       field_start = base_address + offset + 1
       field_end = field_start + length - 2
+      next unless mba[field_start..field_end]
       field_data = mba[field_start..field_end].pack('c*')
       field_data.force_encoding('UTF-8')
+      field_data.scrub!
       if tag =~ /00[1-9]/
         return true if field_data =~ control_regex
       else

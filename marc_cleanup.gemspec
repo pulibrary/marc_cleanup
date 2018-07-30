@@ -16,7 +16,4 @@ Gem::Specification.new do |spec|
   spec.require_paths  = ['lib']
 
   spec.add_dependency 'marc', '~> 1.0'
-  spec.add_dependency 'net-sftp', '~> 2.1'
-  spec.add_dependency 'rubyzip', '~> 1.2'
-
 end
