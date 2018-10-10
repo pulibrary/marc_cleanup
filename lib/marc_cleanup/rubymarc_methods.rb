@@ -3,6 +3,104 @@ module MarcCleanup
     record['001'].nil?
   end
 
+  def non_repeatable_fields
+    %w(
+      001
+      003
+      005
+      008
+      010
+      018
+      036
+      038
+      040
+      042
+      043
+      044
+      045
+      066
+      100
+      110
+      111
+      130
+      240
+      243
+      245
+      254
+      256
+      263
+      306
+      310
+      357
+      384
+      507
+      514
+      841
+      842
+      844
+      882
+    )
+  end
+
+  def auth_codes_042 # https://www.oclc.org/bibformats/en/0xx/042.html
+    %w(
+      anuc
+      dc
+      dhca
+      dlr
+      gamma
+      gils
+      isds/c
+      issnuk
+      lcac
+      lccopycat
+      lccopycat-nm
+      lcderive
+      lchlas
+      lcllh
+      lcnccp
+      lcnitrate
+      lcnuc
+      lcode
+      msc
+      nlc
+      nlmcopyc
+      nsdp
+      nst
+      ntccf
+      pcc
+      premarc
+      reveal
+      sanb
+      scipio
+      ukblcatcopy
+      ukblsr
+      ukscp
+      xisds/c
+      xissnuk
+      xlc
+      xnlc
+      xnsdp
+    )
+  end
+
+  def auth_code_error?(record)
+    return false unless record['042']
+    auth_codes_042.include?(record['042']['a']) ? false : true
+  end
+
+  def fixed_field_char_errors?(record)
+    fields = record.fields('001'..'009').map { |field| field.value }
+    bad_fields = fields.select { |value| value.bytesize != value.chars.size }
+    bad_fields.size > 0
+  end
+
+  def repeatable_field_errors?(record)
+    field_count = record.fields.group_by { |field| field.tag }.map { |key, value| { tag: key, count: value.size } }
+    nr_fields = field_count.select { |item| non_repeatable_fields.include?(item[:tag]) && item[:count] > 1 }
+    nr_fields.size > 0
+  end
+
   def leader_errors?(record)
     correct_leader = /[0-9]{5}[acdnp][ac-gijkmoprt][a-dims][\sa][\sa]22[0-9]{5}[1-8uzI-M\s][aciu\s][abcr\s]4500/
     record.leader =~ correct_leader ? false : true
@@ -70,6 +168,561 @@ module MarcCleanup
 
   def multiple_no_245?(record)
     record.fields('245').size != 1
+  end
+
+  def f245_subfield_errors?(record)
+    fields = record.fields('245')
+    return true if fields.empty?
+    fields.each do |field|
+      subfields = field.subfields.map { |subfield| subfield.code }
+      return true if subfields.count('a') != 1 || subfields.count('b') > 1 || subfields.count('c') > 1
+    end
+    false
+  end
+
+  def missing_040c?(record)
+    return true unless record['040'] && record['040']['c']
+    false
+  end
+
+  def bib_form(record)
+    %w[a c d i j m p t].include?(record.leader[6]) ? record['008'].value[23] : record['008'].value[29]
+  end
+
+  def blvl_ab_valid?(record)
+    record['773'] ? true : false
+  end
+
+  def ftype_ac_cdm_valid?(record)
+    present_fields1 = record.fields(%w(
+      020
+      024
+      027
+      088
+      100
+      110
+      111
+      300
+      533
+      700
+      710
+      711
+      800
+      810
+      811
+      830
+      ))
+    present_fields2 = record.fields(%w(260 264 533))
+    return false unless present_fields1.size > 0
+    return false unless present_fields2.size > 0
+    f1_criteria = false
+    present_fields1.each do |field|
+      f1_criteria = true if field['a']
+    end
+    present_fields2.each do |field|
+      case field.tag
+      when '260'
+        return true if field['a'] || field['b']
+      when '264'
+        return true if field['b']
+      when '533'
+        return true if field['c']
+      end
+    end
+    false
+  end
+
+  def ftype_ac_is_valid?(record)
+    present_fields = record.fields(%w(260 264 533))
+    return false unless present_fields.size > 0
+    present_fields.each do |field|
+      case field.tag
+      when '260'
+        return true if field['a'] || field['b']
+      when '264'
+        return true if field['b']
+      when '533'
+        return true if field['c']
+      end
+    end
+    false
+  end
+
+  def ftype_dt_cdm_valid?(record)
+    present_fields = record.fields(%w(
+      020
+      024
+      027
+      028
+      088
+      100
+      110
+      111
+      300
+      533
+      700
+      710
+      711
+      800
+      810
+      811
+      830
+      ))
+    return false unless present_fields.size > 0
+    present_fields.each do |field|
+      case field.tag
+      when '300'
+        return true if field['a'] || field['f']
+      when '533'
+        return true if field['e']
+      else
+        return true if field['a']
+      end
+    end
+    false
+  end
+
+  def ftype_e_cdims_valid?(record)
+    present_fields1 = record.fields(%w(007 300 338))
+    present_fields2 = record.fields(%w(260 264 533))
+    return false unless present_fields1.size > 0
+    return false unless present_fields2.size > 0
+    f1_criteria = false
+    present_fields1.each do |field|
+      case field.tag
+      when '007'
+        f1_criteria = true if %w(a d r).include? field.value[0]
+      when '300'
+        f1_criteria = true if field['a']
+      when '338'
+        f1_criteria = true if field['a'] || field['b']
+      when 533
+        f1_criteria = true if field['e']
+      end
+    end
+    return false unless f1_criteria
+    present_fields2.each do |field|
+      case field.tag
+      when '260'
+        return true if field['a'] || field['b']
+      when '264'
+        return true if field['b']
+      when '533'
+        return true if field['c']
+      end
+    end
+    false
+  end
+
+  def ftype_f_cdm_valid?(record)
+    present_fields = record.fields(%w(
+      007
+      300
+      338
+      533
+      ))
+    return false unless present_fields.size > 0
+    present_fields.each do |field|
+      case field.tag
+      when '007'
+        return true if ['a', 'd', 'r'].include? field.value[0]
+      when '300'
+        return true if field['a'] || field['f']
+      when '338'
+        return true if field['a'] || field['b']
+      when 533
+        return true if field['e']
+      end
+    end
+    false
+  end
+
+  def ftype_g_cdm_valid?(record)
+    present_fields = record.fields(%w(
+      007
+      008
+      300
+      338
+      345
+      346
+      538
+      ))
+    return false unless present_fields.size > 0
+    present_fields.each do |field|
+      case field.tag
+      when '007'
+        return true if %w(a d r).include? field.value[0]
+      when '008'
+        return true if %w(g k o r).include?(record.leader[6]) && %w(f m p s t v).include?(field.value[33])
+      when '300'
+        return true if field['a']
+      when '345'
+        return true
+      when '346'
+        return true
+      when '538'
+        return true if field['a']
+      end
+    end
+    false
+  end
+
+  def ftype_g_is_valid?(record)
+    present_fields1 = record.fields(%w(
+      007
+      008
+      300
+      338
+      345
+      346
+      538))
+    present_fields2 = record.fields(%w(260 264 533))
+    return false unless present_fields1.size > 0
+    return false unless present_fields2.size > 0
+    f1_criteria = false
+    present_fields1.each do |field|
+      case field.tag
+      when '007'
+        f1_criteria = true if %w(g m v).include? field.value[0]
+      when '008'
+        f1_criteria = true if %w(g k o r).include?(record.leader[6]) && %w(f m p s t v).include?(field.value[33])
+      when '300'
+        f1_criteria = true if field['a']
+      when '338'
+        f1_criteria = true if field['a'] || field['b']
+      when '345'
+        f1_criteria = true
+      when '346'
+        f1_criteria = true
+      when 538
+        f1_criteria = true if field['a']
+      end
+    end
+    return false unless f1_criteria
+    present_fields2.each do |field|
+      case field.tag
+      when '260'
+        return true if field['a'] || field['b']
+      when '264'
+        return true if field['b']
+      when '533'
+        return true if field['c']
+      end
+    end
+    false
+  end
+
+  def ftype_ij_cdm_valid?(record)
+    present_fields = record.fields(%w(
+      007
+      300
+      338
+      344
+      538
+      ))
+    return false unless present_fields.size > 0
+    present_fields.each do |field|
+      case field.tag
+      when '007'
+        return true if field.value[0] == 's'
+      when '300'
+        return true if field['a']
+      when '338'
+        return true if field['a'] || field['b']
+      when '344'
+        return true
+      when '538'
+        return true if field['a']
+      end
+    end
+    false
+  end
+
+  def ftype_ij_is_valid?(record)
+    present_fields1 = record.fields(%w(
+      007
+      300
+      338
+      344
+      538))
+    present_fields2 = record.fields(%w(260 264 533))
+    return false unless present_fields1.size > 0
+    return false unless present_fields2.size > 0
+    f1_criteria = false
+    present_fields1.each do |field|
+      case field.tag
+      when '007'
+        f1_criteria = true if field.value[0] == 's'
+      when '300'
+        f1_criteria = true if field['a']
+      when '338'
+        f1_criteria = true if field['a'] || field['b']
+      when '344'
+        f1_criteria = true
+      when 538
+        f1_criteria = true if field['a']
+      end
+    end
+    return false unless f1_criteria
+    present_fields2.each do |field|
+      case field.tag
+      when '260'
+        return true if field['a'] || field['b']
+      when '264'
+        return true if field['b']
+      when '533'
+        return true if field['c']
+      end
+    end
+    false
+  end
+
+  def ftype_k_cdm_valid?(record)
+    present_fields = record.fields(%w(
+      007
+      008
+      300
+      338
+      ))
+    return false unless present_fields.size > 0
+    present_fields.each do |field|
+      case field.tag
+      when '007'
+        return true if field.value[0] == 'k'
+      when '008'
+        return true if %w(g k o r).include?(record.leader[6]) && %w(a c k l n o p).include?(field.value[33])
+      when '300'
+        return true if field['a']
+      when '338'
+        return true if field['a'] || field['b']
+      end
+    end
+    false
+  end
+
+  def ftype_k_is_valid?(record)
+    present_fields1 = record.fields(%w(
+      007
+      008
+      300
+      338))
+    present_fields2 = record.fields(%w(260 264 533))
+    return false unless present_fields1.size > 0
+    return false unless present_fields2.size > 0
+    f1_criteria = false
+    present_fields1.each do |field|
+      case field.tag
+      when '007'
+        f1_criteria = true if field.value[0] == 'k'
+      when '008'
+        return true if %w(g k o r).include?(record.leader[6]) && %w(a c k l n o p).include?(field.value[33])
+      when '300'
+        f1_criteria = true if field['a']
+      when '338'
+        f1_criteria = true if field['a'] || field['b']
+      end
+    end
+    return false unless f1_criteria
+    present_fields2.each do |field|
+      case field.tag
+      when '260'
+        return true if field['a'] || field['b']
+      when '264'
+        return true if field['b']
+      when '533'
+        return true if field['c']
+      end
+    end
+    false
+  end
+
+  def ftype_m_cdm_valid?(record)
+    present_fields = record.fields(%w(
+      007
+      300
+      338
+      347
+      538
+      ))
+    return false unless present_fields.size > 0
+    present_fields.each do |field|
+      case field.tag
+      when '007'
+        return true if field.value[0] == 'c'
+      when '300'
+        return true if field['a']
+      when '338'
+        return true if field['a'] || field['b']
+      when '347'
+        return true
+      when '538'
+        return true if field['a']
+      end
+    end
+    false
+  end
+
+  def ftype_m_is_valid?(record)
+    present_fields1 = record.fields(%w(
+      007
+      300
+      338
+      347
+      538))
+    present_fields2 = record.fields(%w(260 264 533))
+    return false unless present_fields1.size > 0
+    return false unless present_fields2.size > 0
+    f1_criteria = false
+    present_fields1.each do |field|
+      case field.tag
+      when '007'
+        f1_criteria = true if field.value[0] == 'c'
+      when '300'
+        f1_criteria = true if field['a']
+      when '338'
+        f1_criteria = true if field['a'] || field['b']
+      when '347'
+        f1_criteria = true
+      when '538'
+        f1_criteria = true if field['a']
+      end
+    end
+    return false unless f1_criteria
+    present_fields2.each do |field|
+      case field.tag
+      when '260'
+        return true if field['a'] || field['b']
+      when '264'
+        return true if field['b']
+      when '533'
+        return true if field['c']
+      end
+    end
+    false
+  end
+
+  def ftype_or_cdm_valid?(record)
+    present_fields = record.fields(%w(
+      008
+      300
+      338))
+    return false unless present_fields.size > 0
+    present_fields.each do |field|
+      case field.tag
+      when '008'
+        return true if %w(g k o r).include?(record.leader[6]) && %w(a b c d g q r w).include?(field.value[33])
+      when '300'
+        return true if field['a']
+      when '338'
+        return true if field['a'] || field['b']
+      end
+    end
+    false
+  end
+
+  def ftype_or_is_valid?(record)
+    present_fields1 = record.fields(%w(
+      008
+      300
+      338))
+    present_fields2 = record.fields(%w(260 264 533))
+    return false unless present_fields1.size > 0
+    return false unless present_fields2.size > 0
+    f1_criteria = false
+    present_fields1.each do |field|
+      case field.tag
+      when '008'
+        return true if %w(g k o r).include?(record.leader[6]) && %w(a b c d g q r w).include?(field.value[33])
+      when '300'
+        f1_criteria = true if field['a']
+      when '338'
+        f1_criteria = true if field['a'] || field['b']
+      end
+    end
+    return false unless f1_criteria
+    present_fields2.each do |field|
+      case field.tag
+      when '260'
+        return true if field['a'] || field['b']
+      when '264'
+        return true if field['b']
+      when '533'
+        return true if field['c']
+      end
+    end
+    false
+  end
+
+  def ftype_p_cd_valid?(record)
+    present_fields = record.fields(%w(
+      100
+      110
+      111
+      300
+      338
+      700
+      710
+      711))
+    return false unless present_fields.size > 0
+    present_fields.each do |field|
+      case field.tag
+      when '300'
+        return true if field['a'] || field['f']
+      when '338'
+        return true if field['a'] || field['b']
+      else
+        return true if field['a']
+      end
+    end
+    false
+  end
+
+  def sparse_record?(record)
+    type = record.leader[6]
+    blvl = record.leader[7]
+    form = bib_form(record)
+    return true unless %w(\  a b c d f o q r s).include?(form)
+    valid = case
+      when %w(a b).include?(blvl)
+        blvl_ab_valid?(record)
+      when %w(a c).include?(type) && %w(c d m).include?(blvl)
+        ftype_ac_cdm_valid?(record)
+      when %w(a c).include?(type) && %w(i s).include?(blvl)
+        ftype_ac_is_valid?(record)
+      when %w(d t).include?(type) && %w(c d m).include?(blvl)
+        ftype_dt_cdm_valid?(record)
+      when %w(e).include?(type) && %w(c d i m s).include?(blvl)
+        ftype_e_cdims_valid?(record)
+      when %w(f).include?(type) && %w(c d m).include?(blvl)
+        ftype_f_cdm_valid?(record)
+      when %w(g).include?(type) && %w(c d m).include?(blvl)
+        ftype_g_cdm_valid?(record)
+      when %w(g).include?(type) && %w(i s).include?(blvl)
+        ftype_g_is_valid?(record)
+      when %w(i j).include?(type) && %w(c d m).include?(blvl)
+        ftype_ij_cdm_valid?(record)
+      when %w(i j).include?(type) && %w(i s).include?(blvl)
+        ftype_ij_is_valid?(record)
+      when %w(k).include?(type) && %w(c d m).include?(blvl)
+        ftype_k_cdm_valid?(record)
+      when %w(k).include?(type) && %w(i s).include?(blvl)
+        ftype_k_is_valid?(record)
+      when %w(m).include?(type) && %w(c d m).include?(blvl)
+        ftype_m_cdm_valid?(record)
+      when %w(m).include?(type) && %w(i s).include?(blvl)
+        ftype_m_is_valid?(record)
+      when %w(o r).include?(type) && %w(c d m).include?(blvl)
+        ftype_or_cdm_valid?(record)
+      when %w(o r).include?(type) && %w(i s).include?(blvl)
+        ftype_or_is_valid?(record)
+      when %w(p).include?(type) && %w(c d).include?(blvl)
+        ftype_p_cd_valid?(record)
+      when %w(a c).include?(type) && %w(i s).include?(blvl)
+        ftype_ac_is_valid?(record)
+      else
+        true
+     end
+     valid ? false : true
   end
 
   def pair_880_errors?(record)
