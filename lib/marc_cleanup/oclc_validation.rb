@@ -527,6 +527,9 @@ module MarcCleanup
     blvl = record.leader[7]
     form = bib_form(record)
     return true unless %w[\  a b c d f o q r s].include?(form)
+    f245 = record['245']
+    return true unless f245 && (f245['a'] || f245['k'])
+    return true unless record['008']
     valid =
       if %w[a b].include?(blvl)
         blvl_ab_valid?(record)
