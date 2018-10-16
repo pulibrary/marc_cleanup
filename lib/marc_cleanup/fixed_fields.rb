@@ -1231,7 +1231,12 @@ module MarcCleanup
     return true unless date_entered =~ /^[0-9]{6}$/
     return true unless %w[b c d e i k m n p q r s t u |].include?(date_type)
     return true unless date1 == '||||' || date1 == '    '  || date1 =~ /^[0-9u]{4}$/
-    return true unless date2 == '||||' || date2 == '    '  || date2 =~ /^[0-9u]{4}$/
+    case date_type
+    when 'e'
+      return true unless date2 =~ /^[0-9]+[ ]*$/
+    else
+      return true unless date2 == '||||' || date2 == '    '  || date2 =~ /^[0-9u]{4}$/
+    end
     return true unless place == '|||' || place_codes.include?(place)
     return true unless lang == '|||'  || lang_codes.include?(lang)
     return true unless %w[\  d o r s x |].include?(modified)
