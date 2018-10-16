@@ -1,4 +1,4 @@
-require_relative './rubymarc_methods'
+require_relative './fixed_fields'
 module MarcCleanup
   def leaderfix(record)
     correct_leader = /[0-9]{5}[acdnp][ac-gijkmoprt][a-dims][\sa][\sa]22[0-9]{5}[1-8uzI-M\s][aciu\s][abcr\s]4500/
