@@ -1,4 +1,3 @@
-#coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
@@ -12,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.homepage       = 'https://github.com/pulibrary/marc_cleanup'
   spec.license        = 'BSD-2-Clause'
 
-  spec.files          = `git ls-files`.split($/)
+  spec.files          = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   spec.require_paths  = ['lib']
 
   spec.add_dependency 'marc', '~> 1.0'
