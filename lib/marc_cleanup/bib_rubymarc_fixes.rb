@@ -105,11 +105,9 @@ module MarcCleanup
           prevalue = prevalue.unicode_normalize(:nfc)
         end
         prevalue.each_codepoint do |c|
-          if c < 1570 || (7_680..10_792).cover?(c)
-            fixed_subfield << c.chr(Encoding::UTF_8).unicode_normalize(:nfd)
-          else
-            fixed_subfield << c.chr(Encoding::UTF_8)
-          end
+          char = c.chr(Encoding::UTF_8)
+          char.unicode_normalize!(:nfd) if c < 1570 || (7_680..10_792).cover?(c)
+          fixed_subfield << char
         end
         record.fields[field_index].subfields[curr_subfield].value = fixed_subfield
         curr_subfield += 1
@@ -197,7 +195,7 @@ module MarcCleanup
   def recap_fixes(record)
     record = bad_utf8_fix(record)
     record = field_delete(['959'], record)
-    record = field_delete(['856'], record, { :ind_1 => [' ', '0', '1', '2', '3', '7'] })
+    record = field_delete(['856'], record, ind_1: %w[\  0 1 2 3 7])
     record = leaderfix(record)
     record = extra_space_fix(record)
     record = invalid_xml_fix(record)
@@ -235,15 +233,10 @@ module MarcCleanup
     field_index = fixed_record.fields.index(field)
     field_value = field.value
     specific_008 = field_value[18..34]
-    date_entered = field_value[0..5]
-    date_type = field_value[6]
-    date1 = field_value[7..10]
-    date2 = field_value[11..14]
-    place = field_value[15..17]
-    lang = field_value[35..37]
     modified = field_value[38]
     cat_source = field_value[39]
     fixed_008 = field_value
+    fixed_008[38] = '|' if modified == 'u'
     if cat_source =~ /[abl]/
       fixed_008[39] = ' '
     elsif [' ', 'c', 'd', 'u', '|'].include?(cat_source)
@@ -251,22 +244,24 @@ module MarcCleanup
     elsif cat_source == 'o'
       fixed_008[39] = 'd'
     end
-    fixed_008[18..34] = case
-    when book.include?(rec_type)
-      fix_book_008(specific_008)
-    when comp_file.include?(rec_type)
-      fix_comp_008(specific_008)
-    when map.include?(rec_type)
-      fix_map_008(specific_008)
-    when music.include?(rec_type)
-      fix_music_008(specific_008)
-    when continuing_resource.include?(rec_type)
-      fix_continuing_resource_008(specific_008)
-    when visual.include?(rec_type)
-      fix_visual_008(specific_008)
-    when mixed.include?(rec_type)
-      fix_mix_mat_008(specific_008)
-    end
+    fixed_008[18..34] =
+      if book.include?(rec_type)
+        fix_book_008(specific_008)
+      elsif comp_file.include?(rec_type)
+        fix_comp_008(specific_008)
+      elsif map.include?(rec_type)
+        fix_map_008(specific_008)
+      elsif music.include?(rec_type)
+        fix_music_008(specific_008)
+      elsif continuing_resource.include?(rec_type)
+        fix_continuing_resource_008(specific_008)
+      elsif visual.include?(rec_type)
+        fix_visual_008(specific_008)
+      elsif mixed.include?(rec_type)
+        fix_mix_mat_008(specific_008)
+      else
+        specific_008
+      end
     fixed_record.fields[field_index].value = fixed_008
     fixed_record
   end

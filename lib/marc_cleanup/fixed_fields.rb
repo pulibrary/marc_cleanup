@@ -6,7 +6,12 @@ module MarcCleanup
   def fixed_field_char_errors?(record)
     fields = record.fields('001'..'009').map(&:value)
     bad_fields = fields.reject { |value| value.bytesize == value.chars.size }
+    bad_fields += fields.select { |value| value =~ /[^a-z0-9 \|.A-Z\-]/ }
     !bad_fields.empty?
+  end
+
+  def leader_char_errors?(record)
+    record.leader =~ /[^0-9a-zA-Z ]/ ? true : false
   end
 
   def leader_errors?(record)
@@ -1230,12 +1235,12 @@ module MarcCleanup
     cat_source = field[39]
     return true unless date_entered =~ /^[0-9]{6}$/
     return true unless %w[b c d e i k m n p q r s t u |].include?(date_type)
-    return true unless date1 == '||||' || date1 == '    '  || date1 =~ /^[0-9u]{4}$/
+    return true unless date1 == '||||' || date1 == '    ' || date1 =~ /^[0-9u]{4}$/
     case date_type
     when 'e'
       return true unless date2 =~ /^[0-9]+[ ]*$/
     else
-      return true unless date2 == '||||' || date2 == '    '  || date2 =~ /^[0-9u]{4}$/
+      return true unless date2 == '||||' || date2 == '    ' || date2 =~ /^[0-9u]{4}$/
     end
     return true unless place == '|||' || place_codes.include?(place)
     return true unless lang == '|||'  || lang_codes.include?(lang)
@@ -1565,7 +1570,7 @@ module MarcCleanup
       end
     end
     false
-   end
+  end
 
   def map_007(field)
     return true unless field.length == 7
@@ -1825,6 +1830,11 @@ module MarcCleanup
       end
     end
     false
+  end
+
+  def bad_008_length?(record)
+    field = record['008'].value
+    field.length != 40
   end
 
   def bad_008?(record)
