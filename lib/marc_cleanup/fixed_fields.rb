@@ -1552,21 +1552,22 @@ module MarcCleanup
     fields.each do |field|
       return true if field.value.length != 18
       rec_type = field.value[0]
-      specific_f008 = field.value[1..-1]
-      if %w[a t].include?(rec_type)
-        return true if book_008(specific_f008)
-      elsif rec_type == 'm'
-        return true if comp_008(specific_f008)
-      elsif %w[e f].include?(rec_type)
-        return true if map_008(specific_f008)
-      elsif %w[c d i j].include?(rec_type)
-        return true if music_008(specific_f008)
-      elsif rec_type == 's'
-        return true if continuing_resource_008(specific_f008)
-      elsif %w[g k o r].include?(rec_type)
-        return true if visual_008(specific_f008)
-      elsif rec_type == 'p'
-        return true if mix_mat_008(specific_f008)
+      specific_006 = field.value[1..-1]
+      case rec_type
+      when 'a', 't'
+        return true if book_008(specific_006)
+      when 'm'
+        return true if comp_008(specific_006)
+      when 'w', 'f'
+        return true if map_008(specific_006)
+      when 'c', 'd', 'i', 'j'
+        return true if music_008(specific_006)
+      when 's'
+        return true if continuing_resource_008(specific_006)
+      when 'w', 'g', 'k', 'o', 'r'
+        return true if visual_008(specific_006)
+      when 'p'
+        return true if mix_mat_008(specific_006)
       end
     end
     false
@@ -1661,7 +1662,7 @@ module MarcCleanup
   end
 
   def motion_pict_007(field)
-    return true unless field.length == 22
+    return true unless field.length > 6
     return true unless %w[c f o r u z |].include?(field[0])
     return true unless field[1] == ' '
     return true unless %w[b c h m n u z |].include?(field[2])
@@ -1669,17 +1670,24 @@ module MarcCleanup
     return true unless %w[\  a b u |].include?(field[4])
     return true unless %w[\  a b c d e f g h i u z |].include?(field[5])
     return true unless %w[a b c d e f g u z |].include?(field[6])
-    return true unless %w[k m n q s u z |].include?(field[7])
-    return true unless %w[a b c d e f g n z |].include?(field[8])
-    return true unless %w[a b n u z |].include?(field[9])
-    return true unless %w[d e o r u z |].include?(field[10])
-    return true unless %w[a c d i m n p r t u z |].include?(field[11])
-    return true unless %w[a b c d e f g h i j k l m n p q r s t u v z |].include?(field[12])
-    return true unless %w[a b c d n u z |].include?(field[13])
-    return true unless %w[a b c d e f g h k l m |].include?(field[14])
-    return true unless %w[c i n u |].include?(field[15])
-    return true unless %w[|||||| ------].include?(field[16..21]) || field[16..21] =~ /^[0-9]+[\-]*$/
-    false
+    return true unless field[7].nil? || field[7] =~ /[kmnqsuz|]/
+    return true unless field[8].nil? || field[8] =~ /[a-gnz|]/
+    return true unless field[9].nil? || field[9] =~ /[abnuz|]/
+    return true unless field[10].nil? || field[10] =~ /[deoruz|]/
+    return true unless field[11].nil? || field[11] =~ /[acdimnprtuz|]/
+    return true unless field[12].nil? || field[12] =~ /[a-np-vz|]/
+    return true unless field[13].nil? || field[13] =~ /[abcdnuz|]/
+    return true unless field[14].nil? || field[14] =~ /[a-hklm|]/
+    return true unless field[15].nil? || field[15] =~ /[cinu|]/
+    inspect_date = field[16..21]
+    case inspect_date
+    when '||||||', '------'
+      false
+    when /^[0-9]+[\-]*$/
+      false
+    else
+      true
+    end
   end
 
   def kit_mus_007(field)
@@ -1736,15 +1744,15 @@ module MarcCleanup
 
   def remote_007(field)
     return true unless field.length == 10
-    return true unless %w[u |].include?(field[0])
+    return true unless field[0] =~ /[u|]/
     return true unless field[1] == ' '
-    return true unless %w[a b c n u z |].include?(field[2])
-    return true unless %w[a b c n u |].include?(field[3])
-    return true unless %w[0 1 2 3 4 5 6 7 8 9 n u |].include?(field[4])
-    return true unless %w[a b c d e f g h i n u z |].include?(field[5])
-    return true unless %w[a b c m n u z |].include?(field[6])
-    return true unless %w[a b u z |].include?(field[7])
-    return true unless remote_data_types.include?(field[8..9])
+    return true unless field[2] =~ /[abcnuz|]/
+    return true unless field[3] =~ /[abcnu|]/
+    return true unless field[4] =~ /[0-9nu|]/
+    return true unless field[5] =~ /[a-inuz|]/
+    return true unless field[6] =~ /[abcmnuz|]/
+    return true unless field[7] =~ /[abuz|]/
+    return true unless remote_data_types.include? field[8..9]
     false
   end
 
@@ -1752,17 +1760,17 @@ module MarcCleanup
     return true unless field.length == 13
     return true unless %w[d e g i q r s t u w z |].include?(field[0])
     return true unless field[1] == ' '
-    return true unless %w[a b c d e f h i k l m n o p r u z |].include?(field[2])
-    return true unless %w[m q s u z |].include?(field[3])
-    return true unless %w[m n s u z |].include?(field[4])
-    return true unless %w[a b c d e f g j n o s u z |].include?(field[5])
-    return true unless %w[l m n o p u z |].include?(field[6])
-    return true unless %w[a b c d e f n u z |].include?(field[7])
-    return true unless %w[a b d i m n r s t u z |].include?(field[8])
-    return true unless %w[a b c g i l m n p r s w u z |].include?(field[9])
-    return true unless %w[h l n u |].include?(field[10])
-    return true unless %w[a b c d e f g h n u z |].include?(field[11])
-    return true unless %w[a b d e u z |].include?(field[12])
+    return true unless field[2] =~ /[a-fhik-pruz|]/
+    return true unless field[3] =~ /[mqsuz|]/
+    return true unless field[4] =~ /[mnsuz|]/
+    return true unless field[5] =~ /[a-gjnosuz|]/
+    return true unless field[6] =~ /[l-puz|]/
+    return true unless field[7] =~ /[a-fnuz|]/
+    return true unless field[8] =~ /[abdimnrstuz|]/
+    return true unless field[9] =~ /[abcgilmnprswuz|]/
+    return true unless field[10] =~ /[hlnu|]/
+    return true unless field[11] =~ /[a-hnuz|]/
+    return true unless field[12] =~ /[abdeuz|]/
     false
   end
 
@@ -1776,7 +1784,7 @@ module MarcCleanup
     return true unless %w[c d f r u z |].include?(field[0])
     return true unless field[1] == ' '
     return true unless %w[a b c m n u z |].include?(field[2])
-    return true unless %w[a b c d e f g h i j k m o p q s u v z |].include?(field[3])
+    return true unless field[3] =~ /[a-kmopqsuvz|]/
     return true unless %w[\  a b u |].include?(field[4])
     return true unless %w[\  a b c d e f g h i u z |].include?(field[5])
     return true unless %w[a m o p q r u z |].include?(field[6])
