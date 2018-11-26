@@ -246,10 +246,13 @@ module MarcCleanup
     target_fields = record.fields('007')
     return record if target_fields.empty?
     target_fields.each do |field|
-      rec_type = field[0]
+      field_index = record.fields.index(field)
+      field_value = field.value
+      rec_type = field_value[0]
       next unless %w[a c d f g h k m o q r s t v z].include? rec_type
       fixed_007 = rec_type
-      specific_007 = field[1..-1]
+      specific_007 = field_value[1..-1]
+      next unless specific_007
       case rec_type
       when 'a'
         fixed_007 << fix_map_007(specific_007)
@@ -282,7 +285,9 @@ module MarcCleanup
       when 'z'
         fixed_007 << fix_unspec_007(specific_007)
       end
+      record.fields[field_index].value = fixed_007
     end
+    record
   end
 
   def fix_map_007(specific_007)
@@ -602,6 +607,8 @@ module MarcCleanup
                         'e'
                       when 'f'
                         'i'
+                      else
+                        mat_designation
                       end
     mat_designation.gsub!(/[^degiq-uwz|]/, 'u')
     speed = specific_007[2]
@@ -620,6 +627,8 @@ module MarcCleanup
               'o'
             when 'c'
               'p'
+            else
+              width
             end
     width.gsub!(/[^l-puz|]/, 'u')
     configuration = specific_007[7]
@@ -693,7 +702,7 @@ module MarcCleanup
   end
 
   def fix_contents_chars(contents)
-    return contents if contents == '||||'
+    return contents if contents =~ /[\|]+$/
       contents.chars.each_with_index do |char, index|
         case char
         when 'h'
@@ -707,7 +716,7 @@ module MarcCleanup
         end
       end
       contents_values = contents.chars.select { |c| contents_chars.include? c }.sort.join('')
-      contents_values.ljust(4)
+      contents_values.ljust(contents.size)
     end
 
   def fix_006(record)
