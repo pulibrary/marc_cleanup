@@ -242,6 +242,24 @@ module MarcCleanup
     fixed_record
   end
 
+  def fix_040b(record)
+    f040 = record.fields('040')
+    return record unless f040.size == 1
+    f040 = f040.first
+    field_index = record.fields.index(f040)
+    b040 = f040.subfields.select { |subfield| subfield.code == 'b' }
+    return record unless b040.empty?
+    subf_codes = f040.subfields.map { |subfield| subfield.code }
+    subf_index = if f040['a']
+                   (subf_codes.index { |i| i == 'a' }) + 1
+                 else
+                   0
+                 end
+    subf_b = MARC::Subfield.new('b', 'eng')
+    record.fields[field_index].subfields.insert(subf_index, subf_b)
+    record
+  end
+
   def fix_007(record)
     target_fields = record.fields('007')
     return record if target_fields.empty?
@@ -746,7 +764,6 @@ module MarcCleanup
     end
     record
   end
-
 
   def fix_008(record)
     target_fields = record.fields('008')
