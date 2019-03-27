@@ -1,5 +1,10 @@
 require_relative './fixed_fields'
 module MarcCleanup
+  ### Replaces obsolete values with the current value;
+  #     if encoding level, cataloging form or multipart indicators
+  #     are outside accepted values, replace them with 'unknown'
+  #     normalize the indicator length and subfield code length to 2;
+  #     make the last 4 positions the only possible value of '4500'
   def leaderfix(record)
     correct_leader = /[0-9]{5}[acdnp][ac-gijkmoprt][a-dims][\sa][\sa]22[0-9]{5}[1-8uzI-M\s][aciu\s][abcr\s]4500/
     leader = record.leader
@@ -32,6 +37,7 @@ module MarcCleanup
     string.gsub(/^[[:blank:]]+(.*)$/, '\1')
   end
 
+  ### Remove extra spaces from all fields that are not positionally defined
   def extra_space_fix(record)
     record.fields.each do |field|
       next unless field.class == MARC::DataField && field.tag != '010'
@@ -67,6 +73,9 @@ module MarcCleanup
     record
   end
 
+  ### Scrub invalid UTF-8 byte sequences within field values,
+  #     replacing with nothing; indicators, subfield codes, and tags must be
+  #     handled separately
   def bad_utf8_fix(record)
     record.fields.each do |field|
       field_index = record.fields.index(field)
@@ -82,6 +91,7 @@ module MarcCleanup
     record
   end
 
+  ### Replace invalid XML 1.0 characters with a space
   def invalid_xml_fix(record)
     bad_xml_range = /[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/
     record.leader.gsub!(bad_xml_range, ' ')
@@ -101,6 +111,9 @@ module MarcCleanup
     record
   end
 
+  ### Normalize to the NFC (combined) form of diacritics for characters with
+  #     Arabic diacritics; normalize to NFD for characters below U+622 and
+  #     between U+1E00 and U+2A28
   def composed_chars_normalize(record)
     record.fields.each do |field|
       next unless field.class == MARC::DataField
@@ -124,6 +137,7 @@ module MarcCleanup
     record
   end
 
+  ### Replace tab and newline characters with a space
   def tab_newline_fix(record)
     regex = /[\x09\n\r]/
     record.leader.gsub!(regex, ' ')
@@ -145,15 +159,28 @@ module MarcCleanup
     record
   end
 
+  ### Replace empty indicators with a space;
+  #     scrub indicators with bad UTF-8
   def empty_indicator_fix(record)
     record.fields.each do |field|
       next unless field.class == MARC::DataField
-      field.indicator1 = ' ' if field.indicator1.nil?
-      field.indicator2 = ' ' if field.indicator2.nil?
+      if field.indicator1.nil?
+        field.indicator1 = ' '
+      else
+        field.indicator1.scrub!('')
+        field.indicator1 = ' ' if field.indicator1.size < 1
+      end
+      if field.indicator2.nil?
+        field.indicator2 = ' '
+      else
+        field.indicator2.scrub!('')
+        field.indicator2 = ' ' if field.indicator2.size < 1
+      end
     end
     record
   end
 
+  ### Remove empty subfields from DataFields
   def empty_subfield_fix(record)
     fields_to_delete = []
     curr_field = -1
@@ -198,6 +225,7 @@ module MarcCleanup
     record
   end
 
+  ### Remove the (uri) prefix from subfield 0s
   def subf_0_fix(record)
     record.fields.each do |field|
       next unless field.class == MARC::DataField && field.tag =~ /^[^9]/ && field['0']
@@ -224,6 +252,7 @@ module MarcCleanup
     record
   end
 
+  ### Escape URIs
   def uri_escape(record)
     target_fields = record.fields('856')
     return record if target_fields.empty?
@@ -242,6 +271,7 @@ module MarcCleanup
     fixed_record
   end
 
+  ### Make the 040 $b 'eng' if it doesn't have a value
   def fix_040b(record)
     f040 = record.fields('040')
     return record unless f040.size == 1
@@ -260,6 +290,7 @@ module MarcCleanup
     record
   end
 
+  ### Replace obsolete values with current values when possible
   def fix_007(record)
     target_fields = record.fields('007')
     return record if target_fields.empty?
@@ -737,6 +768,7 @@ module MarcCleanup
       contents_values.ljust(contents.size)
     end
 
+  ### Replace obsolete values with current values when possible
   def fix_006(record)
     target_fields = record.fields('006')
     return record if target_fields.empty?
@@ -765,6 +797,7 @@ module MarcCleanup
     record
   end
 
+  ### Replace obsolete values with current values when possible
   def fix_008(record)
     target_fields = record.fields('008')
     return record if target_fields.size != 1
@@ -990,5 +1023,28 @@ module MarcCleanup
     fixed_field << item_form
     fixed_field << '           '
     fixed_field
+  end
+
+  ### Sort subfields for target fields with an arbitrary order
+  def subfield_sort(record, target_tags, order_array = nil)
+    target_fields = record.fields.select { |f| target_tags.include?(f.tag) }
+    return record if target_fields.empty?
+    target_fields.each do |field|
+      next unless field.class == MARC::DataField
+      orig_codes = field.subfields.map { |subfield| subfield.code }.uniq.sort
+      order_array = orig_codes if order_array.nil?
+      new_subfields = []
+      order_array.each do |code|
+        next unless orig_codes.include?(code)
+        target_subf = field.subfields.select { |subfield| subfield.code == code }
+        target_subf.each { |subfield| new_subfields << subfield }
+      end
+      rem_subfields = field.subfields.select { |subf| !order_array.include?(subf.code) }
+      rem_subfields.each do |subfield|
+        new_subfields << subfield
+      end
+      field.subfields = new_subfields
+    end
+    record
   end
 end
