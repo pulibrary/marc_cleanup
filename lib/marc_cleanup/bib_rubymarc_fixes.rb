@@ -873,7 +873,7 @@ module MarcCleanup
     lit_form.gsub!(' ', '0')
     fixed_field << lit_form
     fixed_field << biog
-    fixed_field
+    fixed_field.gsub('-', '|')
   end
 
   def fix_comp_008(field)
@@ -892,7 +892,7 @@ module MarcCleanup
     gov_pub.gsub!('n', 'o')
     fixed_field << gov_pub
     fixed_field << '      '
-    fixed_field
+    fixed_field.gsub('-', '|')
   end
 
   def fix_map_008(field)
@@ -925,7 +925,7 @@ module MarcCleanup
       format = format_chars.ljust(2)
     end
     fixed_field << format
-    fixed_field
+    fixed_field.gsub('-', '|')
   end
 
   def fix_music_008(field)
@@ -958,7 +958,7 @@ module MarcCleanup
     fixed_field << ' '
     fixed_field << transpose
     fixed_field << ' '
-    fixed_field
+    fixed_field.gsub('-', '|')
   end
 
   def fix_continuing_resource_008(field)
@@ -989,7 +989,7 @@ module MarcCleanup
     fixed_field << '   '
     fixed_field << orig_script
     fixed_field << entry
-    fixed_field
+    fixed_field.gsub('-', '|')
   end
 
   def fix_visual_008(field)
@@ -1022,7 +1022,7 @@ module MarcCleanup
     fixed_field << '     '
     fixed_field << item_form
     fixed_field << '           '
-    fixed_field
+    fixed_field.gsub('-', '|')
   end
 
   ### Sort subfields for target fields with an arbitrary order
