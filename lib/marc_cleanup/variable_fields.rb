@@ -1,4 +1,17 @@
 module MarcCleanup
+
+  def f041_errors?(record)
+    f041 = record.fields('041')
+    return false if f041.empty?
+    f041.each do |field|
+      field.subfields.each do |subfield|
+        val = subfield.value
+        return true if (val.size > 3) && (val.size % 3 == 0)
+      end
+    end
+    false
+  end
+
   # http://www.loc.gov/standards/valuelist/marcauthen.html
   def auth_codes_042
     %w[

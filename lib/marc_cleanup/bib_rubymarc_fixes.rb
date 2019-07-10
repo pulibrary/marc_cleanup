@@ -1025,6 +1025,68 @@ module MarcCleanup
     fixed_field.gsub('-', '|')
   end
 
+  ### Split up subfields that contain multiple 3-letter language codes
+  def fix_041(record)
+    f041 = record.fields('041')
+    return record if f041.empty?
+    f041.each do |field|
+      f_index = record.fields.index(field)
+      new_field = MARC::DataField.new('041', field.indicator1, field.indicator2)
+      field.subfields.each do |subfield|
+        code = subfield.code
+        val = subfield.value
+        next unless val.size % 3 == 0
+        langs = val.scan(/.../)
+        langs.each do |lang|
+          new_field.append(MARC::Subfield.new(code, lang))
+        end
+      end
+      record.fields[f_index] = new_field
+    end
+    record
+  end
+
+  ### Default field sort: sort fixed fields numerically, then sort the rest
+  ###   in groups, leaving the order of fields within the group alone
+  def field_sort(record)
+    new_rec = MARC::Record.new
+    new_rec.leader = record.leader
+    record.fields('001'..'009').sort_by { |field| field.tag }.each do |field|
+      new_rec.append(field)
+    end
+    record.fields('010'..'099').each do |field|
+      new_rec.append(field)
+    end
+    record.fields('100'..'199').each do |field|
+      new_rec.append(field)
+    end
+    record.fields('200'..'299').each do |field|
+      new_rec.append(field)
+    end
+    record.fields('300'..'399').each do |field|
+      new_rec.append(field)
+    end
+    record.fields('400'..'499').each do |field|
+      new_rec.append(field)
+    end
+    record.fields('500'..'599').each do |field|
+      new_rec.append(field)
+    end
+    record.fields('600'..'699').each do |field|
+      new_rec.append(field)
+    end
+    record.fields('700'..'799').each do |field|
+      new_rec.append(field)
+    end
+    record.fields('800'..'899').each do |field|
+      new_rec.append(field)
+    end
+    record.fields('900'..'999').each do |field|
+      new_rec.append(field)
+    end
+    new_rec
+  end
+
   ### Sort subfields for target fields with an arbitrary order
   def subfield_sort(record, target_tags, order_array = nil)
     target_fields = record.fields.select { |f| target_tags.include?(f.tag) }

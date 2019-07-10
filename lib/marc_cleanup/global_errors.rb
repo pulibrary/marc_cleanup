@@ -188,3 +188,31 @@ module MarcCleanup
     false
   end
 end
+
+### Count fields in a record; set :subfields to True to drill down to subfields
+def field_count(record, opts = {})
+  results = {}
+  if opts[:subfields]
+    record.fields.each do |field|
+      tag = field.tag.scrub('')
+      case tag
+      when /^00/
+        results[tag] = 0 unless results[tag]
+        results[tag] += 1
+      else
+        field.subfields.each do |subfield|
+          key = tag + subfield.code.to_s.scrub('')
+          results[key] = 0 unless results[key]
+          results[key] += 1
+        end
+      end
+    end
+  else
+    record.fields.each do |field|
+      tag = field.tag.scrub('')
+      results[tag] = 0 unless results[tag]
+      results[tag] += 1
+    end
+  end
+  results
+end
