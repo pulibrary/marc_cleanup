@@ -434,14 +434,14 @@ module MarcCleanup
     mat_designation.gsub!(/[^abcduz|]/, 'u')
     writing = specific_007[2..3]
     unless writing == '||'
-      writing_chars = relief.chars.select { |c| c =~ /[a-emnuz]/ }.sort.join('')
+      writing_chars = writing.chars.select { |c| c =~ /[a-emnuz]/ }.sort.join('')
       writing = writing_chars.ljust(2)
     end
     contraction = specific_007[4]
     contraction.gsub!(/[^abmnuz|]/, 'u')
     music = specific_007[5..7]
     unless music == '|||'
-      music_chars = relief.chars.select { |c| c =~ /[a-lnuz]/ }.sort.join('')
+      music_chars = music.chars.select { |c| c =~ /[a-lnuz]/ }.sort.join('')
       music = music_chars.ljust(3)
     end
     special = specific_007[8]
@@ -1085,6 +1085,20 @@ module MarcCleanup
       new_rec.append(field)
     end
     new_rec
+  end
+
+  def remove_duplicate_fields(record)
+    field_array = []
+    record.fields.reverse_each do |field|
+      field_index = record.fields.index(field)
+      string = field.to_s
+      if field_array.include?(string)
+        record.fields.delete_at(field_index)
+      else
+        field_array << string
+      end
+    end
+    record
   end
 
   ### Sort subfields for target fields with an arbitrary order
