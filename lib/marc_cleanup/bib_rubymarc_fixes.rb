@@ -1176,4 +1176,17 @@ module MarcCleanup
     end
     record
   end
+
+  ### Duplicate record to preserve original when making modifications
+  def duplicate_record(record)
+    raw_marc = ''
+    writer = MARC::Writer.new(StringIO.new(raw_marc, 'w'))
+    writer.write(record)
+    writer.close
+    reader = MARC::Reader.new(StringIO.new(raw_marc, 'r'),
+                              external_encoding: 'UTF-8',
+                              invalid: :replace,
+                              replace: '')
+    reader.first
+  end
 end
