@@ -15,5 +15,7 @@ Gem::Specification.new do |spec|
   spec.require_paths  = ['lib']
 
   spec.add_dependency 'marc', '~> 1.0'
+  spec.add_dependency "nokogiri"
   spec.add_development_dependency 'rspec'
+  spec.add_development_dependency "byebug"
 end
