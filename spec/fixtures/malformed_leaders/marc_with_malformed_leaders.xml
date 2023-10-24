@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection>
+    <record>
+        <leader>01104nam a2200289 i 4500</leader>
+        <controlfield tag="001">99127156537506421</controlfield>
+        <controlfield tag="005">20230519164555.0</controlfield>
+        <controlfield tag="008">230519s1996    njua          000 0 eng d</controlfield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)1379315007</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)on1379315007</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">PUL</subfield>
+            <subfield code="b">eng</subfield>
+            <subfield code="e">rda</subfield>
+            <subfield code="c">PUL</subfield>
+        </datafield>
+        <datafield tag="043" ind1=" " ind2=" ">
+            <subfield code="a">n-us-nj</subfield>
+        </datafield>
+        <datafield tag="088" ind1=" " ind2=" ">
+            <subfield code="a">PPPL-H 1996</subfield>
+        </datafield>
+        <datafield tag="090" ind1=" " ind2=" ">
+            <subfield code="a">X379357</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="0">
+            <subfield code="a">PPPL highlights :</subfield>
+            <subfield code="b">Princeton Plasma Physics Laboratory.</subfield>
+        </datafield>
+        <datafield tag="264" ind1=" " ind2="1">
+            <subfield code="a">Princeton, N.J. :</subfield>
+            <subfield code="b">Princeton University Plasma Physics Laboratory,</subfield>
+            <subfield code="c">1996.</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">42 pages :</subfield>
+            <subfield code="b">illustrations ;</subfield>
+            <subfield code="c">28 cm</subfield>
+        </datafield>
+        <datafield tag="336" ind1=" " ind2=" ">
+            <subfield code="a">text</subfield>
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+        </datafield>
+        <datafield tag="337" ind1=" " ind2=" ">
+            <subfield code="a">unmediated</subfield>
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+        </datafield>
+        <datafield tag="338" ind1=" " ind2=" ">
+            <subfield code="a">volume</subfield>
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+        </datafield>
+        <datafield tag="610" ind1="2" ind2="0">
+            <subfield code="a">Princeton University.</subfield>
+            <subfield code="b">Plasma Physics Laboratory</subfield>
+            <subfield code="x">Research.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Controlled fusion</subfield>
+            <subfield code="x">Research</subfield>
+            <subfield code="z">New Jersey</subfield>
+            <subfield code="z">Princeton.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Physical laboratories</subfield>
+            <subfield code="z">New Jersey</subfield>
+            <subfield code="z">Princeton.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Science projects</subfield>
+            <subfield code="z">New Jersey</subfield>
+            <subfield code="z">Princeton.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Science students</subfield>
+            <subfield code="z">New Jersey</subfield>
+            <subfield code="z">Princeton.</subfield>
+        </datafield>
+        <datafield tag="710" ind1="2" ind2=" ">
+            <subfield code="a">Princeton University.</subfield>
+            <subfield code="b">Plasma Physics Laboratory,</subfield>
+            <subfield code="e">issuing body.</subfield>
+        </datafield>
+        <datafield tag="902" ind1=" " ind2=" ">
+            <subfield code="a">940007994</subfield>
+            <subfield code="w">original</subfield>
+            <subfield code="1">20230519164506.0</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>01208nam a2200289 i 4500</leader>
+        <controlfield tag="001">99127156556406421</controlfield>
+        <controlfield tag="005">20230516151513.0</controlfield>
+        <controlfield tag="008">230516m19821983nju      at   000 0 eng d</controlfield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)1379207697</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)on1379207697</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">PUL</subfield>
+            <subfield code="b">eng</subfield>
+            <subfield code="e">rda</subfield>
+            <subfield code="c">PUL</subfield>
+        </datafield>
+        <datafield tag="088" ind1=" " ind2=" ">
+            <subfield code="a">PPPL-Trans 121</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="0">
+            <subfield code="a">[Princeton University Plasma Physics Laboratory reports]</subfield>
+        </datafield>
+        <datafield tag="264" ind1=" " ind2="1">
+            <subfield code="a">Princeton, N.J. :</subfield>
+            <subfield code="b">Princeton University Plasma Physics Laboratory,</subfield>
+            <subfield code="c">1982-1983.</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">3 volumes ;</subfield>
+            <subfield code="c">28 cm</subfield>
+        </datafield>
+        <datafield tag="336" ind1=" " ind2=" ">
+            <subfield code="a">text</subfield>
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+        </datafield>
+        <datafield tag="337" ind1=" " ind2=" ">
+            <subfield code="a">unmediated</subfield>
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+        </datafield>
+        <datafield tag="338" ind1=" " ind2=" ">
+            <subfield code="a">volume</subfield>
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+        </datafield>
+        <datafield tag="504" ind1=" " ind2=" ">
+            <subfield code="a">Includes bibliographical references.</subfield>
+        </datafield>
+        <datafield tag="505" ind1="1" ind2=" ">
+            <subfield code="a">Report no.1. Engineering Division first quarterly report -- Report no.2. Electronic and Electrical Engineering Division  quarterly report  -- Report no.3. Electronic and Electrical Engineering Division third quarterly report.</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">Title divised by cataloger.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Tokamaks.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Nuclear fusion.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Electrical engineering.</subfield>
+        </datafield>
+        <datafield tag="655" ind1=" " ind2="7">
+            <subfield code="a">Technical reports.</subfield>
+            <subfield code="2">lcgft</subfield>
+        </datafield>
+        <datafield tag="710" ind1="2" ind2=" ">
+            <subfield code="a">Princeton University.</subfield>
+            <subfield code="b">Plasma Physics Laboratory,</subfield>
+            <subfield code="e">issuing body.</subfield>
+        </datafield>
+        <datafield tag="902" ind1=" " ind2=" ">
+            <subfield code="a">940007994</subfield>
+            <subfield code="w">original</subfield>
+            <subfield code="1">20230516144805.0</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>01166cas a22003017i 4500</leader>
+        <controlfield tag="001">99127166927606421</controlfield>
+        <controlfield tag="005">20230602155815.0</controlfield>
+        <controlfield tag="008">110412d19781982njuuu     t   0    0eng d</controlfield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)713214383</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)ocn713214383</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">PUL</subfield>
+            <subfield code="b">eng</subfield>
+            <subfield code="e">rda</subfield>
+            <subfield code="c">PUL</subfield>
+            <subfield code="d">OCLCO</subfield>
+            <subfield code="d">OCLCQ</subfield>
+            <subfield code="d">OCLCO</subfield>
+            <subfield code="d">PUL</subfield>
+        </datafield>
+        <datafield tag="088" ind1=" " ind2=" ">
+            <subfield code="a">PPPL-ID 26</subfield>
+        </datafield>
+        <datafield tag="090" ind1=" " ind2=" ">
+            <subfield code="a">X734383</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="0">
+            <subfield code="a">Tokamak Fusion Test Reactor monthly highlights report November 1982.</subfield>
+        </datafield>
+        <datafield tag="264" ind1=" " ind2="1">
+            <subfield code="a">Princeton, N.J. :</subfield>
+            <subfield code="b">Princeton University Plasma Physics Laboratory,</subfield>
+            <subfield code="c">1978-1982.</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">volumes :</subfield>
+            <subfield code="b">illustrations ;</subfield>
+            <subfield code="c">28 cm</subfield>
+        </datafield>
+        <datafield tag="310" ind1=" " ind2=" ">
+            <subfield code="a">Monthly</subfield>
+        </datafield>
+        <datafield tag="336" ind1=" " ind2=" ">
+            <subfield code="a">text</subfield>
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+        </datafield>
+        <datafield tag="337" ind1=" " ind2=" ">
+            <subfield code="a">unmediated</subfield>
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+        </datafield>
+        <datafield tag="338" ind1=" " ind2=" ">
+            <subfield code="a">volume</subfield>
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+        </datafield>
+        <datafield tag="362" ind1="1" ind2=" ">
+            <subfield code="a">Began with volume May 1978</subfield>
+        </datafield>
+        <datafield tag="588" ind1=" " ind2=" ">
+            <subfield code="a">Volume May 1978; title from cover</subfield>
+        </datafield>
+        <datafield tag="610" ind1="2" ind2="0">
+            <subfield code="a">Princeton University.</subfield>
+            <subfield code="b">Plasma Physics Laboratory</subfield>
+            <subfield code="x">Research</subfield>
+            <subfield code="v">Periodicals.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Physical laboratories</subfield>
+            <subfield code="z">New Jersey</subfield>
+            <subfield code="z">Princeton</subfield>
+            <subfield code="v">Periodicals.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Tokamaks</subfield>
+            <subfield code="v">Periodicals.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Nuclear fusion</subfield>
+            <subfield code="v">Periodicals.</subfield>
+        </datafield>
+        <datafield tag="710" ind1="2" ind2=" ">
+            <subfield code="a">Princeton University.</subfield>
+            <subfield code="b">Plasma Physics Laboratory,</subfield>
+            <subfield code="e">issuing body.</subfield>
+        </datafield>
+        <datafield tag="902" ind1=" " ind2=" ">
+            <subfield code="a">940007994</subfield>
+            <subfield code="w">original</subfield>
+            <subfield code="1">20230602155520.0</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>01007nam a2200289 i 4500</leader>
+        <controlfield tag="001">99127184638906421</controlfield>
+        <controlfield tag="005">20230622114153.0</controlfield>
+        <controlfield tag="008">230622s1977    njua     abt  000 0 eng d</controlfield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)1385354476</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)on1385354476</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">PUL</subfield>
+            <subfield code="b">eng</subfield>
+            <subfield code="e">rda</subfield>
+            <subfield code="c">PUL</subfield>
+        </datafield>
+        <datafield tag="088" ind1=" " ind2=" ">
+            <subfield code="a">EP-R-031</subfield>
+        </datafield>
+        <datafield tag="090" ind1=" " ind2=" ">
+            <subfield code="a">X3853576</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="0">
+            <subfield code="a">Trade study comparison of open and closed cycle liquid nitrogen systems.</subfield>
+        </datafield>
+        <datafield tag="264" ind1=" " ind2="1">
+            <subfield code="a">Princeton, N.J. :</subfield>
+            <subfield code="b">Princeton University Plasma Physics Laboratory,</subfield>
+            <subfield code="c">1977.</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">ii,56 pages :</subfield>
+            <subfield code="b">illustrations ;</subfield>
+            <subfield code="c">28 cm</subfield>
+        </datafield>
+        <datafield tag="336" ind1=" " ind2=" ">
+            <subfield code="a">text</subfield>
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+        </datafield>
+        <datafield tag="337" ind1=" " ind2=" ">
+            <subfield code="a">unmediated</subfield>
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+        </datafield>
+        <datafield tag="338" ind1=" " ind2=" ">
+            <subfield code="a">volume</subfield>
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+        </datafield>
+        <datafield tag="504" ind1=" " ind2=" ">
+            <subfield code="a">Includes bibliographical references.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Liquid nitrogen.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Low temperature research.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Fusion reactors.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Tokamaks.</subfield>
+        </datafield>
+        <datafield tag="655" ind1=" " ind2="7">
+            <subfield code="a">Technical reports.</subfield>
+            <subfield code="2">lcgft</subfield>
+        </datafield>
+        <datafield tag="710" ind1="2" ind2=" ">
+            <subfield code="a">Princeton University.</subfield>
+            <subfield code="b">Plasma Physics Laboratory,</subfield>
+            <subfield code="e">issuing body.</subfield>
+        </datafield>
+        <datafield tag="902" ind1=" " ind2=" ">
+            <subfield code="a">940007994</subfield>
+            <subfield code="w">original</subfield>
+            <subfield code="1">20230622113927.0</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>01090nam a2200325 i 4500</leader>
+        <controlfield tag="001">99127184639106421</controlfield>
+        <controlfield tag="005">20230622111725.0</controlfield>
+        <controlfield tag="008">230622s1978    njua     abt  000 0 eng d</controlfield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)1385351323</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)on1385351323</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">PUL</subfield>
+            <subfield code="b">eng</subfield>
+            <subfield code="e">rda</subfield>
+            <subfield code="c">PUL</subfield>
+        </datafield>
+        <datafield tag="088" ind1=" " ind2=" ">
+            <subfield code="a">EP-D-012</subfield>
+        </datafield>
+        <datafield tag="090" ind1=" " ind2=" ">
+            <subfield code="a">X3853533</subfield>
+        </datafield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">Walters C. R.,</subfield>
+            <subfield code="e">author.</subfield>
+        </datafield>
+        <datafield tag="245" ind1="1" ind2="0">
+            <subfield code="a">Remote leak detection final report /</subfield>
+            <subfield code="c">by C. R. Walthers</subfield>
+        </datafield>
+        <datafield tag="264" ind1=" " ind2="1">
+            <subfield code="a">Princeton, N.J. :</subfield>
+            <subfield code="b">Princeton University Plasma Physics Laboratory,</subfield>
+            <subfield code="c">1978.</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">various pages :</subfield>
+            <subfield code="b">illustrations ;</subfield>
+            <subfield code="c">28 cm</subfield>
+        </datafield>
+        <datafield tag="336" ind1=" " ind2=" ">
+            <subfield code="a">text</subfield>
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+        </datafield>
+        <datafield tag="337" ind1=" " ind2=" ">
+            <subfield code="a">unmediated</subfield>
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+        </datafield>
+        <datafield tag="338" ind1=" " ind2=" ">
+            <subfield code="a">volume</subfield>
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+        </datafield>
+        <datafield tag="504" ind1=" " ind2=" ">
+            <subfield code="a">Includes bibliographical references.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Ceramics.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Helium.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Tritium.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Fusion reactors.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Tokamaks.</subfield>
+        </datafield>
+        <datafield tag="655" ind1=" " ind2="7">
+            <subfield code="a">Technical reports.</subfield>
+            <subfield code="2">lcgft</subfield>
+        </datafield>
+        <datafield tag="710" ind1="2" ind2=" ">
+            <subfield code="a">Grunman Aerospace Corp,</subfield>
+            <subfield code="e">sponsoring body.</subfield>
+        </datafield>
+        <datafield tag="710" ind1="2" ind2=" ">
+            <subfield code="a">Princeton University.</subfield>
+            <subfield code="b">Plasma Physics Laboratory,</subfield>
+            <subfield code="e">issuing body.</subfield>
+        </datafield>
+        <datafield tag="902" ind1=" " ind2=" ">
+            <subfield code="a">940007994</subfield>
+            <subfield code="w">original</subfield>
+            <subfield code="1">20230622111623.0</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>01241nam a2200373 i 4500</leader>
+        <controlfield tag="001">99127184653806421</controlfield>
+        <controlfield tag="005">20230620114703.0</controlfield>
+        <controlfield tag="008">230620s1983    njua     t   i000 0 eng d</controlfield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)1383659472</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)on1383659472</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">PUL</subfield>
+            <subfield code="b">eng</subfield>
+            <subfield code="e">rda</subfield>
+            <subfield code="c">PUL</subfield>
+        </datafield>
+        <datafield tag="043" ind1=" " ind2=" ">
+            <subfield code="a">n-us-nj</subfield>
+        </datafield>
+        <datafield tag="088" ind1=" " ind2=" ">
+            <subfield code="a">PPPL-ID-6</subfield>
+        </datafield>
+        <datafield tag="090" ind1=" " ind2=" ">
+            <subfield code="a">X38365947</subfield>
+        </datafield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">Hooke, W.M.,</subfield>
+            <subfield code="e">author.</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="0">
+            <subfield code="a">Proposal for Interim RF heating experiments on PLT, utilizing existing equipment.</subfield>
+        </datafield>
+        <datafield tag="264" ind1=" " ind2="1">
+            <subfield code="a">Princeton, N.J. :</subfield>
+            <subfield code="b">Princeton University Plasma Physics Laboratory,</subfield>
+            <subfield code="c">1983</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">30 pages :</subfield>
+            <subfield code="b">illustrations ;</subfield>
+            <subfield code="c">28 cm</subfield>
+        </datafield>
+        <datafield tag="336" ind1=" " ind2=" ">
+            <subfield code="a">text</subfield>
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+        </datafield>
+        <datafield tag="337" ind1=" " ind2=" ">
+            <subfield code="a">unmediated</subfield>
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+        </datafield>
+        <datafield tag="338" ind1=" " ind2=" ">
+            <subfield code="a">volume</subfield>
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Fusion reactors.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Tokamaks.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Controlled fusion.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Ions.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Heat.</subfield>
+        </datafield>
+        <datafield tag="655" ind1=" " ind2="7">
+            <subfield code="a">Technical reports.</subfield>
+            <subfield code="2">lcgft</subfield>
+        </datafield>
+        <datafield tag="700" ind1="1" ind2=" ">
+            <subfield code="a">Perkins, F. W.,</subfield>
+            <subfield code="e">author.</subfield>
+        </datafield>
+        <datafield tag="700" ind1="1" ind2=" ">
+            <subfield code="a">Stix, Thomas Howard,</subfield>
+            <subfield code="e">author.</subfield>
+        </datafield>
+        <datafield tag="700" ind1="1" ind2=" ">
+            <subfield code="a">Takahashi, H.</subfield>
+            <subfield code="q">(Hironori),</subfield>
+            <subfield code="e">author.</subfield>
+        </datafield>
+        <datafield tag="700" ind1="1" ind2=" ">
+            <subfield code="a">Deitz, A.,</subfield>
+            <subfield code="e">author.</subfield>
+        </datafield>
+        <datafield tag="700" ind1="1" ind2=" ">
+            <subfield code="a">Lawson, J.Q.,</subfield>
+            <subfield code="e">author.</subfield>
+        </datafield>
+        <datafield tag="710" ind1="2" ind2=" ">
+            <subfield code="a">Princeton University.</subfield>
+            <subfield code="b">Plasma Physics Laboratory,</subfield>
+            <subfield code="e">issuing body.</subfield>
+        </datafield>
+        <datafield tag="902" ind1=" " ind2=" ">
+            <subfield code="a">940007994</subfield>
+            <subfield code="w">original</subfield>
+            <subfield code="1">20230620113700.0</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>01130nam a2200325 i 4500</leader>
+        <controlfield tag="001">99127184654106421</controlfield>
+        <controlfield tag="005">20230620112123.0</controlfield>
+        <controlfield tag="008">230620s1980    njua     bt   000 0 eng d</controlfield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)1383659404</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)on1383659404</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">PUL</subfield>
+            <subfield code="b">eng</subfield>
+            <subfield code="e">rda</subfield>
+            <subfield code="c">PUL</subfield>
+        </datafield>
+        <datafield tag="043" ind1=" " ind2=" ">
+            <subfield code="a">n-us-nj</subfield>
+        </datafield>
+        <datafield tag="088" ind1=" " ind2=" ">
+            <subfield code="a">ORNL-PPPL PDX 6</subfield>
+        </datafield>
+        <datafield tag="090" ind1=" " ind2=" ">
+            <subfield code="a">X3836594</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="0">
+            <subfield code="a">ORNL/PPPL PDX 6-Megawatt Neutral Beam Project summary of the January 1980 six-month Review.</subfield>
+        </datafield>
+        <datafield tag="264" ind1=" " ind2="1">
+            <subfield code="a">Princeton, N.J. :</subfield>
+            <subfield code="b">Princeton University Plasma Physics Laboratory,</subfield>
+            <subfield code="c">1980.</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">37 pages :</subfield>
+            <subfield code="b">illustrations ;</subfield>
+            <subfield code="c">28 cm</subfield>
+        </datafield>
+        <datafield tag="336" ind1=" " ind2=" ">
+            <subfield code="a">text</subfield>
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+        </datafield>
+        <datafield tag="337" ind1=" " ind2=" ">
+            <subfield code="a">unmediated</subfield>
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+        </datafield>
+        <datafield tag="338" ind1=" " ind2=" ">
+            <subfield code="a">volume</subfield>
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+        </datafield>
+        <datafield tag="504" ind1=" " ind2=" ">
+            <subfield code="a">Includes bibliographical references.</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">EY-76-C-02-3073.</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">"Oak Ridge National Laboratory"--title page.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Neutral beams.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Tokamaks.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Fusion reactors.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Nitrogen.</subfield>
+        </datafield>
+        <datafield tag="655" ind1=" " ind2="7">
+            <subfield code="a">Technical reports.</subfield>
+            <subfield code="2">lcgft</subfield>
+        </datafield>
+        <datafield tag="710" ind1="2" ind2=" ">
+            <subfield code="a">Princeton University.</subfield>
+            <subfield code="b">Plasma Physics Laboratory,</subfield>
+            <subfield code="e">issuing body.</subfield>
+        </datafield>
+        <datafield tag="902" ind1=" " ind2=" ">
+            <subfield code="a">940007994</subfield>
+            <subfield code="w">original</subfield>
+            <subfield code="1">20230620112031.0</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>01073nam a2200289 i 4500</leader>
+        <controlfield tag="001">99128091158506421</controlfield>
+        <controlfield tag="005">20230808124841.0</controlfield>
+        <controlfield tag="008">230808s1968    njua     b    000 0 eng d</controlfield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)1393109067</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)on1393109067</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">PUL</subfield>
+            <subfield code="b">eng</subfield>
+            <subfield code="e">rda</subfield>
+            <subfield code="c">PUL</subfield>
+        </datafield>
+        <datafield tag="088" ind1=" " ind2=" ">
+            <subfield code="a">MATT-BIB-00</subfield>
+        </datafield>
+        <datafield tag="090" ind1=" " ind2=" ">
+            <subfield code="a">X1285850</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="1">
+            <subfield code="a">Annotated bibliography of books on plasma physics and controlled thermonuclear research.</subfield>
+        </datafield>
+        <datafield tag="264" ind1=" " ind2="1">
+            <subfield code="a">Princeton, N.J. :</subfield>
+            <subfield code="b">Princeton University Plasma Physics Laboratory,</subfield>
+            <subfield code="c">1968.</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">26 pages :</subfield>
+            <subfield code="b">illustrations ;</subfield>
+            <subfield code="c">28 cm</subfield>
+        </datafield>
+        <datafield tag="336" ind1=" " ind2=" ">
+            <subfield code="a">text</subfield>
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+        </datafield>
+        <datafield tag="337" ind1=" " ind2=" ">
+            <subfield code="a">unmediated</subfield>
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+        </datafield>
+        <datafield tag="338" ind1=" " ind2=" ">
+            <subfield code="a">volume</subfield>
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+        </datafield>
+        <datafield tag="504" ind1=" " ind2=" ">
+            <subfield code="a">Includes bibliographical references.</subfield>
+        </datafield>
+        <datafield tag="525" ind1=" " ind2=" ">
+            <subfield code="a">Supplement issues: 1. (October, 1965 - October, 1966); 2. (October 1966 - December, 1967).</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Research.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Tokamaks.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Nuclear reactors.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Fusion reactors.</subfield>
+        </datafield>
+        <datafield tag="710" ind1="2" ind2=" ">
+            <subfield code="a">Princeton University.</subfield>
+            <subfield code="b">Plasma Physics Laboratory,</subfield>
+            <subfield code="e">issuing body.</subfield>
+        </datafield>
+        <datafield tag="902" ind1=" " ind2=" ">
+            <subfield code="a">940007994</subfield>
+            <subfield code="w">original</subfield>
+            <subfield code="1">20230808122923.0</subfield>
+        </datafield>
+    </record>
+</collection>

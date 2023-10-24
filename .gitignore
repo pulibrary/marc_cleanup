@@ -9,8 +9,6 @@
 /spec/reports/
 /tmp/
 *.rb~
-*.mrc
-*.xml
 lib/marc_cleanup/credentials.rb
 *.log
 tasks/
