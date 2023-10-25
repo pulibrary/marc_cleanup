@@ -15,8 +15,20 @@ module MarcCleanup
   end
 
   def leader_errors?(record)
-    correct_leader = /[0-9]{5}[acdnp][ac-gijkmoprt][a-dims][\sa][\sa]22[0-9]{5}[1-8uzI-M\s][aciu\s][abcr\s]4500/
-    record.leader =~ correct_leader ? false : true
+    error = false
+    leader = record.leader
+    error = true if leader[0..4] =~ /[^0-9]/ # record length
+    error = true if leader[5] =~ /[^acdnp]/ # record status
+    error = true if leader[6] =~ /[^ac-gijkmoprt]/ # type of record
+    error = true if leader[7] =~ /[^a-dims]/ # bibliographic level
+    error = true if leader[8..9] =~ /[^a\s]/ # type of control and coding scheme
+    error = true if leader[10..11] != '22' # indicator and subfield count
+    error = true if leader[12..16] =~ /[^0-9]/ # base address of data
+    error = true if leader[17] =~ /[^1-578uzIJM\s]/ # OCLC encoding levels
+    error = true if leader[18] =~ /[^acinu\s]/ # descriptive cataloging form
+    error = true if leader[19] =~ /[^abc\s]/ # multipart resource record level
+    error = true if leader[20..23] != '4500' # fixed values
+    error
   end
 
   def bib_form(record)
