@@ -1,0 +1,20 @@
+<?xml version='1.0'?>
+<collection xmlns='http://www.loc.gov/MARC21/slim'
+      xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+      xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+<record>
+  <leader>01208bam a2200289 i 4500</leader>
+  <controlfield tag='001'>99127156556406421</controlfield>
+  <controlfield tag='005'>20230516151513.0</controlfield>
+  <controlfield tag='008'>230516m19821983nju      at   000 0 eng d</controlfield>
+  <datafield ind1=' ' ind2=' ' tag='040'>
+    <subfield code='a'>PUL</subfield>
+    <subfield code='b'>eng</subfield>
+    <subfield code='e'>rda</subfield>
+    <subfield code='c'>PUL</subfield>
+  </datafield>
+  <datafield ind1='0' ind2='0' tag='245'>
+    <subfield code='a'>[Princeton University Plasma Physics Laboratory reports]</subfield>
+  </datafield>
+</record>
+</collection>
