@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection>
+    <record>
+        <leader>01104nam a2200289 i 4500</leader>
+        <controlfield tag="001">99127156537506421</controlfield>
+        <controlfield tag="005">20230519164555.0</controlfield>
+        <controlfield tag="008">230519s1996    njua          000 0 eng d</controlfield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)1379315007</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)on1379315007</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">PUL</subfield>
+            <subfield code="b">eng</subfield>
+            <subfield code="e">rda</subfield>
+            <subfield code="c">PUL</subfield>
+        </datafield>
+        <datafield tag="043" ind1=" " ind2=" ">
+            <subfield code="a">n-us-nj</subfield>
+        </datafield>
+        <datafield tag="088" ind1=" " ind2=" ">
+            <subfield code="a">PPPL-H 1996</subfield>
+        </datafield>
+        <datafield tag="090" ind1=" " ind2=" ">
+            <subfield code="a">X379357</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="0">
+            <subfield code="a">PPPL highlights :</subfield>
+            <subfield code="b">Princeton Plasma Physics Laboratory.</subfield>
+        </datafield>
+        <datafield tag="264" ind1=" " ind2="1">
+            <subfield code="a">Princeton, N.J. :</subfield>
+            <subfield code="b">Princeton University Plasma Physics Laboratory,</subfield>
+            <subfield code="c">1996.</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">42 pages :</subfield>
+            <subfield code="b">illustrations ;</subfield>
+            <subfield code="c">28 cm</subfield>
+        </datafield>
+        <datafield tag="336" ind1=" " ind2=" ">
+            <subfield code="a">text</subfield>
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+        </datafield>
+        <datafield tag="337" ind1=" " ind2=" ">
+            <subfield code="a">unmediated</subfield>
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+        </datafield>
+        <datafield tag="338" ind1=" " ind2=" ">
+            <subfield code="a">volume</subfield>
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+        </datafield>
+        <datafield tag="610" ind1="2" ind2="0">
+            <subfield code="a">Princeton University.</subfield>
+            <subfield code="b">Plasma Physics Laboratory</subfield>
+            <subfield code="x">Research.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Controlled fusion</subfield>
+            <subfield code="x">Research</subfield>
+            <subfield code="z">New Jersey</subfield>
+            <subfield code="z">Princeton.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Physical laboratories</subfield>
+            <subfield code="z">New Jersey</subfield>
+            <subfield code="z">Princeton.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Science projects</subfield>
+            <subfield code="z">New Jersey</subfield>
+            <subfield code="z">Princeton.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Science students</subfield>
+            <subfield code="z">New Jersey</subfield>
+            <subfield code="z">Princeton.</subfield>
+        </datafield>
+        <datafield tag="710" ind1="2" ind2=" ">
+            <subfield code="a">Princeton University.</subfield>
+            <subfield code="b">Plasma Physics Laboratory,</subfield>
+            <subfield code="e">issuing body.</subfield>
+        </datafield>
+        <datafield tag="902" ind1=" " ind2=" ">
+            <subfield code="a">940007994</subfield>
+            <subfield code="w">original</subfield>
+            <subfield code="1">20230519164506.0</subfield>
+        </datafield>
+    </record>
+</collection>
