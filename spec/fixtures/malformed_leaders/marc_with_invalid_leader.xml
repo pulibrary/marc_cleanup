@@ -3,7 +3,7 @@
       xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
       xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
 <record>
-  <leader>01208bam a2200289 i 4500</leader>
+  <leader>01208bam a2200289xi 4500</leader>
   <controlfield tag='001'>99127156556406421</controlfield>
   <controlfield tag='005'>20230516151513.0</controlfield>
   <controlfield tag='008'>230516m19821983nju      at   000 0 eng d</controlfield>

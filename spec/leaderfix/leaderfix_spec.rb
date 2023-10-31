@@ -23,5 +23,9 @@ RSpec.describe 'test leaders' do
       corrected_record = MarcCleanup.leaderfix(record_with_invalid_leader)
       expect(corrected_record.leader[5]).to eq 'n'
     end
+    it 'corrects leader invalid position 17' do
+      corrected_record = MarcCleanup.leaderfix(record_with_invalid_leader)
+      expect(corrected_record.leader[17]).to eq 'u'
+    end
   end
 end
