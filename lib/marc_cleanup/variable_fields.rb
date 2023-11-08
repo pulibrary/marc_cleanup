@@ -1,8 +1,8 @@
 module MarcCleanup
-
   def f041_errors?(record)
     f041 = record.fields('041')
     return false if f041.empty?
+
     f041.each do |field|
       field.subfields.each do |subfield|
         val = subfield.value
@@ -76,12 +76,14 @@ module MarcCleanup
 
   def auth_code_error?(record)
     return false unless record['042']
+
     auth_codes_042.include?(record['042']['a']) ? false : true
   end
 
   def invalid_indicators?(record)
     record.fields.each do |field|
       next unless field.class == MARC::DataField
+
       return true unless field.indicator1 =~ /^[0-9 ]$/ && field.indicator2 =~ /^[0-9 ]$/
     end
     false
@@ -90,6 +92,7 @@ module MarcCleanup
   def invalid_subfield_code?(record)
     record.fields.each do |field|
       next unless field.class == MARC::DataField
+
       field.subfields.each do |subfield|
         return true unless subfield.code =~ /^[0-9a-z]$/
       end
@@ -100,6 +103,7 @@ module MarcCleanup
   def empty_subfields?(record)
     record.fields.each do |field|
       next unless field.class == MARC::DataField
+
       field.subfields.each do |subfield|
         return true if subfield.value =~ /^[[:blank:]]*$/
       end
@@ -111,6 +115,7 @@ module MarcCleanup
     blank_regex = /^.*[[:blank:]]{2,}.*$|^.*[[:blank:]]+$|^[[:blank:]]+(.*)$/
     record.fields.each do |field|
       next unless field.class == MARC::DataField && field.tag != '010'
+
       if field.tag =~ /[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
         field.subfields.each do |subfield|
           return true if subfield.value =~ blank_regex
@@ -118,16 +123,19 @@ module MarcCleanup
       elsif field.tag == '533'
         field.subfields.each do |subfield|
           next if subfield.code == '7'
+
           return true if subfield.value =~ blank_regex
         end
       elsif field.tag =~ /7[6-8]./
         field.subfields.each do |subfield|
           next unless subfield.code =~ /[a-v3-8]/
+
           return true if subfield.value =~ blank_regex
         end
       elsif field.tag =~ /8../
         field.subfields.each do |subfield|
           next unless subfield.code =~ /[^w7]/
+
           return true if subfield.value =~ blank_regex
         end
       end
@@ -143,9 +151,11 @@ module MarcCleanup
   def multiple_no_040b?(record)
     f040 = record.fields('040')
     return true if f040.size != 1
+
     f040 = f040.first
     b040 = f040.subfields.select { |subfield| subfield.code == 'b' }
     return true if b040.size != 1
+
     b040 = b040.first.value
     b040.gsub!(/[ ]/, '')
     b040 == ''
@@ -154,6 +164,7 @@ module MarcCleanup
   def f046_subfield_errors?(record)
     f046 = record.fields('046')
     return false if f046.empty?
+
     f046.each do |field|
       subf_codes = field.subfields.map { |subfield| subfield.code }
       return true if field['a'].nil? && (subf_codes & %w[b c d e]).size > 0
@@ -168,6 +179,7 @@ module MarcCleanup
   def f245_subfield_errors?(record)
     fields = record.fields('245')
     return true if fields.empty?
+
     fields.each do |field|
       subfields = field.subfields.map(&:code)
       return true if subfields.count('a') != 1
@@ -179,6 +191,7 @@ module MarcCleanup
 
   def missing_040c?(record)
     return true unless record['040'] && record['040']['c']
+
     false
   end
 
@@ -186,9 +199,12 @@ module MarcCleanup
     pair_880s = []
     linked_fields = []
     return false unless record['880']
+
     record.fields.each do |field|
       return true if field.tag == '880' && field['6'].nil?
+
       next unless field.tag =~ /^[0-8]..$/ && field.class == MARC::DataField && field['6']
+
       if field.tag == '880'
         pair_880s << field['6'].gsub(/^([0-9]{3}-[0-9]{2}).*$/, '\1')
       else
@@ -197,6 +213,7 @@ module MarcCleanup
     end
     pair_880s.delete_if { |x| x =~ /^.*-00/ }
     return true if pair_880s.uniq != pair_880s || pair_880s.uniq.sort != linked_fields.uniq.sort
+
     false
   end
 
@@ -213,11 +230,13 @@ module MarcCleanup
       if field.tag =~ /[17][01]0/
         field.subfields.each do |subfield|
           next unless subfield.code == 'e' && subfield.value =~ /.*[^a-z, \.].*/
+
           return true
         end
       elsif field.tag =~ /[17]11/
         field.subfields.each do |subfield|
           next unless subfield.code == 'j' && subfield.value =~ /.*[^a-z, \.].*/
+
           return true
         end
       end
@@ -229,6 +248,7 @@ module MarcCleanup
     record.fields(%w[100 600 700 800]).each do |field|
       field.subfields.each do |subfield|
         next unless subfield.code == 'q' && subfield.value =~ /^(?!\([^\)]*\))$/
+
         return true
       end
     end
@@ -251,6 +271,7 @@ module MarcCleanup
     comma_regex = /^.*[^,]$/
     record.fields.each do |field|
       next unless field.tag =~ /[17][01][01]/
+
       code_array = ''
       field.subfields.each do |subfield|
         code_array << subfield.code
@@ -270,6 +291,7 @@ module MarcCleanup
     punct_regex = /.*[^"\).\!\?\-]$/
     record.fields.each do |field|
       next unless field.tag =~ /^[167][0-5].$/ && field.indicator2 =~ /[^47]/
+
       code_array = ''
       field.subfields.each do |subfield|
         code_array << subfield.code
@@ -283,6 +305,7 @@ module MarcCleanup
   def lowercase_headings?(record)
     record.fields.each do |field|
       next unless field.tag =~ /[1678]../
+
       return true if field['a'] =~ /^[a-z]{3,}/
     end
     false
@@ -291,6 +314,7 @@ module MarcCleanup
   def subf_0_uri?(record)
     record.fields.each do |field|
       next unless field.class == MARC::DataField && field.tag =~ /^[^9]/ && field['0']
+
       field.subfields.each do |subfield|
         return true if subfield.code == '0' && subfield.value =~ /^\(uri\)/
       end
@@ -301,14 +325,201 @@ module MarcCleanup
   def bad_uri?(record)
     target_fields = record.fields('856')
     return false if target_fields.empty?
+
     target_fields.each do |field|
       next unless field['u']
+
       field.subfields.each do |subfield|
         next unless subfield.code == 'u'
+
         string = subfield.value
         return true unless URI.escape(URI.unescape(string).scrub) == string
       end
     end
     false
+  end
+
+  ### Normalize to the NFC (combined) form of diacritics for characters with
+  #     Arabic diacritics; normalize to NFD for characters below U+622 and
+  #     between U+1E00 and U+2A28
+  def composed_chars_normalize(record)
+    record.fields.each do |field|
+      next unless field.class == MARC::DataField
+
+      field_index = record.fields.index(field)
+      curr_subfield = 0
+      field.subfields.each do |subfield|
+        fixed_subfield = ''
+        prevalue = subfield.value
+        if prevalue =~ /^.*[\u0653\u0654\u0655].*$/
+          prevalue = prevalue.unicode_normalize(:nfc)
+        end
+        prevalue.each_codepoint do |c|
+          char = c.chr(Encoding::UTF_8)
+          char.unicode_normalize!(:nfd) if c < 1570 || (7_680..10_792).cover?(c)
+          fixed_subfield << char
+        end
+        record.fields[field_index].subfields[curr_subfield].value = fixed_subfield
+        curr_subfield += 1
+      end
+    end
+    record
+  end
+
+  ### Replace empty indicators with a space;
+  #     scrub indicators with bad UTF-8
+  def empty_indicator_fix(record)
+    record.fields.each do |field|
+      next unless field.class == MARC::DataField
+
+      if field.indicator1.nil?
+        field.indicator1 = ' '
+      else
+        field.indicator1.scrub!('')
+        field.indicator1 = ' ' if field.indicator1.size < 1
+      end
+      if field.indicator2.nil?
+        field.indicator2 = ' '
+      else
+        field.indicator2.scrub!('')
+        field.indicator2 = ' ' if field.indicator2.size < 1
+      end
+    end
+    record
+  end
+
+  ### Remove empty subfields from DataFields
+  def empty_subfield_fix(record)
+    fields_to_delete = []
+    curr_field = -1
+    record.fields.each do |field|
+      curr_field += 1
+      next unless field.class == MARC::DataField
+
+      curr_subfield = 0
+      subfields_to_delete = []
+      field.subfields.each do |subfield|
+        subfields_to_delete.unshift(curr_subfield) if subfield.value.empty? || subfield.value.nil?
+        curr_subfield += 1
+      end
+      subfields_to_delete.each do |i|
+        record.fields[curr_field].subfields.delete_at(i)
+      end
+      fields_to_delete.unshift(curr_field) if record.fields[curr_field].subfields.empty?
+    end
+    unless fields_to_delete.empty?
+      fields_to_delete.each do |i|
+        record.fields.delete_at(i)
+      end
+    end
+    record
+  end
+
+  ### Remove the (uri) prefix from subfield 0s
+  def subf_0_fix(record)
+    record.fields.each do |field|
+      next unless field.class == MARC::DataField && field.tag =~ /^[^9]/ && field['0']
+
+      field_index = record.fields.index(field)
+      field.subfields.each do |subfield|
+        next unless subfield.code == '0' && subfield.value =~ /^\(uri\)/
+
+        subfield_index = field.subfields.index(subfield)
+        record.fields[field_index].subfields[subfield_index].value = subfield.value.gsub(/^\(uri\)(.*)$/, '\1')
+      end
+    end
+    record
+  end
+
+  ### Escape URIs
+  def uri_escape(record)
+    target_fields = record.fields('856')
+    return record if target_fields.empty?
+
+    fixed_record = record
+    target_fields.each do |field|
+      next unless field['u']
+
+      field_index = fixed_record.fields.index(field)
+      field.subfields.each do |subfield|
+        next unless subfield.code == 'u'
+
+        subfield_index = field.subfields.index(subfield)
+        string = subfield.value
+        fixed_string = URI.escape(URI.unescape(string).scrub)
+        fixed_record.fields[field_index].subfields[subfield_index].value = fixed_string
+      end
+    end
+    fixed_record
+  end
+
+  ### Make the 040 $b 'eng' if it doesn't have a value
+  def fix_040b(record)
+    f040 = record.fields('040')
+    return record unless f040.size == 1
+
+    f040 = f040.first
+    field_index = record.fields.index(f040)
+    b040 = f040.subfields.select { |subfield| subfield.code == 'b' }
+    return record unless b040.empty?
+
+    subf_codes = f040.subfields.map { |subfield| subfield.code }
+    subf_index = if f040['a']
+                   (subf_codes.index { |i| i == 'a' }) + 1
+                 else
+                   0
+                 end
+    subf_b = MARC::Subfield.new('b', 'eng')
+    record.fields[field_index].subfields.insert(subf_index, subf_b)
+    record
+  end
+
+  ### Split up subfields that contain multiple 3-letter language codes
+  def fix_041(record)
+    f041 = record.fields('041')
+    return record if f041.empty?
+
+    f041.each do |field|
+      f_index = record.fields.index(field)
+      new_field = MARC::DataField.new('041', field.indicator1, field.indicator2)
+      field.subfields.each do |subfield|
+        code = subfield.code
+        val = subfield.value
+        next unless val.size % 3 == 0
+
+        langs = val.scan(/.../)
+        langs.each do |lang|
+          new_field.append(MARC::Subfield.new(code, lang))
+        end
+      end
+      record.fields[f_index] = new_field
+    end
+    record
+  end
+
+  ### Sort subfields for target fields with an arbitrary order
+  def subfield_sort(record, target_tags, order_array = nil)
+    target_fields = record.fields.select { |f| target_tags.include?(f.tag) }
+    return record if target_fields.empty?
+
+    target_fields.each do |field|
+      next unless field.class == MARC::DataField
+
+      orig_codes = field.subfields.map { |subfield| subfield.code }.uniq.sort
+      order_array = orig_codes if order_array.nil?
+      new_subfields = []
+      order_array.each do |code|
+        next unless orig_codes.include?(code)
+
+        target_subf = field.subfields.select { |subfield| subfield.code == code }
+        target_subf.each { |subfield| new_subfields << subfield }
+      end
+      rem_subfields = field.subfields.select { |subf| !order_array.include?(subf.code) }
+      rem_subfields.each do |subfield|
+        new_subfields << subfield
+      end
+      field.subfields = new_subfields
+    end
+    record
   end
 end

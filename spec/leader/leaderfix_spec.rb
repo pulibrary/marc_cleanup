@@ -5,7 +5,7 @@ require 'marc_cleanup'
 
 RSpec.describe 'test leaders' do
   describe 'valid leader' do
-    let(:marcfile) {"#{Dir.getwd}/spec/fixtures/malformed_leaders/marc_with_valid_leader.xml"}
+    let(:marcfile) {"#{Dir.getwd}/spec/fixtures/leader/marc_with_valid_leader.xml"}
     let(:reader) { MARC::XMLReader.new(marcfile, parser: 'magic', ignore_namespace: true) }
     let(:record_with_valid_leader) { reader.first }
     it 'knows that a record with a valid leader is valid' do
@@ -13,7 +13,7 @@ RSpec.describe 'test leaders' do
     end
   end
   describe 'invalid leader' do
-    let(:marcfile) { "#{Dir.getwd}/spec/fixtures/malformed_leaders/marc_with_invalid_leader.xml" }
+    let(:marcfile) { "#{Dir.getwd}/spec/fixtures/leader/marc_with_invalid_leader.xml" }
     let(:reader) { MARC::XMLReader.new(marcfile, parser: 'magic') }
     let(:record_with_invalid_leader) { reader.first }
     it 'knows that a record with an invalid leader is invalid' do
@@ -26,7 +26,7 @@ RSpec.describe 'test leaders' do
     it 'corrects leader invalid position 17' do
       corrected_record = MarcCleanup.leaderfix(record_with_invalid_leader)
       expect(corrected_record.leader[17]).to eq 'u'
-    end  
+    end
     it 'corrects leader invalid position 8' do
       corrected_record = MarcCleanup.leaderfix(record_with_invalid_leader)
       expect(corrected_record.leader[8]).to eq ' '

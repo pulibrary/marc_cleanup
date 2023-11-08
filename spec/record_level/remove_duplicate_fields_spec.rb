@@ -6,7 +6,7 @@ require 'marc_cleanup'
 
 RSpec.describe 'remove_duplicate_fields' do
   describe 'record with duplicate fields' do
-    let(:marcfile) { "#{Dir.getwd}/spec/fixtures/global_errors/marc_with_duplicate_fields.xml" }
+    let(:marcfile) { "#{Dir.getwd}/spec/fixtures/record_level/marc_with_duplicate_fields.xml" }
     let(:reader) { MARC::XMLReader.new(marcfile, parser: 'magic') }
     let(:record_with_duplicate_fields) { reader.first }
     it 'removes duplicate 500 field' do
@@ -15,4 +15,4 @@ RSpec.describe 'remove_duplicate_fields' do
       expect(f500.size).to eq 1
     end
   end
-end 
+end
