@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns='http://www.loc.gov/MARC21/slim'
+      xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+      xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+    <record>
+        <leader>01104nam a2200289 i 4500</leader>
+        <controlfield tag="001">99127156537506421</controlfield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">This is a note</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">This is a note</subfield>
+        </datafield>
+    </record>
+</collection>
