@@ -15,4 +15,4 @@ jobs:
       - ruby/bundle-install
       - run:
           name: rspec
-          command: bundle exec rspec
+          command: COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN bundle exec rspec
