@@ -1,3 +1,6 @@
+[![CircleCI](https://circleci.com/gh/pulibrary/marc_cleanup.svg?style=svg)](https://circleci.com/gh/pulibrary/marc_cleanup)
+[![Coverage Status](https://coveralls.io/repos/github/pulibrary/marc_cleanup/badge.svg?branch=main)](https://coveralls.io/github/pulibrary/marc_cleanup?branch=main)
+
 # marc_cleanup
 A collection of Ruby methods to identify errors in MARC records and correct them automatically when possible.
 
@@ -71,5 +74,3 @@ field_delete - Delete fields with specified tags.
 
 ### Fixes for raw MARC:
 controlcharfix - Remove extra end-of-field, end-of-subfield, or end-of-record characters.
-
-
