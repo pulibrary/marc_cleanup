@@ -38,7 +38,7 @@ module MarcCleanup
     ]
   end
 
-  def repeatable_field_errors?(record)
+  def non_repeatable_field_errors?(record)
     field_count = record.fields.group_by(&:tag).map { |key, value| { tag: key, count: value.size } }
     nr_fields = field_count.select { |item| non_repeatable_fields.include?(item[:tag]) && item[:count] > 1 }
     !nr_fields.empty?
