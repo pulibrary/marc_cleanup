@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns='http://www.loc.gov/MARC21/slim'
+      xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+      xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+    <record>
+        <leader>01104naa a2200289 i 4500</leader>
+        <controlfield tag="001">99127156537506421</controlfield>
+        <controlfield tag="008">230519s1996    njua   u      000 0 eng d</controlfield>
+        <datafield tag="245" ind1="0" ind2="0">
+            <subfield code="a">PPPL highlights :</subfield>
+            <subfield code="b">Princeton Plasma Physics Laboratory.</subfield>
+        </datafield>
+    </record>
+</collection>
