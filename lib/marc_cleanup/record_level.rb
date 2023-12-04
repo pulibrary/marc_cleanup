@@ -38,9 +38,13 @@ module MarcCleanup
     ]
   end
 
-  def non_repeatable_field_errors?(record)
+  def non_repeatable_field_errors?(record:, schema: RECORD_SCHEMA)
     field_count = record.fields.group_by(&:tag).map { |key, value| { tag: key, count: value.size } }
-    nr_fields = field_count.select { |item| non_repeatable_fields.include?(item[:tag]) && item[:count] > 1 }
+    nr_fields = field_count.select do |field|
+      field[:count] > 1 &&
+      schema[field[:tag]] &&
+      schema[field[:tag]]['repeat'] == false
+    end
     !nr_fields.empty?
   end
 
@@ -1079,5 +1083,71 @@ module MarcCleanup
         true
       end
     valid ? false : true
+  end
+
+  ### `schema` is a YAML file loaded as a hash;
+  ### schema = YAML.load_file("#{ROOT_DIR}/lib/marc_cleanup/variable_field_schema.yml")
+  def validate_marc(record:, schema: RECORD_SCHEMA)
+    hash = {}
+    hash[:multiple_1xx] = multiple_1xx?(record)
+    hash[:has_130_240] = has_130_240?(record)
+    hash[:multiple_no_245] = multiple_no_245?(record)
+    hash[:non_repeatable_field_errors] = non_repeatable_field_errors?(record: record, schema: schema)
+    hash[:invalid_tags] = record.fields.select do |field|
+      field.class == MARC::DataField &&
+      field.tag[0] != '9' &&
+      !schema.keys.include?(field.tag)
+    end.map { |f| f.tag }
+    hash[:invalid_fields] = {}
+    record.fields('010'..'899').each do |field|
+      next unless schema[field.tag]
+
+      field_num = record.fields(field.tag).index { |f| field }
+      field_num += 1
+      tag = field.tag
+      if field.tag == '880'
+        linked_field = field.subfields.select { |s| s.code == '6' }
+        if linked_field.empty?
+          error = "No field linkage in instance #{field_num} of 880"
+          hash[:invalid_fields][field.tag] ||= []
+          hash[:invalid_fields][field.tag] << error
+        elsif linked_field.size > 1
+          error = "Multiple field links in instance #{field_num} of 880"
+          hash[:invalid_fields][field.tag] ||= []
+          hash[:invalid_fields][field.tag] << error
+        elsif field['6'] !~ /^[0-9]{3}-[0-9]+/
+          error = "Invalid field linkage in instance #{field_num} of 880"
+          hash[:invalid_fields][field.tag] ||= []
+          hash[:invalid_fields][field.tag] << error
+        else
+          tag = field['6'].gsub(/^([0-9]{3})-.*$/, '\1')
+        end
+      end
+      unless schema[tag]['ind1'].include?(field.indicator1.to_s)
+        error = "Invalid indicator1 value #{field.indicator1.to_s} in instance #{field_num}"
+        hash[:invalid_fields][field.tag] ||= []
+        hash[:invalid_fields][field.tag] << error
+      end
+      unless schema[tag]['ind2'].include?(field.indicator2.to_s)
+        error = "Invalid indicator2 value #{field.indicator2.to_s} in instance #{field_num}"
+        hash[:invalid_fields][field.tag] ||= []
+        hash[:invalid_fields][field.tag] << error
+      end
+      subf_hash = {}
+      field.subfields.each do |subfield|
+        subf_hash[subfield.code] ||= 0
+        subf_hash[subfield.code] += 1
+      end
+      subf_hash.each do |code, count|
+        if schema[tag]['subfields'][code].nil?
+          hash[:invalid_fields][field.tag] ||= []
+          hash[:invalid_fields][field.tag] << "Invalid subfield code #{code} in instance #{field_num}"
+        elsif schema[tag]['subfields'][code]['repeat'] == false && count > 1
+          hash[:invalid_fields][field.tag] ||= []
+          hash[:invalid_fields][field.tag] << "Non-repeatable subfield code #{code} repeated in instance #{field_num}"
+        end
+      end
+    end
+    hash
   end
 end
