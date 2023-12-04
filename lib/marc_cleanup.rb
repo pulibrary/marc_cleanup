@@ -10,4 +10,5 @@ require_relative 'marc_cleanup/record_level'
 require_relative 'marc_cleanup/variable_fields'
 require_relative 'marc_cleanup/bib_marc_fixes'
 require_relative 'marc_cleanup/leader'
+require_relative 'marc_cleanup/generate_field_yaml'
 include MarcCleanup

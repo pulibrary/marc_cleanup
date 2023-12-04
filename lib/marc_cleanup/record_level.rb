@@ -1,43 +1,4 @@
 module MarcCleanup
-  def non_repeatable_fields
-    %w[
-      001
-      003
-      005
-      008
-      010
-      018
-      036
-      038
-      040
-      042
-      043
-      044
-      045
-      066
-      100
-      110
-      111
-      130
-      240
-      243
-      245
-      254
-      256
-      263
-      306
-      310
-      357
-      384
-      507
-      514
-      841
-      842
-      844
-      882
-    ]
-  end
-
   def non_repeatable_field_errors?(record:, schema: RECORD_SCHEMA)
     field_count = record.fields.group_by(&:tag).map { |key, value| { tag: key, count: value.size } }
     nr_fields = field_count.select do |field|

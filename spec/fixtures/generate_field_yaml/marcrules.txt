@@ -1,0 +1,12 @@
+999	NR	TEST FIELD
+ind1	blank	Undefined
+ind2	b12	Multiple valid indicators
+subfield	a	Valid Subfields
+a	NR	Valid subfield
+
+799	NR	TEST FIELD 2
+ind1	b12	Multiple valid indicators
+ind2	blank	Undefined
+subfield	a	Valid Subfields
+a	NR	Valid subfield
+
