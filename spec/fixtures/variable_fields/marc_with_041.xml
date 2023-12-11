@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns='http://www.loc.gov/MARC21/slim'
+      xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+      xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+    <record>
+        <leader>04329cam a2200661Ii 4500</leader>
+        <controlfield tag="001">99119427243506421</controlfield>
+        <datafield tag="010">
+            <subfield code="a">2019015243</subfield>
+        </datafield>
+        <datafield tag="041">
+            <subfield code="a">eng</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="0">
+            <subfield code="a">Race after technology :</subfield>
+            <subfield code="b">abolitionist tools for the new Jim code</subfield>
+            <subfield code="c">Ruha Benjamin.</subfield>
+        </datafield>
+    </record>
+</collection>

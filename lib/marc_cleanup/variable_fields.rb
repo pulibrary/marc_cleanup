@@ -1,4 +1,7 @@
 module MarcCleanup
+
+  # check the 041 field for errors
+  # 041 is a language code
   def f041_errors?(record)
     f041 = record.fields('041')
     return false if f041.empty?
