@@ -32,4 +32,19 @@ RSpec.describe 'field_020' do
       expect(record['020']['a']).to eq '9780316458757'
     end
   end
+  describe 'new_020_q' do
+    let(:fields) do
+      [
+        { '020' => { 'indicator1' => ' ',
+                     'indicator2' => ' ',
+                     'subfields' => [{ 'a' => '9780316458757(set)' }] } },
+      ]
+    end
+    let(:record) { MARC::Record.new_from_hash('fields' => fields) }
+    it 'moves parathenticals to subfield q of an 020' do
+      new_020_q(record)
+      expect(record['020']['a']).to eq '9780316458757'
+      expect(record['020']['q']).to eq '(set)' 
+    end
+  end
 end
