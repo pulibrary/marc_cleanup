@@ -1,11 +1,11 @@
 module MarcCleanup
 
-### Remove non-numberical strings and append a new 020$q with the string
+### Remove non-numerical strings and append a new 020$q with the string
 def new_020_q(record)
   record.fields('020').each do |f020|
     f020.subfields.each do |subfield|
       next unless subfield.code == 'a'
-      isbn_parts = /^\s*([\d]+)\s*(\(.*?\))\s*$/.match(subfield.value)
+      isbn_parts = /^\s*([\d\-]+)\s*(\(.*?\))\s*$/.match(subfield.value)
       next if isbn_parts.nil?
       subfield.value = isbn_parts[1]
       f020.append(MARC::Subfield.new('q', isbn_parts[2])) 
