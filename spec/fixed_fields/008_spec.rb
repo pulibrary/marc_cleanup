@@ -103,5 +103,77 @@ RSpec.describe 'field 008 methods' do
         expect(fix_008(record)['008'].value).to eq '230519s1996    njua          000 0 eng d'
       end
     end
+    describe 'fix_comp_008' do
+      let(:fields) do
+        [
+          { '008' => '230519s1996    njua          000 0 eng d' }
+        ]
+      end
+      let(:leader) { '01104nma a2200289 i 4500' }
+      let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
+      it 'corrects a bad computer format 008' do
+        expect(fix_008(record)['008'].value).to eq '230519s1996    nju                 eng d'
+      end
+    end
+    describe 'fix_map_008' do
+      let(:fields) do
+        [
+          { '008' => '230519s1996    njua          000 0 eng d' }
+        ]
+      end
+      let(:leader) { '01104nea a2200289 i 4500' }
+      let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
+      it 'corrects a bad map format 008' do
+        expect(fix_008(record)['008'].value).to eq '230519s1996    njua          0 0   eng d'
+      end
+    end
+    describe 'fix_music_008' do
+      let(:fields) do
+        [
+          { '008' => '230519s1996    njua          000 0 eng d' }
+        ]
+      end
+      let(:leader) { '01104nca a2200289 i 4500' }
+      let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
+      it 'corrects a bad music format 008' do
+        expect(fix_008(record)['008'].value).to eq '230519s1996    njua              0 eng d'
+      end
+    end  
+    describe 'fix_continuing_resource_008' do
+      let(:fields) do
+        [
+          { '008' => '230519s1996    njua          000 0 eng d' }
+        ]
+      end
+      let(:leader) { '01104nab a2200289 i 4500' }
+      let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
+      it 'corrects a bad continuing resource format 008' do
+        expect(fix_008(record)['008'].value).to eq '230519s1996    njua          0   0 eng d'     
+      end
+    end
+    describe 'fix_visual_008' do
+      let(:fields) do
+        [
+          { '008' => '230519s1996    njua          000 0 eng d' }
+        ]
+      end
+      let(:leader) { '01104nga a2200289 i 4500' }
+      let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
+      it 'corrects a bad visual format 008' do
+        expect(fix_008(record)['008'].value).to eq '230519s1996    njua          0   0neng d'     
+      end
+    end
+    describe 'fix_mix_mat_008' do
+      let(:fields) do
+        [
+          { '008' => '230519s1996    njua          000 0 eng d' }
+        ]
+      end
+      let(:leader) { '01104npa a2200289 i 4500' }
+      let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
+      it 'corrects a bad mixed materials format 008' do
+        expect(fix_008(record)['008'].value).to eq '230519s1996    nju                 eng d'     
+      end
+    end        
   end
 end  
