@@ -174,6 +174,18 @@ RSpec.describe 'field 008 methods' do
       it 'corrects a bad mixed materials format 008' do
         expect(fix_008(record)['008'].value).to eq '230519s1996    nju                 eng d'     
       end
+    end
+    describe 'specified 008' do
+      let(:fields) do
+        [
+          { '008' => '230519s1996    njua          000 0 eng d' }
+        ]
+      end
+      let(:leader) { '01104nja a2200289 i 4500' }
+      let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
+      it 'corrects a bad specified 008' do
+        expect(fix_008(record)['008'].value).to eq '230519s1996    njua              0 eng d'     
+      end
     end    
   end
 end  
