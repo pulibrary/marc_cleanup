@@ -94,19 +94,19 @@ RSpec.describe 'field 008 methods' do
     describe 'fix_book_008' do
       let(:fields) do
         [
-          { '008' => '230519s1996    njuax         000 0 eng d' }
+          { '008' => '230519s1996    njuax         000 0 eng a' }
         ]
       end
       let(:leader) { '01104naa a2200289 i 4500' }
       let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
       it 'corrects a bad book format 008' do
-        expect(fix_008(record)['008'].value).to eq '230519s1996    njua          000 0 eng d'
+        expect(fix_008(record)['008'].value).to eq '230519s1996    njua          000 0 eng  '
       end
     end
     describe 'fix_comp_008' do
       let(:fields) do
         [
-          { '008' => '230519s1996    njua          000 0 eng d' }
+          { '008' => '230519s1996    njua          000 0 eng o' }
         ]
       end
       let(:leader) { '01104nma a2200289 i 4500' }
@@ -174,6 +174,6 @@ RSpec.describe 'field 008 methods' do
       it 'corrects a bad mixed materials format 008' do
         expect(fix_008(record)['008'].value).to eq '230519s1996    nju                 eng d'     
       end
-    end        
+    end    
   end
 end  
