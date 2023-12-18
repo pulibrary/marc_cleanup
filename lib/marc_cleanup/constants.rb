@@ -6,4 +6,5 @@ module MarcCleanup
   END_OF_FIELD = 0x1E.chr
   END_OF_RECORD = 0x1D.chr
   ROOT_DIR = File.join(File.dirname(__FILE__), '../..')
+  ISBN13PREFIX = '978'.freeze
 end
