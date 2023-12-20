@@ -1860,11 +1860,6 @@ module MarcCleanup
     false
   end
 
-  def bad_008_length?(record)
-    field = record['008'].value
-    field.length != 40
-  end
-
   def bad_008?(record)
     field = record['008'].value
     return true if field.length != 40
