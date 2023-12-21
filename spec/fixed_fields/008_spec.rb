@@ -97,10 +97,22 @@ RSpec.describe 'field 008 methods' do
       end
       let(:leader) { '01104n a a2200289 i 4500' }
       let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
-      it 'knows a 008 length is wrong' do
+      it 'knows when a 008 length is wrong' do
         expect(MarcCleanup.bad_008?(record)).to eq true
       end
-  end
+    end
+    describe 'valid 008' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999||||xx |||||||||||||| ||eng||' }
+        ]
+      end
+      let(:leader) { '01104nam a2200289 i 4500' }
+      let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
+      it 'knows when a 008 is valid' do
+        expect(MarcCleanup.bad_008?(record)).to eq false
+      end
+    end
   end
   describe 'fix_008' do
     describe 'fix_book_008' do
