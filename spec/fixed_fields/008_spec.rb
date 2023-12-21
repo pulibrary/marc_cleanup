@@ -20,7 +20,7 @@ RSpec.describe 'field 008 methods' do
     describe 'bad computer format 008' do
       let(:fields) do
         [
-          { '008' => '230519s1996||||nju|||||||||||||||||-eng|z' }
+          { '008' => '230519s1996||||nju||||||||||||||||-eng|z' }
         ]
       end
       let(:leader) { '01104nma a2200289 i 4500' }
