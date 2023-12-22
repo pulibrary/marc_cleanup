@@ -5,6 +5,26 @@ require 'marc_cleanup'
 
 RSpec.describe 'field 008 methods' do
   let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
+  describe 'multiple_no_008?' do
+    let(:leader) { '01104naa a2200289 i 4500' }    
+    context 'when there is more than one 008' do
+      let(:fields) do 
+        [ 
+          { '008' => '230414s9999||||xx |||||||||||||| ||eng||' }, 
+          { '008' => '230414s9999||||xx |||||||||||||| ||eng||' }   
+        ] 
+      end
+      it { expect(MarcCleanup.multiple_no_008?(record)).to eq true }
+    end
+    context 'when there is less than one 008' do
+      let(:fields) { [ { '001' => '99129117045606421' } ] }
+      it { expect(MarcCleanup.multiple_no_008?(record)).to eq true }
+    end
+    context 'when there is one 008' do
+      let(:fields) { [ { '008' => '230414s9999||||xx |||||||||||||| ||eng||' } ] }
+      it { expect(MarcCleanup.multiple_no_008?(record)).to eq false }
+    end
+  end
   describe 'bad_008?' do
     describe 'book format 008' do
       let(:leader) { '01104naa a2200289 i 4500' }
