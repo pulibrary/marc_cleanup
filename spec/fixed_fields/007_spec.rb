@@ -252,28 +252,51 @@ RSpec.describe 'fields 007 methods' do
 
 
     describe 'fix_motion_pic_007' do
-      let(:leader) { '' }
-      let(:fields) { [ { '007' => '' } ] }
-      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq '' }
+      let(:leader) { '01104nga a2200289 i 4500' }
+        let(:fields) { [ { '007' => 'mrabf  fnnartnnai198512' } ] }
+      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'mr bf  fnnartnnai198512' }
     end
 
-    describe 'fix_ _007' do
-      let(:leader) { '' }
-      let(:fields) { [ { '007' => '' } ] }
-      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq '' }
+    describe 'fix_kit_007' do
+      let(:leader) { '01104nca a2200289 i 4500' }
+      let(:fields) { [ { '007' => 'oz' } ] }
+      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'ou' }
     end
 
-    describe 'fix_ _007' do
-      let(:leader) { '' }
-      let(:fields) { [ { '007' => '' } ] }
-      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq '' }
+    describe 'fix_notated_mus_007' do
+      let(:leader) { '01104npa a2200289 i 4500' }
+      let(:fields) { [ { '007' => 'qz' } ] }
+      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'qu' }
     end
 
-    describe 'fix_ _007' do
-      let(:leader) { '' }
-      let(:fields) { [ { '007' => '' } ] }
-      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq '' }
+    describe 'fix_remote_007' do
+      let(:leader) { '01104nga a2200289 i 4500' }
+        let(:fields) { [ { '007' => 'ruaaa0aaaaa' } ] }
+      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'ru aa0aaaaa' }
     end
 
+    describe 'fix_sound_rec_007' do
+      let(:leader) { '01104npa a2200289 i 4500' }
+      let(:fields) { [ { '007' => 'sdaammamaaahaa' } ] }
+      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'sd ammamaaahaa' }
+    end
+
+    describe 'fix_text_007' do
+      let(:leader) { '01104naa a2200289 i 4500' }
+        let(:fields) { [ { '007' => 'te' } ] }
+      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'tu' }
+    end
+
+    describe 'fix_video_007' do
+      let(:leader) { '01104nga a2200289 i 4500' }
+      let(:fields) { [ { '007' => 'vcaaaaaok' } ] }
+      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'vc aaaaok' }
+    end
+
+    describe 'fix_unspec_007' do
+      let(:leader) { '01104nab a2200289 i 4500' }
+      let(:fields) { [ { '007' => 'za' } ] }
+      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'zu' }
+    end
   end
 end
