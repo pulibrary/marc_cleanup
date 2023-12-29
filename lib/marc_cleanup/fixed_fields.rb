@@ -1652,11 +1652,10 @@ module MarcCleanup
     return true unless %w[a d f g h l m o p u z |].include?(field[3])
     return true unless %w[a b c d e u v |].include?(field[4])
     return true unless field[5..7] == '|||' || field[5..7] =~ /^[0-9]+[\-]*$/
-    return true unless %w[a m u |].include?(field[8])
-    return true unless %w[a n p u |].include?(field[9])
-    return true unless %w[a b c d m n u |].include?(field[10])
-    return true unless %w[a b d m u |].include?(field[11])
-    return true unless %w[a n p r u |].include?(field[12])
+    return true unless %w[b c m u z |].include?(field[8])
+    return true unless %w[a b c m n u z |].include?(field[9])
+    return true unless %w[a b c m u |].include?(field[10])
+    return true unless %w[a c d i m n p r t u z |].include?(field[11])
 
     false
   end
