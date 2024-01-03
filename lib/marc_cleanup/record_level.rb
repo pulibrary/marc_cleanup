@@ -1030,7 +1030,13 @@ module MarcCleanup
     false
   end
 
+  def bib_form(record)
+    %w[a c d i j m p t].include?(record.leader[6]) ? record['008'].value[23] : record['008'].value[29]
+  end
+
   def sparse_record?(record)
+    return true unless record['008']
+
     type = record.leader[6]
     blvl = record.leader[7]
     form = bib_form(record)
@@ -1038,7 +1044,6 @@ module MarcCleanup
 
     f245 = record['245']
     return true unless f245 && (f245['a'] || f245['k'])
-    return true unless record['008']
 
     valid =
       if %w[a b].include?(blvl)
