@@ -337,4 +337,50 @@ RSpec.describe 'sparse_record?' do
       it { expect(MarcCleanup.sparse_record?(record)).to eq false }
     end
   end
+  describe 'monographic cartographic material' do
+    let(:leader) { '01104nem a2200289 i 4500' }
+    context 'when there is no required field1 present' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx        a     0   eng d' },
+          { '264' => { 'indicator1' => '1',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'a' => 'New York' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+    end
+    context 'when there is a valid field1 present and no field2' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx        a     0   eng d' },
+          { '007' => 'aj canzn' },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+    end
+    context 'when there is a valid field1 present and a non-valid field2' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx        a     0   eng d' },
+          { '300' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'a' => '1 volume' }] } },
+          { '264' => { 'indicator1' => ' ',
+                       'indicator2' => '1',
+                       'subfields' => [{ 'a' => 'New York' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+    end
+  end
 end
