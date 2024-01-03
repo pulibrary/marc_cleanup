@@ -110,8 +110,16 @@ RSpec.describe 'fields 007 methods' do
       let(:leader) { '01104nga a2200289 i 4500' }
     
       context 'when the 007 is valid' do
-        let(:fields) { [ { '007' => 'mr bf  fnnartnnai198512' } ] }
-        it { expect(MarcCleanup.bad_007?(record)).to eq false }
+
+        context 'when the inspect_date is numerical' do
+          let(:fields) { [ { '007' => 'mr bf  fnnartnnai198512' } ] }
+          it { expect(MarcCleanup.bad_007?(record)).to eq false }
+        end
+
+        context 'when the inspect_date is |||||| or ------' do
+          let(:fields) { [ { '007' => 'mr bf  fnnartnnai||||||' } ] }
+          it { expect(MarcCleanup.bad_007?(record)).to eq false }
+        end
       end
 
       context 'when the 007 is invalid' do
@@ -204,6 +212,11 @@ RSpec.describe 'fields 007 methods' do
       end
     end
 
+    describe '007 with non valid category' do
+      let(:leader) { '01104nab a2200289 i 4500' }
+      let(:fields) { [ { '007' => 'wa' } ] }
+      it { expect(MarcCleanup.bad_007?(record)).to eq true }
+    end
   end
 
   describe 'fix_007' do
@@ -277,8 +290,31 @@ RSpec.describe 'fields 007 methods' do
 
     describe 'fix_sound_rec_007' do
       let(:leader) { '01104npa a2200289 i 4500' }
-      let(:fields) { [ { '007' => 'sdaammamaaahaa' } ] }
-      it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'sd ammamaaahaa' }
+
+      context 'when width is a' do
+        let(:fields) { [ { '007' => 'sd ammaaaaahaa' } ] }
+        it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'sd ammamaaahaa' }
+      end
+
+      context 'when width is b' do
+        let(:fields) { [ { '007' => 'sd ammabaaahaa' } ] }
+        it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'sd ammaoaaahaa' }
+      end
+        
+      context 'when width is c' do
+        let(:fields) { [ { '007' => 'sd ammacaaahaa' } ] }
+        it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'sd ammapaaahaa' }
+      end
+
+      context 'when mat_designation is f' do
+        let(:fields) { [ { '007' => 'sf ammamaaahaa' } ] }
+        it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'si ammamaaahaa' }
+      end
+
+      context 'when mat_designation is c' do
+        let(:fields) { [ { '007' => 'sc ammamaaahaa' } ] }
+        it { expect(MarcCleanup.fix_007(record)['007'].value).to eq 'se ammamaaahaa' }
+      end
     end
 
     describe 'fix_text_007' do
