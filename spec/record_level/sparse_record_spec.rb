@@ -236,4 +236,105 @@ RSpec.describe 'sparse_record?' do
       it { expect(MarcCleanup.sparse_record?(record)).to eq true }
     end
   end
+  describe 'manuscript monographic language material' do
+    let(:leader) { '01104ntm a2200289 i 4500' }
+    context 'when there is no required field present' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+    end
+    context 'when there is a 533 field without subfield e' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
+          { '533' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'a' => 'Photocopy.' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+    end
+    context 'when there is a 533 field with subfield e' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
+          { '533' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'e' => '1 book' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+    end
+    context 'when there is a 300 field without subfield a' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
+          { '300' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'c' => '20 cm' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+    end
+    context 'when there is a 300 field with subfield a' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
+          { '300' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'a' => '1 volume' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+    end
+    context 'when there is a 100 field without subfield a' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
+          { '100' => { 'indicator1' => '0',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'd' => '1946-' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+    end
+    context 'when there is a 100 field with subfield a' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
+          { '100' => { 'indicator1' => '0',
+                       'indicator2' => ' ',
+                       'subfields' => [
+                                        { 'a' => 'Cher' },
+                                        { 'd' => '1946-' }
+                                      ] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+    end
+  end
 end
