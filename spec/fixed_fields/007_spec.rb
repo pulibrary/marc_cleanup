@@ -82,7 +82,7 @@ RSpec.describe 'fields 007 methods' do
       let(:leader) { '01104nga a2200289 i 4500' }
     
       context 'when the 007 is valid' do
-        let(:fields) { [ { '007' => 'he bmb024aaaa' } ] }
+        let(:fields) { [ { '007' => 'he bmb024baaa' } ] }
         it { expect(MarcCleanup.bad_007?(record)).to eq false }
       end
 
