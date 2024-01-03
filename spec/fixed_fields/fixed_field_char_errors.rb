@@ -17,7 +17,7 @@ RSpec.describe 'fixed_field_char_errors?' do
           { '008' => '230519e1996    njuax         000 0 eng d' }, 
         ] 
         end
-      it { expect(MarcCleanup.fixed_field_char_errors?(record)).to eq false }
+      it { expect(MarcCleanup.fixed_field_char_errors?(record.fields)).to eq false }
     end
 
     context 'when field characters are invalid' do
@@ -30,6 +30,6 @@ RSpec.describe 'fixed_field_char_errors?' do
           { '008' => '230519e1996 =  njuax         000 0 eng d' }, 
         ] 
       end
-      it { expect(MarcCleanup.fixed_field_char_errors?(record)).to eq true }
+      it { expect(MarcCleanup.fixed_field_char_errors?(record.fields)).to eq true }
     end
 end
