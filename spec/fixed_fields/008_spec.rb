@@ -97,7 +97,7 @@ RSpec.describe 'field 008 methods' do
       end
       
       context 'when the 008 is valid' do
-        let(:fields) { [ { '008' => '230519s1996    nju|| ||||||||0   ||eng d' } ] }        
+        let(:fields) { [ { '008' => '230519s1996    nju|| |||aa  |0   ||eng d' } ] }        
         it { expect(MarcCleanup.bad_008?(record)).to eq false }
       end
     end
