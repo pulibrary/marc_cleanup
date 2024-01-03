@@ -586,7 +586,7 @@ module MarcCleanup
   end
 
   def ftype_e_cdims_valid?(record)
-    present_fields1 = record.fields(%w[007 300 338])
+    present_fields1 = record.fields(%w[007 300 338 533])
     present_fields2 = record.fields(%w[260 264 533])
     return false if present_fields1.empty?
     return false if present_fields2.empty?
@@ -600,7 +600,7 @@ module MarcCleanup
         f1_criteria = true if field['a']
       when '338'
         f1_criteria = true if field['a'] || field['b']
-      when 533
+      when '533'
         f1_criteria = true if field['e']
       end
     end

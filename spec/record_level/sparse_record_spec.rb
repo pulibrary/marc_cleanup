@@ -353,7 +353,7 @@ RSpec.describe 'sparse_record?' do
       end
       it { expect(MarcCleanup.sparse_record?(record)).to eq true }
     end
-    context 'when there is a valid field1 present and no field2' do
+    context 'when there is a valid 007 present and no field2' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
@@ -365,7 +365,22 @@ RSpec.describe 'sparse_record?' do
       end
       it { expect(MarcCleanup.sparse_record?(record)).to eq true }
     end
-    context 'when there is a valid field1 present and a non-valid field2' do
+    context 'when there is a non-valid 007 field present and a valid 264' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx        a     0   eng d' },
+          { '007' => 'ou' },
+          { '264' => { 'indicator1' => ' ',
+                       'indicator2' => '1',
+                       'subfields' => [{ 'b' => 'Springer' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+    end
+    context 'when there is a valid 300 field present and a non-valid 264' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
@@ -375,6 +390,40 @@ RSpec.describe 'sparse_record?' do
           { '264' => { 'indicator1' => ' ',
                        'indicator2' => '1',
                        'subfields' => [{ 'a' => 'New York' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+    end
+    context 'when there is a valid 338 field present and no 533c' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx        a     0   eng d' },
+          { '338' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'b' => 'nb' }] } },
+          { '533' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'e' => '1 book' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+    end
+    context 'when there is a 533e present and no 260b' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx        a     0   eng d' },
+          { '533' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'e' => '1 book' }] } },
+          { '260' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'c' => '1989' }] } },
           { '245' => { 'indicator1' => '0',
                        'indicator2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
