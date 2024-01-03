@@ -2014,7 +2014,7 @@ module MarcCleanup
   end
 
   def fix_globe_007(specific_007)
-    return specific_007 unless specific_007.length == 7
+    return specific_007 unless specific_007.length == 5
 
     fixed_field = ''
     mat_designation = specific_007[0]
