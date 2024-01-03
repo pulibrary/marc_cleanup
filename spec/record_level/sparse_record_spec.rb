@@ -105,5 +105,65 @@ RSpec.describe 'sparse_record?' do
       end
       it { expect(MarcCleanup.sparse_record?(record)).to eq false }
     end
+    context 'when there is a 100 field with subfield a and a 260b' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
+          { '100' => { 'indicator1' => '0',
+                       'indicator2' => ' ',
+                       'subfields' => [
+                                        { 'a' => 'Cher' },
+                                        { 'd' => '1946-' }
+                                      ] } },
+          { '260' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'b' => 'Springer' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+    end
+    context 'when there is a 100 field with subfield a and a 533c' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
+          { '100' => { 'indicator1' => '0',
+                       'indicator2' => ' ',
+                       'subfields' => [
+                                        { 'a' => 'Cher' },
+                                        { 'd' => '1946-' }
+                                      ] } },
+          { '533' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'c' => 'Acme Corp.' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+    end
+    context 'when there is a 100 field with subfield a and no 264b' do
+      let(:fields) do
+        [
+          { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
+          { '100' => { 'indicator1' => '0',
+                       'indicator2' => ' ',
+                       'subfields' => [
+                                        { 'a' => 'Cher' },
+                                        { 'd' => '1946-' }
+                                      ] } },
+          { '264' => { 'indicator1' => ' ',
+                       'indicator2' => '1',
+                       'subfields' => [{ 'a' => 'New York' }] } },
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'Title' }] } }
+        ]
+      end
+      it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+    end
   end
 end
