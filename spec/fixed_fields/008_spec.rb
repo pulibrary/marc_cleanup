@@ -92,7 +92,7 @@ RSpec.describe 'field 008 methods' do
       let(:leader) { '01104nab a2200289 i 4500' }  
       
       context 'when the 008 is invalid' do    
-        let(:fields) { [ { '008' => '230519s1996    njua   u      000 0 eng d' } ] }
+        let(:fields) { [ { '008' => '230519s1996    njua   u aa   000 0 eng d' } ] }
         it { expect(MarcCleanup.bad_008?(record)).to eq true }
       end
       
