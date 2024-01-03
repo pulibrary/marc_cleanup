@@ -10,11 +10,11 @@ RSpec.describe 'fixed_field_char_errors?' do
     context 'when field characters are valid' do
       let(:fields) do 
         [ 
-          { '001' => {  'subfields' => [ '9998976453506421' ] } }, 
-          { '005' => {  'subfields' => [ '20221219173639.0' ] } }, 
-          { '006' => {  'subfields' => [ 'aax         000 0 ' ] } }, 
-          { '007' => {  'subfields' => [ 'za' ] } }, 
-          { '008' => {  'subfields' => [ '230519e1996    njuax         000 0 eng d' ] } }, 
+          { '001' => '9998976453506421' }, 
+          { '005' => '20221219173639.0' }, 
+          { '006' => 'aax         000 0 ' }, 
+          { '007' => 'za' }, 
+          { '008' => '230519e1996    njuax         000 0 eng d' }, 
         ] 
         end
       it { expect(MarcCleanup.fixed_field_char_errors?(record)).to eq false }
@@ -23,11 +23,11 @@ RSpec.describe 'fixed_field_char_errors?' do
     context 'when field characters are invalid' do
       let(:fields) do 
         [ 
-          { '001' => {  'subfields' => [ '999897645350642*' ] } }, 
-          { '005' => {  'subfields' => [ '20221219173639.+' ] } }, 
-          { '006' => {  'subfields' => [ 'aax      =  000 0 ' ] } }, 
-          { '007' => {  'subfields' => [ 'z=' ] } }, 
-          { '008' => {  'subfields' => [ '230519e1996 =  njuax         000 0 eng d' ] } }, 
+          { '001' => '999897645350642*' }, 
+          { '005' => '20221219173639.+' }, 
+          { '006' => 'aax      =  000 0 ' }, 
+          { '007' => 'z=' }, 
+          { '008' => '230519e1996 =  njuax         000 0 eng d' }, 
         ] 
       end
       it { expect(MarcCleanup.fixed_field_char_errors?(record)).to eq true }
