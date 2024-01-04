@@ -1628,6 +1628,7 @@ module MarcCleanup
     end
   end
 
+# Kit and notated music are tested with the same method
   def kit_mus_007(field)
     return true unless field.length == 1
 
@@ -2393,8 +2394,6 @@ module MarcCleanup
         fix_visual_008(specific_008)
       elsif mixed.include? rec_type
         fix_mix_mat_008(specific_008)
-      else
-        specific_008
       end
     fixed_record.fields[field_index].value = fixed_008
     fixed_record

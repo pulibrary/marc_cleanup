@@ -92,12 +92,12 @@ RSpec.describe 'field 008 methods' do
       let(:leader) { '01104nab a2200289 i 4500' }  
       
       context 'when the 008 is invalid' do    
-        let(:fields) { [ { '008' => '230519s1996    njua   u      000 0 eng d' } ] }
+        let(:fields) { [ { '008' => '230519s1996    njua   u aa   000 0 eng d' } ] }
         it { expect(MarcCleanup.bad_008?(record)).to eq true }
       end
       
       context 'when the 008 is valid' do
-        let(:fields) { [ { '008' => '230519s1996    nju|| ||||||||0   ||eng d' } ] }        
+        let(:fields) { [ { '008' => '230519s1996    nju|| |||aa  |0   ||eng d' } ] }        
         it { expect(MarcCleanup.bad_008?(record)).to eq false }
       end
     end
@@ -140,9 +140,27 @@ RSpec.describe 'field 008 methods' do
   describe 'fix_008' do
     
     describe 'fix_book_008' do
-      let(:leader) { '01104naa a2200289 i 4500' }      
-      let(:fields) { [ { '008' => '230519s1996    njuax         000 0 eng a' } ] }
-      it { expect(fix_008(record)['008'].value).to eq '230519s1996    njua          000 0 eng  ' }
+      let(:leader) { '01104naa a2200289 i 4500' }
+      
+      context 'when contents char is h' do
+        let(:fields) { [ { '008' => '230519s1996    njuax     h   000 0 eng a' } ] }
+        it { expect(fix_008(record)['008'].value).to eq '230519s1996    njua     f    000 0 eng  ' }
+      end
+
+      context 'when contents char is 3' do
+        let(:fields) { [ { '008' => '230519s1996    njuax     3   000 0 eng a' } ] }
+        it { expect(fix_008(record)['008'].value).to eq '230519s1996    njua     k    000 0 eng  ' }
+      end      
+
+      context 'when contents char is x' do
+        let(:fields) { [ { '008' => '230519s1996    njuax     x   000 0 eng a' } ] }
+        it { expect(fix_008(record)['008'].value).to eq '230519s1996    njua     t    000 0 eng  ' }
+      end
+
+      context 'when contents char is 4' do
+        let(:fields) { [ { '008' => '230519s1996    njuax     4   000 0 eng a' } ] }
+        it { expect(fix_008(record)['008'].value).to eq '230519s1996    njua     q    000 0 eng  ' }
+      end      
     end
     
     describe 'fix_comp_008' do
