@@ -807,14 +807,12 @@ module MarcCleanup
         338
       ]
     )
-    return false if present_fields.empty?
-
     present_fields.each do |field|
       case field.tag
       when '007'
         return true if field.value[0] == 'k'
       when '008'
-        return true if %w[g k o r].include?(record.leader[6]) && %w[a c k l n o p].include?(field.value[33])
+        return true if %w[a c k l n o p].include?(field.value[33])
       when '300'
         return true if field['a']
       when '338'
