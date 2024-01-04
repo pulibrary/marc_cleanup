@@ -1028,75 +1028,6 @@ module MarcCleanup
     /[ ejklnoprz]+/
   end
 
-  def comp_codes_uris
-    {
-      'an' => 'gf2014026635',
-      'bd' => 'gf2014026648',
-      'bg' => 'gf2014026664',
-      'bl' => 'gf2014026665',
-      'bt' => 'gf2014026650',
-      'ca' => 'gf2014026701',
-      'cb' => 'gf2014026707',
-      'cc' => 'gf2014026707',
-      'cg' => 'gf2014026724',
-      'ch' => 'gf2014026713',
-      'cl' => 'gf2014026712',
-      'cn' => 'gf2014026687',
-      'co' => 'gf2014026725',
-      'cp' => 'gf2014027007',
-      'cr' => 'gf2014026695',
-      'cs' => 'gf2014026624',
-      'ct' => 'gf2014026688',
-      'cy' => 'gf2014026739',
-      'dv' => 'gf2014027116',
-      'fg' => 'gf2014026818',
-      'fl' => 'gf2014026806',
-      'fm' => 'gf2014026809',
-      'ft' => 'gf2018026018',
-      'gm' => 'gf2014026839',
-      'hy' => 'gf2014026872',
-      'jz' => 'gf2014026879',
-      'mc' => 'gf2014027050',
-      'md' => 'gf2014026915',
-      'mi' => 'gf2014026940',
-      'mo' => 'gf2014026949',
-      'mp' => 'gf2014026950',
-      'mr' => 'gf2014026922',
-      'ms' => 'gf2014026926',
-      'mz' => 'gf2014026928',
-      'nc' => 'gf2017026144',
-      'op' => 'gf2014026976',
-      'or' => 'gf2014026977',
-      'ov' => 'gf2014026980',
-      'pg' => 'gf2014027017',
-      'pm' => 'gf2014026861',
-      'po' => 'gf2014027005',
-      'pp' => 'gf2014027009',
-      'pr' => 'gf2014027013',
-      'ps' => 'gf2014026989',
-      'pt' => 'gf2014026984',
-      'pv' => 'gf2014026994',
-      'rc' => 'gf2014027054',
-      'rd' => 'gf2014027057',
-      'rg' => 'gf2014027034',
-      'ri' => 'gf2017026128',
-      'rp' => 'gf2014027051',
-      'rq' => 'gf2014027048',
-      'sd' => 'gf2014027111',
-      'sg' => 'gf2014027103',
-      'sn' => 'gf2014027099',
-      'sp' => 'gf2014027120',
-      'st' => 'gf2014027115',
-      'su' => 'gf2014027116',
-      'sy' => 'gf2014027121',
-      'tc' => 'gf2014027140',
-      'vi' => 'gf2017026025',
-      'vr' => 'gf2014027156',
-      'wz' => 'gf2014027167',
-      'za' => 'gf2016026059'
-    }
-  end
-
   def composition_codes
     %w[
       an
@@ -1701,6 +1632,7 @@ module MarcCleanup
     end
   end
 
+# Kit and notated music are tested with the same method
   def kit_mus_007(field)
     return true unless field.length == 1
 
@@ -2466,8 +2398,6 @@ module MarcCleanup
         fix_visual_008(specific_008)
       elsif mixed.include? rec_type
         fix_mix_mat_008(specific_008)
-      else
-        specific_008
       end
     fixed_record.fields[field_index].value = fixed_008
     fixed_record
