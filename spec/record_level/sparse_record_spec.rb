@@ -944,5 +944,82 @@ RSpec.describe 'sparse_record?' do
         it { expect(MarcCleanup.sparse_record?(record)).to eq false }
       end
     end
+    describe 'serial nonprojectable graphic' do
+      let(:leader) { '01104nks a2200289 i 4500' }
+      context 'when there is a an 008 field and no imprint field' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx nnn            dneng d' },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+      context 'when 008 field indicates an art original and there is a valid 264 field' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx nnn            aneng d' },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } },
+            { '264' => { 'indicator1' => ' ',
+                         'indicator2' => '1',
+                         'subfields' => [{ 'b' => 'Springer' }] } },
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+      end
+      context 'when there is a valid 300 field and a non-valid 264 field' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx nnn            dneng d' },
+            { '300' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'a' => '1 sheet' }] } },
+            { '264' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'c' => '1989' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+      context 'when there is a valid 338 field and a non-valid 260 field' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx nnn            dneng d' },
+            { '338' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'b' => 'nb' }] } },
+            { '260' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'c' => '1989' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+      context 'when there is a valid 007 field and a non-valid 533 field' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx nnn            dneng d' },
+            { '007' => 'ka ac ' },
+            { '533' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'a' => 'Photocopy.' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+    end
   end
 end
