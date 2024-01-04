@@ -689,7 +689,6 @@ module MarcCleanup
       ]
     )
     present_fields2 = record.fields(%w[260 264 533])
-    return false if present_fields1.empty?
     return false if present_fields2.empty?
 
     f1_criteria = false
@@ -698,7 +697,7 @@ module MarcCleanup
       when '007'
         f1_criteria = true if %w[g m v].include? field.value[0]
       when '008'
-        f1_criteria = true if %w[g k o r].include?(record.leader[6]) && %w[f m p s t v].include?(field.value[33])
+        f1_criteria = true if %w[f m p s t v].include?(field.value[33])
       when '300'
         f1_criteria = true if field['a']
       when '338'
@@ -707,7 +706,7 @@ module MarcCleanup
         f1_criteria = true
       when '346'
         f1_criteria = true
-      when 538
+      when '538'
         f1_criteria = true if field['a']
       end
     end
