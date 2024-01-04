@@ -499,5 +499,87 @@ RSpec.describe 'sparse_record?' do
       end
       it { expect(MarcCleanup.sparse_record?(record)).to eq false }
     end
+    describe 'monographic projected medium' do
+      let(:leader) { '01104ngm a2200289 i 4500' }
+      context 'when there is a non-valid 007 field present' do
+        let(:fields) do
+          [
+            { '007' => 'ou' },
+            { '008' => '230414s9999    xx 120            aleng d' },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+      context 'when the 008 field indicates a motion picture' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx 120            mleng d' },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+      end
+      context 'when there is a non-valid 300 field present' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx 120            aleng d' },
+            { '300' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'c' => '20 cm' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+      context 'when there is a valid 345 field present' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx 120            aleng d' },
+            { '345' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'b' => '48 fps' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+      end
+      context 'when there is a valid 346 field present' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx 120            aleng d' },
+            { '346' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'a' => 'Beta' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+      end
+      context 'when there is a non-valid 583 field present' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx 120            aleng d' },
+            { '538' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'i' => 'Digital version' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+    end
   end
 end

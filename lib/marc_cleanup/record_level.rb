@@ -657,8 +657,6 @@ module MarcCleanup
         538
       ]
     )
-    return false if present_fields.empty?
-
     present_fields.each do |field|
       case field.tag
       when '007'
