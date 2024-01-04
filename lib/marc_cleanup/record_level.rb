@@ -638,7 +638,7 @@ module MarcCleanup
         return true if field['a'] || field['f']
       when '338'
         return true if field['a'] || field['b']
-      when 533
+      when '533'
         return true if field['e']
       end
     end
