@@ -1021,5 +1021,87 @@ RSpec.describe 'sparse_record?' do
         it { expect(MarcCleanup.sparse_record?(record)).to eq true }
       end
     end
+    describe 'monograph computer file' do
+      let(:leader) { '01104nmm a2200289 i 4500' }
+      context 'when there is no required field' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx      q  a        eng d' },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+      context 'when there is a valid 007' do
+        let(:fields) do
+          [
+            { '007' => 'cj ba 008apnan' },
+            { '008' => '230414s9999    xx      q  a        eng d' },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+      end
+      context 'when there is a non-valid 300' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx      q  a        eng d' },
+            { '300' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'c' => '20 cm' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+      context 'when there is a valid 338' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx      q  a        eng d' },
+            { '338' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'b' => 'nb' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+      end
+      context 'when there is a valid 347' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx      q  a        eng d' },
+            { '347' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'a' => 'text file' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+      end
+      context 'when there is a non-valid 538' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx      q  a        eng d' },
+            { '538' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'i' => 'Digital version' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+    end
   end
 end
