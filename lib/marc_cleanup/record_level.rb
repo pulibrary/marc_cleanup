@@ -779,7 +779,7 @@ module MarcCleanup
         f1_criteria = true if field['a'] || field['b']
       when '344'
         f1_criteria = true
-      when 538
+      when '538'
         f1_criteria = true if field['a']
       end
     end

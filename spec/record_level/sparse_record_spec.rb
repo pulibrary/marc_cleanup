@@ -792,5 +792,103 @@ RSpec.describe 'sparse_record?' do
         it { expect(MarcCleanup.sparse_record?(record)).to eq true }
       end
     end
+    describe 'serial musical sound recording' do
+      let(:leader) { '01104njs a2200289 i 4500' }
+      context 'when there is a non-valid 007 field and no imprint' do
+        let(:fields) do
+          [
+            { '007' => 'ou' },
+            { '008' => '230414c19999999xx bdnn             eng d' },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+      context 'when there is a valid 007 field and a non-valid 260 field' do
+        let(:fields) do
+          [
+            { '007' => 'sd fsngnnmmncd' },
+            { '008' => '230414c19999999xx bdnn             eng d' },
+            { '260' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'c' => '1989' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+      context 'when there is a valid 300 field and a non-valid 264 field' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx bdnn             eng d' },
+            { '300' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'a' => '1 compact disc' }] } },
+            { '264' => { 'indicator1' => ' ',
+                         'indicator2' => '1',
+                         'subfields' => [{ 'a' => 'New York' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+      context 'when there is a valid 338 field and a non-valid 533 field' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx bdnn             eng d' },
+            { '533' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'e' => '1 book' }] } },
+            { '338' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'b' => 'nb' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+      context 'when there is a valid 344 field and a valid 533 field' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx bdnn             eng d' },
+            { '344' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'g' => 'stereo' }] } },
+            { '533' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'c' => 'Princeton University' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+      end
+      context 'when there is a valid 538 field and a valid 533 field' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx bdnn             eng d' },
+            { '538' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'a' => 'Compact disc' }] } },
+            { '533' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'c' => 'Princeton University' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+      end
+    end
   end
 end
