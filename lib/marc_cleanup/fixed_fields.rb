@@ -10,10 +10,6 @@ module MarcCleanup
     !bad_fields.empty?
   end
 
-  def bib_form(record)
-    %w[a c d i j m p t].include?(record.leader[6]) ? record['008'].value[23] : record['008'].value[29]
-  end
-
   def multiple_no_008?(record)
     record.fields('008').size != 1
   end
