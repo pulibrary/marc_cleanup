@@ -1,10 +1,12 @@
 ### Derived from
 ###   https://github.com/reeset/marcrulesfiles/blob/master/marcrules.txt;
-### 1xx and require 245 rules were stripped, in addition to the stub fields:
-###   841, 842, 843, 844, 845, 853-855, 863-868, 876-878;
-###   those fields were expanded upon, and the global rules were added to the
-###   validate_marc method;
-### Fixed fields were also added;
+### 1xx and required 245 rules (global rules) were removed from the file and
+###   added to the validate_marc method;
+### stub fields from holdings that are valid in bib records were expanded upon:
+###     841, 842, 843, 844, 845, 853-855, 863-868, 876-878;
+### fixed fields (001 through 009) were removed;
+### after this method was run and the YAML file was generated,
+###   the fixed fields were added in by hand;
 ### Use this method as a starting point to derive a new YAML file
 ### :source is an object that can be used like a file (File or StringIO)
 ### :output is an object that can be used like a file (File or StringIO)
