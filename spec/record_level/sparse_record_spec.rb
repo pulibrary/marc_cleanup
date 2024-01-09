@@ -1397,5 +1397,54 @@ RSpec.describe 'sparse_record?' do
         it { expect(MarcCleanup.sparse_record?(record)).to eq false }
       end
     end
+
+    describe 'collection mixed material' do
+      let(:leader) { '01104npc a2200289 i 4500' }
+
+      context 'when there is a non-valid 100 field' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx                  eng d' },
+            { '100' => { 'indicator1' => '0',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'd' => '1946-' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+
+      context 'when there is a non-valid 300 field' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx                  eng d' },
+            { '300' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'c' => '20 cm' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+
+      context 'when there is a valid 338 field' do
+        let(:fields) do
+          [
+            { '008' => '230414s9999    xx                  eng d' },
+            { '338' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'b' => 'nb' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+      end
+    end
   end
 end
