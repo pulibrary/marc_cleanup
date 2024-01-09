@@ -123,7 +123,7 @@ RSpec.describe 'fields 007 methods' do
       end
 
       context 'when the 007 is invalid' do
-        let(:fields) { [ { '007' => 'mrabf  fnnartnnai198512' } ] }
+        let(:fields) { [ { '007' => 'mrabf  fnnartnnaiaaaaaa' } ] }
         it { expect(MarcCleanup.bad_007?(record)).to eq true }
       end
     end
