@@ -1189,6 +1189,7 @@ RSpec.describe 'sparse_record?' do
         it { expect(MarcCleanup.sparse_record?(record)).to eq true }
       end
     end
+
     describe 'serial computer file' do
       let(:leader) { '01104nms a2200289 i 4500' }
 
@@ -1280,6 +1281,7 @@ RSpec.describe 'sparse_record?' do
         it { expect(MarcCleanup.sparse_record?(record)).to eq false }
       end
     end
+
     describe 'monograph kit' do
       let(:leader) { '01104nom a2200289 i 4500' }
 
@@ -1317,9 +1319,76 @@ RSpec.describe 'sparse_record?' do
             { '338' => { 'indicator1' => ' ',
                          'indicator2' => ' ',
                          'subfields' => [{ 'b' => 'nb' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+      end
+    end
+
+    describe 'serial three-dimensional artifact' do
+      let(:leader) { '01104nrs a2200289 i 4500' }
+
+      context 'when the 008 field indicates a kit and there is no imprint' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx nnn            bneng d' },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+
+      context 'when 008 indicates chart and there is a valid 300 and valid 260' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx nnn            nneng d' },
             { '300' => { 'indicator1' => ' ',
                          'indicator2' => ' ',
-                         'subfields' => [{ 'c' => '20 cm' }] } },
+                         'subfields' => [{ 'a' => '1 volume' }] } },
+            { '260' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'b' => 'Springer' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+      end
+
+      context 'when 008 indicates chart and there is a valid 338 and non-valid 264' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx nnn            nneng d' },
+            { '264' => { 'indicator1' => ' ',
+                         'indicator2' => '1',
+                         'subfields' => [{ 'a' => 'New York' }] } },
+            { '338' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'b' => 'nb' }] } },
+            { '245' => { 'indicator1' => '0',
+                         'indicator2' => '0',
+                         'subfields' => [{ 'a' => 'Title' }] } }
+          ]
+        end
+        it { expect(MarcCleanup.sparse_record?(record)).to eq true }
+      end
+
+      context 'when 008 indicates chart and there is a valid 338 and valid 533' do
+        let(:fields) do
+          [
+            { '008' => '230414c19999999xx nnn            nneng d' },
+            { '533' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'c' => 'Acme Corp.' }] } },
+            { '338' => { 'indicator1' => ' ',
+                         'indicator2' => ' ',
+                         'subfields' => [{ 'b' => 'nb' }] } },
             { '245' => { 'indicator1' => '0',
                          'indicator2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
