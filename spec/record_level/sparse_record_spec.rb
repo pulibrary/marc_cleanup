@@ -1445,6 +1445,25 @@ RSpec.describe 'sparse_record?' do
         end
         it { expect(MarcCleanup.sparse_record?(record)).to eq false }
       end
+
+      describe 'monograph mixed material (non-valid)' do
+        let(:leader) { '01104npm a2200289 i 4500' }
+
+        context 'when there is an 008 field' do
+          let(:fields) do
+            [
+              { '008' => '230414s9999    xx                  eng d' },
+              { '100' => { 'indicator1' => '0',
+                           'indicator2' => ' ',
+                           'subfields' => [{ 'd' => '1946-' }] } },
+              { '245' => { 'indicator1' => '0',
+                           'indicator2' => '0',
+                           'subfields' => [{ 'a' => 'Title' }] } }
+            ]
+          end
+          it { expect(MarcCleanup.sparse_record?(record)).to eq false }
+        end
+      end
     end
   end
 end
