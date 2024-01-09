@@ -908,12 +908,10 @@ module MarcCleanup
         338
       ]
     )
-    return false if present_fields.empty?
-
     present_fields.each do |field|
       case field.tag
       when '008'
-        return true if %w[g k o r].include?(record.leader[6]) && %w[a b c d g q r w].include?(field.value[33])
+        return true if %w[a b c d g q r w].include?(field.value[33])
       when '300'
         return true if field['a']
       when '338'
@@ -932,14 +930,13 @@ module MarcCleanup
       ]
     )
     present_fields2 = record.fields(%w[260 264 533])
-    return false if present_fields1.empty?
     return false if present_fields2.empty?
 
     f1_criteria = false
     present_fields1.each do |field|
       case field.tag
       when '008'
-        return true if %w[g k o r].include?(record.leader[6]) && %w[a b c d g q r w].include?(field.value[33])
+        return true if %w[a b c d g q r w].include?(field.value[33])
       when '300'
         f1_criteria = true if field['a']
       when '338'
@@ -994,7 +991,7 @@ module MarcCleanup
   end
 
   def sparse_record?(record)
-    return true unless record['008']
+    return true unless record.fields('008').size == 1
 
     type = record.leader[6]
     blvl = record.leader[7]
