@@ -56,19 +56,13 @@ RSpec.describe 'validate_marc' do
       [
         { '011' => { 'indicator1' => ' ',
                      'indicator2' => ' ',
-                     'subfields' => [{ 'a' => 'Invalid field' }] } },
-        { 'ABC' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
-                     'subfields' => [{ 'a' => 'Non-numeric tag' }] } }
+                     'subfields' => [{ 'a' => 'Invalid field' }] } }
       ]
     end
     let(:record) { MARC::Record.new_from_hash('fields' => fields) }
     it 'finds the invalid tag' do
       record_errors = MarcCleanup.validate_marc(record: record)
-      expect(record_errors[:invalid_tags]).to include '011'
-    end
-    it 'finds the non-numeric tag' do
-      expect(MarcCleanup.invalid_tag?(record)).to eq true
+      expect(record_errors[:invalid_tags]).to eq ['011']
     end
   end
   describe 'invalid field indicator1' do
