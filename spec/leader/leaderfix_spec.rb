@@ -16,6 +16,9 @@ RSpec.describe 'test leaders' do
     let(:marcfile) { "#{Dir.getwd}/spec/fixtures/leader/marc_with_invalid_leader.xml" }
     let(:reader) { MARC::XMLReader.new(marcfile, parser: 'magic') }
     let(:record_with_invalid_leader) { reader.first }
+    it 'knows that a leader contains an invalid character' do
+      expect(MarcCleanup.leader_char_errors?(record_with_invalid_leader)).to eq true
+    end
     it 'knows that a record with an invalid leader is invalid' do
       expect(MarcCleanup.leader_errors?(record_with_invalid_leader)).to eq true
     end
