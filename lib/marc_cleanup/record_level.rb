@@ -1108,3 +1108,10 @@ module MarcCleanup
     hash
   end
 end
+
+###When the 040$e says rda, position 18 of the leader must be c or i.
+def rda_convention_mismatch(record)
+  rda040 = record.fields('040').select { |field| field['e'] == 'rda' }
+  return true if !rda040.empty? && !%w[c i].include?(record.leader[18])
+  false
+end
