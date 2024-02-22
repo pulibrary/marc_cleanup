@@ -1113,4 +1113,12 @@ module MarcCleanup
     rda040 = record.fields('040').select { |field| field['e'] == 'rda' }
     !rda040.empty? && !%w[c i].include?(record.leader[18])
   end
+
+  def rda_convention_correction(record)
+    if rda_convention_mismatch(record) == true
+      record.leader[18] = "i"
+    end
+    record 
+  end
+
 end
