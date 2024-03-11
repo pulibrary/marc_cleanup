@@ -1,8 +1,4 @@
 module MarcCleanup
-  def leader_char_errors?(record)
-    record.leader =~ /[^0-9a-zA-Z ]/ ? true : false
-  end
-
   def leader_errors?(record)
     error = false
     leader = record.leader
