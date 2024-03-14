@@ -510,28 +510,11 @@ end
 
   ### Remove empty subfields from DataFields
   def empty_subfield_fix(record)
-    fields_to_delete = []
-    curr_field = -1
     record.fields.each do |field|
-      curr_field += 1
       next unless field.class == MARC::DataField
-
-      curr_subfield = 0
-      subfields_to_delete = []
-      field.subfields.each do |subfield|
-        subfields_to_delete.unshift(curr_subfield) if subfield.value.empty? || subfield.value.nil?
-        curr_subfield += 1
-      end
-      subfields_to_delete.each do |i|
-        record.fields[curr_field].subfields.delete_at(i)
-      end
-      fields_to_delete.unshift(curr_field) if record.fields[curr_field].subfields.empty?
+      field.subfields.delete_if { |subfield| subfield.value.nil? || subfield.value.empty? }
     end
-    unless fields_to_delete.empty?
-      fields_to_delete.each do |i|
-        record.fields.delete_at(i)
-      end
-    end
+    record.fields.delete_if { |field| field.class == MARC::DataField && field.subfields.empty? }
     record
   end
 
