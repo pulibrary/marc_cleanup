@@ -16,7 +16,7 @@ RSpec.describe 'field_040' do
                       'subfields' => [{ 'a' => 'DLC' }] } },
         { '040' => { 'indicator1' => ' ',
                       'indicator2' => ' ',
-                      'subfields' => [{ 'a' => 'DLC' }] } },
+                      'subfields' => [{ 'a' => 'DLC' }] } }
       ]
     end
     it 'checks if a record has multiple or no 040 fields' do
@@ -39,6 +39,7 @@ RSpec.describe 'field_040' do
   end
 
   describe 'fix_040b' do
+
     context "when there is no subfield a" do
       let(:fields) do
         [
@@ -69,17 +70,36 @@ RSpec.describe 'field_040' do
   end  
 
   describe 'missing_040c?' do
-    let(:fields) do
-      [
-        { '001' => '9970534203506421' },
-        { '040' => { 'indicator1' => ' ',
-                      'indicator2' => ' ',
-                      'subfields' => [{ 'a' => 'DLC' },
-                                      { 'b' => 'eng' }]} },
-      ]
+
+    context 'when no there is no subfield c' do
+      let(:fields) do
+        [
+          { '001' => '9970534203506421' },
+          { '040' => { 'indicator1' => ' ',
+                        'indicator2' => ' ',
+                        'subfields' => [{ 'a' => 'DLC' },
+                                        { 'b' => 'eng' }]} }
+        ]
+      end
+      it 'checks for subfield c in field 040' do
+        expect(MarcCleanup.missing_040c?(record)).to eq true
+      end
     end
-    it 'checks for subfield c in field 040' do
-      expect(MarcCleanup.missing_040c?(record)).to eq true
+
+    context 'when no there is no subfield c' do
+      let(:fields) do
+        [
+          { '001' => '9970534203506421' },
+          { '040' => { 'indicator1' => ' ',
+                        'indicator2' => ' ',
+                        'subfields' => [{ 'a' => 'DLC' },
+                                        { 'b' => 'eng' },
+                                        { 'c' => 'DLC' }]} }
+        ]
+      end
+      it 'checks for subfield c in field 040' do
+        expect(MarcCleanup.missing_040c?(record)).to eq false
+      end
     end
   end  
 end
