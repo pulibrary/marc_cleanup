@@ -39,16 +39,32 @@ RSpec.describe 'field_040' do
   end
 
   describe 'fix_040b' do
-    let(:fields) do
-      [
-        { '001' => '9970534203506421' },
-        { '040' => { 'indicator1' => ' ',
-                      'indicator2' => ' ',
-                      'subfields' => [{ 'c' => 'DLC' }]} }
-      ]
+    context "when there is no subfield a" do
+      let(:fields) do
+        [
+          { '001' => '9970534203506421' },
+          { '040' => { 'indicator1' => ' ',
+                        'indicator2' => ' ',
+                        'subfields' => [{ 'c' => 'DLC' }]} }
+        ]
+      end
+      it 'corrects the 040b' do
+        expect(MarcCleanup.fix_040b(record)['040']['b']).to eq 'eng'
+      end
     end
-    it 'corrects the 040b' do
-      expect(MarcCleanup.fix_040b(record)['040']['b']).to eq 'eng'
+
+    context "when there is one subfield a" do
+      let(:fields) do
+        [
+          { '001' => '9970534203506421' },
+          { '040' => { 'indicator1' => ' ',
+                        'indicator2' => ' ',
+                        'subfields' => [{ 'a' => 'DLC' }]} }
+        ]
+      end
+      it 'corrects the 040b' do
+        expect(MarcCleanup.fix_040b(record)['040']['b']).to eq 'eng'
+      end
     end
   end  
 
