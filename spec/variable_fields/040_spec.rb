@@ -61,7 +61,7 @@ RSpec.describe 'field_040' do
           { '001' => '9970534203506421' },
           { '040' => { 'indicator1' => ' ',
                         'indicator2' => ' ',
-                        'subfields' => [{ 'a' => 'DLC' }]} }
+                        'subfields' => [{ 'c' => 'DLC' }]} }
         ]
       end
       it 'corrects the 040b' do
