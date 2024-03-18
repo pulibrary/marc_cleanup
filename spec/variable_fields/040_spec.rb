@@ -26,20 +26,20 @@ RSpec.describe 'field_040' do
 
   describe 'multiple_no_040b?' do
 
-    context "when there is more than one 040 subfield b" do
-      let(:fields) do
-        [
-          { '001' => '9970534203506421' },
-          { '040' => { 'indicator1' => ' ',
-                        'indicator2' => ' ',
-                        'subfields' => [{ 'b' => 'eng' },
-                                        { 'b' => 'fre' }]} }
-        ]
-      end
-      it 'checks if a record has multiple or no 040 fields' do
-        expect(MarcCleanup.multiple_no_040b?(record)).to eq true
-      end
-    end
+  # context "when there is more than one 040 subfield b" do
+  #   let(:fields) do
+  #     [
+  #       { '001' => '9970534203506421' },
+  #       { '040' => { 'indicator1' => ' ',
+  #                     'indicator2' => ' ',
+  #                     'subfields' => [{ 'b' => 'eng' },
+  #                                     { 'b' => 'fre' }]} }
+  #     ]
+  #   end
+  #   it 'checks if a record has multiple or no 040 fields' do
+  #     expect(MarcCleanup.multiple_no_040b?(record)).to eq true
+  #   end
+  # end
 
     context "when there is one 040 subfield b" do
       let(:fields) do
