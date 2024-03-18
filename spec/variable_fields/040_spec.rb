@@ -47,7 +47,7 @@ RSpec.describe 'field_040' do
           { '001' => '9970534203506421' },
           { '040' => { 'indicator1' => ' ',
                         'indicator2' => ' ',
-                        'subfields' => [{ 'b' => 'eng' }]} }
+                        'subfields' => [{ 'b' => 'e n g' }]} }
         ]
       end
       it 'checks if a record has multiple or no 040 fields' do
