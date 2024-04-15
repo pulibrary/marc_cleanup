@@ -9,7 +9,7 @@ module MarcCleanup
     !nr_fields.empty?
   end
 
-  def invalid_tag?(record)
+  def non_numeric_tag?(record)
     record.tags.find { |x| x =~ /[^0-9]/ } ? true : false
   end
 

@@ -1,7 +1,7 @@
 require 'marc_cleanup'
 require 'byebug'
 
-RSpec.describe 'invalid_tag' do
+RSpec.describe 'non_numeric_tag' do
     let(:fields) do
       [
         { 'ABC' => { 'indicator1' => ' ',
@@ -11,6 +11,6 @@ RSpec.describe 'invalid_tag' do
     end
     let(:record) { MARC::Record.new_from_hash('fields' => fields) }
     it 'finds the non-numeric tag' do
-      expect(MarcCleanup.invalid_tag?(record)).to eq true
+      expect(MarcCleanup.non_numeric_tag?(record)).to eq true
     end
   end
