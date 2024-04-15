@@ -15,7 +15,7 @@ no_001 - Record has no 001 field.
 
 leader_errors - Errors in the leader.
 
-invalid_tag - Tag does not consist of 3 numbers.
+non_numeric_tag - Tag does not consist of 3 numbers.
 
 invalid_indicators - Characters other than a space or a number in the field indicators.
 
