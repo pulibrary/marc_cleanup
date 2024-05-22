@@ -1352,6 +1352,28 @@
       repeat: true
       description: Field link and sequence number
 
+'092':
+  repeat: true
+  description: LOCALLY ASSIGNED DEWEY CALL NUMBER (OCLC)
+  ind1: [" ", "0", "1"]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Classification number
+    'b':
+      repeat: false
+      description: Item number
+    'e':
+      repeat: false
+      description: Feature heading
+    'f':
+      repeat: false
+      description: Filing suffix
+    '2':
+      repeat: false
+      description: Edition information
+
 '099':
   repeat: true
   description: LOCAL FREE-TEXT CALL NUMBER (OCLC)
