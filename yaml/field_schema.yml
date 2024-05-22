@@ -1354,7 +1354,7 @@
 
 '092':
   repeat: true
-  description: LOCAL DEWEY CALL NUMBER (OCLC)
+  description: LOCALLY ASSIGNED DEWEY CALL NUMBER (OCLC)
   ind1: [" ", "0", "1"]
   ind2: [" "]
   subfields:
