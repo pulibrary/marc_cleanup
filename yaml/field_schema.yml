@@ -8642,10 +8642,10 @@
   subfields:
     'a':
       repeat: true
-      description: Tag of the foreign MARC field
+      description: Tag of the foreign MARC field / Foreign MARC subfield
     'b':
       repeat: true
-      description: Content of the foreign MARC field
+      description: Content of the foreign MARC field / Foreign MARC subfield
     'c':
       repeat: true
       description: Foreign MARC subfield
@@ -8726,7 +8726,7 @@
       description: Foreign MARC subfield
     '2':
       repeat: true
-      description: Source of data
+      description: Source of data / Foreign MARC subfield
     '3':
       repeat: true
       description: Source of data
