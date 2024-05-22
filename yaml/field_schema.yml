@@ -8751,22 +8751,22 @@
       description: Source of data / Foreign MARC subfield
     '3':
       repeat: true
-      description: Source of data
+      description: Foreign MARC subfield
     '4':
       repeat: true
-      description: Source of data
+      description: Foreign MARC subfield
     '5':
       repeat: true
-      description: Source of data
+      description: Foreign MARC subfield
     '6':
       repeat: true
-      description: Source of data
+      description: Foreign MARC subfield
     '7':
       repeat: true
-      description: Source of data
+      description: Foreign MARC subfield
     '8':
       repeat: true
-      description: Source of data
+      description: Foreign MARC subfield
     '9':
       repeat: true
-      description: Source of data
+      description: Foreign MARC subfield
