@@ -32,17 +32,45 @@ RSpec.describe 'field 008 methods' do
   
   describe 'bad_008?' do
 
+    describe 'global 008 value check' do 
+      let(:leader) { '01104naa a2200289 i 4500' }
+
+      context 'when the global 008 values are invalid' do
+        let(:fields) { [ { '008' => '230414s9999||||xx |||||||||||||| ||eng|x' } ] }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:false, errors:['Invalid value in global 008 (positions 0-17, 35-39)'] }
+    
+        context 'when the 008 is valid' do
+          let(:fields) { [ { '008' => '230414s9999||||xx |||||||||||||| ||eng||' } ] }
+          it { expect(MarcCleanup.bad_008?(record)).to eq valid:true, errors:[] }
+        end
+      end
+    end
+
+    describe 'global and specific 008 check' do
+      let(:leader) { '01104npa a2200289 i 4500' }
+    
+      context 'when both the global and specific 008 values are invalid' do
+        let(:fields) { [ { '008' => '230519s1996    njux   u      000 0 eng x' } ] }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:false, errors:['Invalid value in global 008 (positions 0-17, 35-39)','Invalid value in the specific 008 (positions 18-34)'] }
+      end
+    
+      context 'when the 008 is valid' do
+        let(:fields) { [ { '008' => '230519s1996    nju     |           eng d' } ] }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:true, errors:[] }
+      end
+    end
+    
     describe 'book format 008' do
       let(:leader) { '01104naa a2200289 i 4500' }
   
       context 'when the 008 is invalid' do
-        let(:fields) { [ { '008' => '230519e1996    njuax         000 0 eng d' } ] }
-        it { expect(MarcCleanup.bad_008?(record)).to eq true }
+        let(:fields) { [ { '008' => '230414s9999||||xx x||||||||||||| ||eng||' } ] }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:false, errors:["Invalid value in the specific 008 (positions 18-34)"] }
       end
  
       context 'when the 008 is valid' do
         let(:fields) { [ { '008' => '230414s9999||||xx |||||||||||||| ||eng||' } ] }
-        it { expect(MarcCleanup.bad_008?(record)).to eq false }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:true, errors:[] }
       end
     end
     
@@ -51,12 +79,12 @@ RSpec.describe 'field 008 methods' do
       
       context 'when the 008 is invalid' do
         let(:fields) { [ { '008' => '140108s2023    miu    fo  a       xeng d' } ] }
-        it { expect(MarcCleanup.bad_008?(record)).to eq true }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:false, errors:['Invalid value in the specific 008 (positions 18-34)'] }
       end
       
       context 'when the 008 is valid' do
         let(:fields) { [ { '008' => '140108s2023    miu    fo  a        eng d' } ] } 
-        it { expect(MarcCleanup.bad_008?(record)).to eq false }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:true, errors:[] }
       end
     end
     
@@ -65,12 +93,12 @@ RSpec.describe 'field 008 methods' do
       
       context 'when the 008 is invalid' do
         let(:fields) { [ { '008' => '231127s2023    dcu|||||| |  || | ||eng z' } ] }
-        it { expect(MarcCleanup.bad_008?(record)).to eq true }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:false, errors:['Invalid value in global 008 (positions 0-17, 35-39)'] }
       end
       
       context 'when the 008 is valid' do
         let(:fields) { [ { '008' => '231127s2023    dcu|||||| |  || | ||eng c' } ] }
-        it { expect(MarcCleanup.bad_008?(record)).to eq false }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:true, errors:[] }
       end
     end
 
@@ -79,12 +107,12 @@ RSpec.describe 'field 008 methods' do
       
       context 'when the 008 is invalid' do
         let(:fields) { [ { '008' => '230519s1996    njua   u      000 0 eng d' } ] }
-        it { expect(MarcCleanup.bad_008?(record)).to eq true }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:false, errors:['Invalid value in the specific 008 (positions 18-34)'] }
       end
       
       context 'when the 008 is valid' do
         let(:fields) { [ { '008' => '230519s1996    nju|||||||||||||| | eng d' } ] }
-        it { expect(MarcCleanup.bad_008?(record)).to eq false }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:true, errors:[] }
       end
     end
     
@@ -93,12 +121,12 @@ RSpec.describe 'field 008 methods' do
       
       context 'when the 008 is invalid' do    
         let(:fields) { [ { '008' => '230519s1996    njua   u aa   000 0 eng d' } ] }
-        it { expect(MarcCleanup.bad_008?(record)).to eq true }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:false, errors:['Invalid value in the specific 008 (positions 18-34)'] }
       end
       
       context 'when the 008 is valid' do
         let(:fields) { [ { '008' => '230519s1996    nju|| |||aa  |0   ||eng d' } ] }        
-        it { expect(MarcCleanup.bad_008?(record)).to eq false }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:true, errors:[] }
       end
     end
     
@@ -107,12 +135,12 @@ RSpec.describe 'field 008 methods' do
       
       context 'when the 008 is invalid' do
         let(:fields) { [ { '008' => '230519s1996    njua   u      000 0 eng d' } ] }
-        it { expect(MarcCleanup.bad_008?(record)).to eq true }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:false, errors:['Invalid value in the specific 008 (positions 18-34)'] }
       end
       
       context 'when the 008 is valid' do
         let(:fields) { [ { '008' => '230519s1996    nju||| |     ||   ||eng d' } ] }
-        it { expect(MarcCleanup.bad_008?(record)).to eq false }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:true, errors:[] }
       end
     end
     
@@ -121,19 +149,19 @@ RSpec.describe 'field 008 methods' do
     
       context 'when the 008 is invalid' do
         let(:fields) { [ { '008' => '230519s1996    njua   u      000 0 eng d' } ] }
-        it { expect(MarcCleanup.bad_008?(record)).to eq true }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:false, errors:['Invalid value in the specific 008 (positions 18-34)'] }
       end
     
       context 'when the 008 is valid' do
         let(:fields) { [ { '008' => '230519s1996    nju     |           eng d' } ] }
-        it { expect(MarcCleanup.bad_008?(record)).to eq false }
+        it { expect(MarcCleanup.bad_008?(record)).to eq valid:true, errors:[] }
       end
     end
-    
+   
     describe 'bad 008 length' do
       let(:leader) { '01104n a a2200289 i 4500' }      
       let(:fields) { [ { '008' => '230519s1996    njua         000 0 eng a' } ] }
-      it { expect(MarcCleanup.bad_008?(record)).to eq true }
+      it { expect(MarcCleanup.bad_008?(record)).to eq valid:false, errors:['Invalid 008 length'] }
     end
   end
   
