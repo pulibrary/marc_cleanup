@@ -64,12 +64,12 @@ RSpec.describe 'field 008 methods' do
       let(:leader) { '01104naa a2200289 i 4500' }
   
       context 'when the 008 is invalid' do
-        let(:fields) { [ { '008' => '230414s9999    xx x||||||||||||| ||eng||' } ] }
+        let(:fields) { [ { '008' => '230414s19951996xx x||||||||||||| ||eng||' } ] }
         it { expect(MarcCleanup.bad_008?(record)).to eq valid:false, errors:["Invalid value in the specific 008 (positions 18-34)"] }
       end
  
       context 'when the 008 is valid' do
-        let(:fields) { [ { '008' => '230414s9999    xx |||||||||||||| ||eng||' } ] }
+        let(:fields) { [ { '008' => '230414s19951996xx |||||||||||||| ||eng||' } ] }
         it { expect(MarcCleanup.bad_008?(record)).to eq valid:true, errors:[] }
       end
     end
