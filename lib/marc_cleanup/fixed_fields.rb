@@ -1788,28 +1788,40 @@ module MarcCleanup
   end
 
   def bad_008?(record)
+    hash = {}
+    hash[:valid] = true
+    hash[:errors] = []
+    errors = [
+      'Invalid 008 length',
+      'Invalid value in global 008 (positions 0-17, 35-39)',
+      'Invalid value in the specific 008 (positions 18-34)'
+    ]
     field = record['008'].value
-    return true if field.length != 40
-    return true if all_008(field)
+  
+    if field.length != 40
+      hash[:valid] = false
+      hash[:errors] << errors[0] 
+      return hash
+    end
+
+    if all_008(field)
+      hash[:valid] = false
+      hash[:errors] << errors[1]
+    end
 
     rec_type = record.leader[6..7]
     specific_f008 = field[18..34]
-    if book.include?(rec_type)
-      return true if book_008(specific_f008)
-    elsif comp_file.include?(rec_type)
-      return true if comp_008(specific_f008)
-    elsif map.include?(rec_type)
-      return true if map_008(specific_f008)
-    elsif music.include?(rec_type)
-      return true if music_008(specific_f008)
-    elsif continuing_resource.include?(rec_type)
-      return true if continuing_resource_008(specific_f008)
-    elsif visual.include?(rec_type)
-      return true if visual_008(specific_f008)
-    elsif mixed.include?(rec_type)
-      return true if mix_mat_008(specific_f008)
+    if book.include?(rec_type) && book_008(specific_f008) ||
+      comp_file.include?(rec_type) && comp_008(specific_f008) ||
+      map.include?(rec_type) && map_008(specific_f008) ||
+      music.include?(rec_type) && music_008(specific_f008) ||
+      continuing_resource.include?(rec_type) && continuing_resource_008(specific_f008) ||
+      visual.include?(rec_type) && visual_008(specific_f008) ||
+      mixed.include?(rec_type) && mix_mat_008(specific_f008)
+      hash[:valid] = false
+      hash[:errors] << errors[2]
     end
-    false
+    hash
   end
 
   ### Replace obsolete values with current values when possible
