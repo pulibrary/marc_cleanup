@@ -1362,7 +1362,7 @@
       repeat: true
       description: Classification number
     'b':
-      repeat: true
+      repeat: false
       description: Local Cutter number
     'e':
       repeat: false
