@@ -1078,8 +1078,15 @@ module MarcCleanup
           hash[:invalid_fields][field.tag] << error
         else
           tag = field['6'].gsub(/^([0-9]{3})-.*$/, '\1')
+          unless schema[tag]
+            error = "Invalid linked field tag #{tag} in instance #{field_num} of 880"
+            hash[:invalid_fields][field.tag] ||= []
+            hash[:invalid_fields][field.tag] << error
+          end
         end
       end
+      next unless schema[tag]
+
       unless schema[tag]['ind1'].include?(field.indicator1.to_s)
         error = "Invalid indicator1 value #{field.indicator1.to_s} in instance #{field_num}"
         hash[:invalid_fields][field.tag] ||= []
@@ -1118,7 +1125,7 @@ module MarcCleanup
     if rda_convention_mismatch(record) == true
       record.leader[18] = "i"
     end
-    record 
+    record
   end
 
 end

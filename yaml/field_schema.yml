@@ -1352,6 +1352,25 @@
       repeat: true
       description: Field link and sequence number
 
+'090':
+  repeat: true
+  description: LOCALLY ASSIGNED LC-TYPE CALL NUMBER (OCLC)
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: true
+      description: Classification number
+    'b':
+      repeat: false
+      description: Local Cutter number
+    'e':
+      repeat: false
+      description: Feature heading
+    'f':
+      repeat: false
+      description: Filing suffix
+
 '092':
   repeat: true
   description: LOCALLY ASSIGNED DEWEY CALL NUMBER (OCLC)
@@ -5111,6 +5130,25 @@
     '5':
       repeat: false
       description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'590':
+  repeat: true
+  description: LOCAL NOTE (OCLC)
+  ind1: [" ", "0", "1"]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Local note
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
