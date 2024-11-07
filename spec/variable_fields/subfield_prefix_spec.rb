@@ -3,10 +3,9 @@
 require 'marc_cleanup'
 
 RSpec.describe 'remove_prefix_from_subfield' do
-
   let(:leader) { '01104naa a2200289 i 4500' }
-  let(:string) { 'Is it '}
-  let(:targets) { [ { field: '245', subfields: ['b'] } ] }
+  let(:string) { 'Is it ' }
+  let(:targets) { [{ field: '245', subfields: ['b'] }] }
   let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
   let(:fields) do
     [
@@ -27,11 +26,11 @@ RSpec.describe 'remove_prefix_from_subfield' do
     expect(result['245']['b']).to eq 'in array'
   end
 end
-RSpec.describe 'add_prefix_to_subfield' do
 
+RSpec.describe 'add_prefix_to_subfield' do
   let(:leader) { '01104naa a2200289 i 4500' }
-  let(:string) { 'It is '}
-  let(:targets) { [ { field: '245', subfields: ['b'] } ] }
+  let(:string) { 'It is ' }
+  let(:targets) { [{ field: '245', subfields: ['b'] }] }
   let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
   let(:fields) do
     [
