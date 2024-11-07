@@ -1,121 +1,122 @@
+# frozen_string_literal: true
+
 module MarcCleanup
-
-### Remove non-numerical strings and append a new 020$q with the string
-def new_020_q(record)
-  record.fields('020').each do |f020|
-    f020.subfields.each do |subfield|
-      next unless subfield.code == 'a'
-      isbn_parts = /^\s*([\d\-]+)\s*(\(.*?\))\s*$/.match(subfield.value)
-      next if isbn_parts.nil?
-      subfield.value = isbn_parts[1]
-      f020.append(MARC::Subfield.new('q', isbn_parts[2])) 
-    end  
-  end
-  record
-end
-
-### Convert ISBN-10 to ISBN-13
-def isbn10_to_13(isbn)
-  stem = isbn[0..8]
-  return nil if stem =~ /\D/
-
-  existing_check = isbn[9]
-  return nil if existing_check && existing_check != checkdigit_10(stem)
-
-  main = ISBN13PREFIX + stem
-  checkdigit = checkdigit_13(main)
-  main + checkdigit
-end
-
-### Calculate check digit for ISBN-10
-def checkdigit_10(stem)
-  int_index = 0
-  int_sum = 0
-  stem.each_char do |digit|
-    int_sum += digit.to_i * (10 - int_index)
-    int_index += 1
-  end
-  mod = (11 - (int_sum % 11)) % 11
-  mod == 10 ? 'X' : mod.to_s
-end
-
-### Calculate check digit for ISBN-13
-def checkdigit_13(stem)
-  int_index = 0
-  int_sum = 0
-  stem.each_char do |digit|
-    int_sum += int_index.even? ? digit.to_i : digit.to_i * 3
-    int_index += 1
-  end
-  ((10 - (int_sum % 10)) % 10).to_s
-end
-
-### Normalize ISBN-13
-def isbn13_normalize(raw_isbn)
-  int_sum = 0
-  stem = raw_isbn[0..11]
-  return nil if stem =~ /\D/
-
-  int_index = 0
-  stem.each_char do |digit|
-    int_sum += int_index.even? ? digit.to_i : digit.to_i * 3
-    int_index += 1
-  end
-  checkdigit = checkdigit_13(stem)
-  return nil if raw_isbn[12] && raw_isbn[12] != checkdigit
-
-  stem + checkdigit
-end
-
-### Normalize any given string that is supposed to include an ISBN
-def isbn_normalize(isbn)
-  return nil unless isbn
-
-  raw_isbn = isbn.dup
-  raw_isbn.delete!('-')
-  raw_isbn.delete!('\\')
-  raw_isbn.gsub!(/\([^\)]*\)/, '')
-  raw_isbn.gsub!(/^(.*)\$c.*$/, '\1')
-  raw_isbn.gsub!(/^(.*)\$q.*$/, '\1')
-  raw_isbn.gsub!(/^\D+([0-9].*)$/, '\1')
-  if raw_isbn =~ /^978/
-    raw_isbn.gsub!(/^(978[0-9 ]+).*$/, '\1')
-    raw_isbn.delete!(' ')
-  else
-    raw_isbn.gsub!(/([0-9])\s*([0-9]{4})\s*([0-9]{4})\s*([0-9xX]).*$/, '\1\2\3\4')
-  end
-  raw_isbn.gsub!(/^([0-9]{9,13}[xX]?)[^0-9xX].*$/, '\1')
-  raw_isbn.gsub!(/^([0-9]+?)\D.*$/, '\1')
-  if raw_isbn.length > 6 && raw_isbn.length < 9 && raw_isbn =~ /^[0-9]+$/
-    raw_isbn = raw_isbn.ljust(9, '0')
-  end
-  valid_lengths = [9, 10, 12, 13] # ISBN10 and ISBN13 with/out check digits
-  return nil unless valid_lengths.include? raw_isbn.length
-
-  if raw_isbn.length < 12
-    isbn10_to_13(raw_isbn)
-  else
-    isbn13_normalize(raw_isbn)
-  end
-end
-
-### If the ISBN is invalid, change the subfield code to z
-### Otherwise, replace ISBN with normalized ISBN
-def move_invalid_isbn(record)
-  record.fields('020').each do |f020|
-    f020.subfields.each do |subfield|
-      next unless subfield.code == 'a'
-      isbn = subfield.value
-      normalized_isbn = isbn_normalize(isbn)
-      if normalized_isbn
-        subfield.value = normalized_isbn
-      else
-        subfield.code = 'z'
+  ### Remove non-numerical strings and append a new 020$q with the string
+  def new_020_q(record)
+    record.fields('020').each do |f020|
+      f020.subfields.each do |subfield|
+        next unless subfield.code == 'a'
+        isbn_parts = /^\s*([\d\-]+)\s*(\(.*?\))\s*$/.match(subfield.value)
+        next if isbn_parts.nil?
+        subfield.value = isbn_parts[1]
+        f020.append(MARC::Subfield.new('q', isbn_parts[2]))
       end
     end
+    record
   end
-  record
-end
+
+  ### Convert ISBN-10 to ISBN-13
+  def isbn10_to_13(isbn)
+    stem = isbn[0..8]
+    return nil if stem =~ /\D/
+
+    existing_check = isbn[9]
+    return nil if existing_check && existing_check != checkdigit_10(stem)
+
+    main = ISBN13PREFIX + stem
+    checkdigit = checkdigit_13(main)
+    main + checkdigit
+  end
+
+  ### Calculate check digit for ISBN-10
+  def checkdigit_10(stem)
+    int_index = 0
+    int_sum = 0
+    stem.each_char do |digit|
+      int_sum += digit.to_i * (10 - int_index)
+      int_index += 1
+    end
+    mod = (11 - (int_sum % 11)) % 11
+    mod == 10 ? 'X' : mod.to_s
+  end
+
+  ### Calculate check digit for ISBN-13
+  def checkdigit_13(stem)
+    int_index = 0
+    int_sum = 0
+    stem.each_char do |digit|
+      int_sum += int_index.even? ? digit.to_i : digit.to_i * 3
+      int_index += 1
+    end
+    ((10 - (int_sum % 10)) % 10).to_s
+  end
+
+  ### Normalize ISBN-13
+  def isbn13_normalize(raw_isbn)
+    int_sum = 0
+    stem = raw_isbn[0..11]
+    return nil if stem =~ /\D/
+
+    int_index = 0
+    stem.each_char do |digit|
+      int_sum += int_index.even? ? digit.to_i : digit.to_i * 3
+      int_index += 1
+    end
+    checkdigit = checkdigit_13(stem)
+    return nil if raw_isbn[12] && raw_isbn[12] != checkdigit
+
+    stem + checkdigit
+  end
+
+  ### Normalize any given string that is supposed to include an ISBN
+  def isbn_normalize(isbn)
+    return nil unless isbn
+
+    raw_isbn = isbn.dup
+    raw_isbn.delete!('-')
+    raw_isbn.delete!('\\')
+    raw_isbn.gsub!(/\([^\)]*\)/, '')
+    raw_isbn.gsub!(/^(.*)\$c.*$/, '\1')
+    raw_isbn.gsub!(/^(.*)\$q.*$/, '\1')
+    raw_isbn.gsub!(/^\D+([0-9].*)$/, '\1')
+    if raw_isbn =~ /^978/
+      raw_isbn.gsub!(/^(978[0-9 ]+).*$/, '\1')
+      raw_isbn.delete!(' ')
+    else
+      raw_isbn.gsub!(/([0-9])\s*([0-9]{4})\s*([0-9]{4})\s*([0-9xX]).*$/, '\1\2\3\4')
+    end
+    raw_isbn.gsub!(/^([0-9]{9,13}[xX]?)[^0-9xX].*$/, '\1')
+    raw_isbn.gsub!(/^([0-9]+?)\D.*$/, '\1')
+    if raw_isbn.length > 6 && raw_isbn.length < 9 && raw_isbn =~ /^[0-9]+$/
+      raw_isbn = raw_isbn.ljust(9, '0')
+    end
+    valid_lengths = [9, 10, 12, 13] # ISBN10 and ISBN13 with/out check digits
+    return nil unless valid_lengths.include? raw_isbn.length
+
+    if raw_isbn.length < 12
+      isbn10_to_13(raw_isbn)
+    else
+      isbn13_normalize(raw_isbn)
+    end
+  end
+
+  ### If the ISBN is invalid, change the subfield code to z
+  ### Otherwise, replace ISBN with normalized ISBN
+  def move_invalid_isbn(record)
+    record.fields('020').each do |f020|
+      f020.subfields.each do |subfield|
+        next unless subfield.code == 'a'
+        isbn = subfield.value
+        normalized_isbn = isbn_normalize(isbn)
+        if normalized_isbn
+          subfield.value = normalized_isbn
+        else
+          subfield.code = 'z'
+        end
+      end
+    end
+    record
+  end
 
   # check the 041 field for errors
   # 041 is a language code
@@ -596,6 +597,40 @@ end
         end
       end
       record.fields[f_index] = new_field
+    end
+    record
+  end
+
+  ### Removes text from the beginning of a subfield
+  ### An array of hashes of the format { field:, subfields: } will be passed
+  ###   in the targets: symbol
+  ###   subfield: is an array of subfield codes
+  def remove_prefix_from_subfield(record:, targets:, string:)
+    targets.each do |target|
+      record.fields(target[:field]).each do |field|
+        field.subfields.each do |subfield|
+          next unless target[:subfields].include?(subfield.code)
+
+          subfield.value = subfield.value.dup.delete_prefix(string)
+        end
+      end
+    end
+    record
+  end
+
+  ### Adds text to the beginning of a subfield
+  ### An array of hashes of the format { field:, subfields: } will be passed
+  ###   in the targets: symbol
+  ###   subfield: is an array of subfield codes
+  def add_prefix_to_subfield(record:, targets:, string:)
+    targets.each do |target|
+      record.fields(target[:field]).each do |field|
+        field.subfields.each do |subfield|
+          next unless target[:subfields].include?(subfield.code)
+
+          subfield.value = subfield.value.dup.prepend(string)
+        end
+      end
     end
     record
   end
