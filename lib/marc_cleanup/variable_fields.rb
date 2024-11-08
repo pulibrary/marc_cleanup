@@ -589,11 +589,13 @@ module MarcCleanup
       field.subfields.each do |subfield|
         code = subfield.code
         val = subfield.value
-        next unless val.size % 3 == 0
-
-        langs = val.scan(/.../)
-        langs.each do |lang|
-          new_field.append(MARC::Subfield.new(code, lang))
+        if val.size % 3 == 0
+          langs = val.scan(/.../)
+          langs.each do |lang|
+            new_field.append(MARC::Subfield.new(code, lang))
+          end
+        else
+          new_field.append(MARC::Subfield.new(code, val))
         end
       end
       record.fields[f_index] = new_field
