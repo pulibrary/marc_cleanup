@@ -203,5 +203,77 @@ RSpec.describe 'field 042 methods' do
         expect(MarcCleanup.auth_code_error?(record)).to eq true
       end
     end
+
+    context 'has one valid auth_code' do
+      let(:fields) do
+        [
+          { '042' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'a' => 'sanb' }] } }
+        ]
+      end
+      it 'does not trigger an error' do
+        expect(MarcCleanup.auth_code_error?(record)).to eq false
+      end
+    end
+  end
+end
+
+RSpec.describe 'field 046 methods' do
+  let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
+  let(:leader) { '01104naa a2200289 i 4500' }
+
+  describe 'f046_errors?' do
+    context 'has no 046 field' do
+      let(:fields) do
+        [
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'This record has no 046' }] } }
+        ]
+      end
+      it 'does not trigger an error' do
+        expect(MarcCleanup.f046_errors?(record)).to eq false
+      end
+    end
+
+    context 'subfield b with no subfield a' do
+      let(:fields) do
+        [
+          { '046' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'b' => '1937' }] } }
+        ]
+      end
+      it 'triggers an error' do
+        expect(MarcCleanup.f046_errors?(record)).to eq true
+      end
+    end
+
+    context 'subfield b with invalid subfield a value' do
+      let(:fields) do
+        [
+          { '046' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'a' => 'a' }, { 'b' => '1937' }] } }
+        ]
+      end
+      it 'triggers an error' do
+        expect(MarcCleanup.f046_errors?(record)).to eq true
+      end
+    end
+
+    context 'subfield b with valid subfield a value' do
+      let(:fields) do
+        [
+          { '046' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'a' => 'r' }, { 'b' => '1937' }] } }
+        ]
+      end
+      it 'does not trigger an error' do
+        expect(MarcCleanup.f046_errors?(record)).to eq false
+      end
+    end
   end
 end

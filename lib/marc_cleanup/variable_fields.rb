@@ -287,13 +287,16 @@ module MarcCleanup
     b040 == ''
   end
 
-  def f046_subfield_errors?(record)
+  def f046_errors?(record)
+    subf_codes = %w[b c d e]
+    subf_a_values = %w[r s p t x q n i k r m t x n]
     f046 = record.fields('046')
     return false if f046.empty?
 
     f046.each do |field|
-      subf_codes = field.subfields.map { |subfield| subfield.code }
-      return true if field['a'].nil? && (subf_codes & %w[b c d e]).size > 0
+      codes = field.subfields.map { |subfield| subfield.code }
+      return true if field['a'] && !subf_a_values.include?(field['a'])
+      return true if field['a'].nil? && (subf_codes & codes).size.positive?
     end
     false
   end
