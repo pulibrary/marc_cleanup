@@ -277,7 +277,7 @@ module MarcCleanup
     b040 = f040.subfields.select { |subfield| subfield.code == 'b' }
     return true if b040.size != 1
 
-    b040 = b040.first.value
+    b040 = b040.first.value.dup
     b040.gsub!(/[ ]/, '')
     b040 == ''
   end
