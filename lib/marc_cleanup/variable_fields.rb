@@ -197,8 +197,13 @@ module MarcCleanup
 
   def auth_code_error?(record)
     return false unless record['042']
+    return true if record.fields('042').size > 1
 
-    auth_codes_042.include?(record['042']['a']) ? false : true
+    record['042'].subfields.each do |subfield|
+      next if subfield.code != 'a'
+      return true unless auth_codes_042.include?(subfield.value)
+    end
+    false
   end
 
   def invalid_indicators?(record)

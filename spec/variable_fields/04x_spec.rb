@@ -156,3 +156,52 @@ RSpec.describe 'field 041 methods' do
     end
   end
 end
+
+RSpec.describe 'field 042 methods' do
+  let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
+  let(:leader) { '01104naa a2200289 i 4500' }
+
+  describe 'auth_code_error?' do
+    context 'has no 042 field' do
+      let(:fields) do
+        [
+          { '245' => { 'indicator1' => '0',
+                       'indicator2' => '0',
+                       'subfields' => [{ 'a' => 'This record has no 042' }] } }
+        ]
+      end
+      it 'does not trigger an error' do
+        expect(MarcCleanup.auth_code_error?(record)).to eq false
+      end
+    end
+
+    context 'has multiple 042 fields' do
+      let(:fields) do
+        [
+          { '042' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'a' => 'sanb' }] } },
+          { '042' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'a' => 'pcc' }] } }
+        ]
+      end
+      it 'triggers an error' do
+        expect(MarcCleanup.auth_code_error?(record)).to eq true
+      end
+    end
+
+    context 'has one valid auth_code and one invalid auth_code' do
+      let(:fields) do
+        [
+          { '042' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'a' => 'sanb' }, { 'a' => 'pcl' }] } }
+        ]
+      end
+      it 'triggers an error' do
+        expect(MarcCleanup.auth_code_error?(record)).to eq true
+      end
+    end
+  end
+end
