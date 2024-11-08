@@ -127,71 +127,23 @@ module MarcCleanup
     f041.each do |field|
       field.subfields.each do |subfield|
         val = subfield.value
-        return true if (val.size > 3) && (val.size % 3 == 0)
+        return true if (val.size > 3) && (val.size % 3).zero?
       end
     end
     false
   end
 
   # http://www.loc.gov/standards/valuelist/marcauthen.html
-  def auth_codes_042
+  def auth_codes_f042
     %w[
-      anuc
-      croatica
-      dc
-      dhca
-      dlr
-      gamma
-      gils
-      gnd1
-      gnd2
-      gnd3
-      gnd4
-      gnd5
-      gnd6
-      gnd7
-      gndz
-      isds/c
-      issnuk
-      lacderived
-      lc
-      lcac
-      lccopycat
-      lccopycat-nm
-      lcd
-      lcderive
-      lchlas
-      lcllh
-      lcnccp
-      lcnitrate
-      lcnuc
-      lcode
-      msc
-      natgaz
-      nbr
-      nlc
-      nlmcopyc
-      norbibl
-      nsdp
-      nst
-      ntccf
-      nznb
-      pcc
-      premarc
-      reveal
-      sanb
-      scipio
-      toknb
-      ukblcatcopy
-      ukblderived
-      ukblproject
-      ukblsr
-      ukscp
-      xisds/c
-      xissnuk
-      xlc
-      xnlc
-      xnsdp
+      anuc croatica dc dhca dlr
+      gamma gils gnd1 gnd2 gnd3 gnd4 gnd5 gnd6 gnd7 gndz isds/c issnuk
+      lacderived lc lcac lccopycat lccopycat-nm lcd lcderive
+      lchlas lcllh lcnccp lcnitrate lcnuc lcode
+      msc natgaz nbr nlc nlmcopyc norbibl nsdp nst ntccf nznb
+      pcc premarc reveal sanb scipio toknb
+      ukblcatcopy ukblderived ukblproject ukblsr ukscp
+      xisds/c xissnuk xlc xnlc xnsdp
     ]
   end
 
@@ -201,7 +153,7 @@ module MarcCleanup
 
     record['042'].subfields.each do |subfield|
       next if subfield.code != 'a'
-      return true unless auth_codes_042.include?(subfield.value)
+      return true unless auth_codes_f042.include?(subfield.value)
     end
     false
   end
@@ -270,8 +222,7 @@ module MarcCleanup
   end
 
   def multiple_no_040?(record)
-    f040 = record.fields('040')
-    f040.size != 1
+    record.fields('040').size != 1
   end
 
   def multiple_no_040b?(record)
@@ -283,7 +234,7 @@ module MarcCleanup
     return true if b040.size != 1
 
     b040 = b040.first.value.dup
-    b040.gsub!(/[ ]/, '')
+    b040.gsub!(/\s/, '')
     b040 == ''
   end
 
@@ -294,7 +245,7 @@ module MarcCleanup
     return false if f046.empty?
 
     f046.each do |field|
-      codes = field.subfields.map { |subfield| subfield.code }
+      codes = field.subfields.map(&:code)
       return true if field['a'] && !subf_a_values.include?(field['a'])
       return true if field['a'].nil? && (subf_codes & codes).size.positive?
     end
@@ -567,15 +518,14 @@ module MarcCleanup
 
   ### Make the 040 $b 'eng' if it doesn't have a value
   def fix_040b(record)
-    f040 = record.fields('040')
-    return record unless f040.size == 1
+    return record unless record.fields('040').size == 1
 
-    f040 = f040.first
+    f040 = record['040']
     field_index = record.fields.index(f040)
     b040 = f040.subfields.select { |subfield| subfield.code == 'b' }
     return record unless b040.empty?
 
-    subf_codes = f040.subfields.map { |subfield| subfield.code }
+    subf_codes = f040.subfields.map(&:code)
     subf_index = if f040['a']
                    (subf_codes.index { |i| i == 'a' }) + 1
                  else
@@ -587,7 +537,7 @@ module MarcCleanup
   end
 
   ### Split up subfields that contain multiple 3-letter language codes
-  def fix_041(record)
+  def fix_f041(record)
     f041 = record.fields('041')
     return record if f041.empty?
 
@@ -597,7 +547,7 @@ module MarcCleanup
       field.subfields.each do |subfield|
         code = subfield.code
         val = subfield.value
-        if val.size % 3 == 0
+        if (val.size % 3).zero?
           langs = val.scan(/.../)
           langs.each do |lang|
             new_field.append(MARC::Subfield.new(code, lang))

@@ -118,7 +118,7 @@ RSpec.describe 'field 041 methods' do
     end
   end
 
-  describe 'fix_041' do
+  describe 'fix_f041' do
     context 'has incomplete language code in subfield' do
       let(:fields) do
         [
@@ -128,7 +128,7 @@ RSpec.describe 'field 041 methods' do
         ]
       end
       it 'does not modify the 041 field' do
-        modified_record = MarcCleanup.fix_041(record)
+        modified_record = MarcCleanup.fix_f041(record)
         expect(modified_record['041']['b']).to eq 'engit'
       end
     end
@@ -142,7 +142,7 @@ RSpec.describe 'field 041 methods' do
         ]
       end
       it 'splits the codes into separate subfields' do
-        modified_record = MarcCleanup.fix_041(record)
+        modified_record = MarcCleanup.fix_f041(record)
         f041subfields = modified_record['041'].subfields
         mapped_subfields = f041subfields.map do |subfield|
           { code: subfield.code, value: subfield.value }
