@@ -160,16 +160,16 @@ module MarcCleanup
 
   def invalid_indicators?(record)
     record.fields.each do |field|
-      next unless field.class == MARC::DataField
-
-      return true unless field.indicator1 =~ /^[0-9 ]$/ && field.indicator2 =~ /^[0-9 ]$/
+      next unless field.instance_of?(MARC::DataField)
+      return true unless field.indicator1.match?(/^[0-9 ]$/)
+      return true unless field.indicator2.match?(/^[0-9 ]$/)
     end
     false
   end
 
   def invalid_subfield_code?(record)
     record.fields.each do |field|
-      next unless field.class == MARC::DataField
+      next unless field.instance_of?(MARC::DataField)
 
       field.subfields.each do |subfield|
         return true unless subfield.code =~ /^[0-9a-z]$/
@@ -180,7 +180,7 @@ module MarcCleanup
 
   def empty_subfields?(record)
     record.fields.each do |field|
-      next unless field.class == MARC::DataField
+      next unless field.instance_of?(MARC::DataField)
 
       field.subfields.each do |subfield|
         return true if subfield.value =~ /^[[:blank:]]*$/
@@ -391,7 +391,7 @@ module MarcCleanup
 
   def subf_0_uri?(record)
     record.fields.each do |field|
-      next unless field.class == MARC::DataField && field.tag =~ /^[^9]/ && field['0']
+      next unless field.instance_of?(MARC::DataField) && field.tag =~ /^[^9]/ && field['0']
 
       field.subfields.each do |subfield|
         return true if subfield.code == '0' && subfield.value =~ /^\(uri\)/
@@ -445,23 +445,18 @@ module MarcCleanup
   end
 
   ### Replace empty indicators with a space;
-  #     scrub indicators with bad UTF-8
+  ###   scrub indicators with bad UTF-8;
+  ###   The ruby-marc gem converts nil subfields to spaces
   def empty_indicator_fix(record)
     record.fields.each do |field|
-      next unless field.class == MARC::DataField
+      next unless field.instance_of?(MARC::DataField)
 
-      if field.indicator1.nil?
-        field.indicator1 = ' '
-      else
-        field.indicator1.scrub!('')
-        field.indicator1 = ' ' if field.indicator1.size < 1
-      end
-      if field.indicator2.nil?
-        field.indicator2 = ' '
-      else
-        field.indicator2.scrub!('')
-        field.indicator2 = ' ' if field.indicator2.size < 1
-      end
+      ind1_value = field.indicator1.dup
+      ind1_value.scrub!('')
+      field.indicator1 = ' ' if ind1_value.empty?
+      ind2_value = field.indicator2.dup
+      ind2_value.scrub!('')
+      field.indicator2 = ' ' if ind2_value.empty?
     end
     record
   end
@@ -469,24 +464,23 @@ module MarcCleanup
   ### Remove empty subfields from DataFields
   def empty_subfield_fix(record)
     record.fields.each do |field|
-      next unless field.class == MARC::DataField
+      next unless field.instance_of?(MARC::DataField)
+
       field.subfields.delete_if { |subfield| subfield.value.nil? || subfield.value.empty? }
     end
-    record.fields.delete_if { |field| field.class == MARC::DataField && field.subfields.empty? }
+    record.fields.delete_if { |field| field.instance_of?(MARC::DataField) && field.subfields.empty? }
     record
   end
 
   ### Remove the (uri) prefix from subfield 0s
-  def subf_0_fix(record)
+  def subf_0_uri_fix(record)
     record.fields.each do |field|
-      next unless field.class == MARC::DataField && field.tag =~ /^[^9]/ && field['0']
+      next unless field.instance_of?(MARC::DataField) && field.tag[0] != '9' && field['0']
 
-      field_index = record.fields.index(field)
       field.subfields.each do |subfield|
         next unless subfield.code == '0' && subfield.value =~ /^\(uri\)/
 
-        subfield_index = field.subfields.index(subfield)
-        record.fields[field_index].subfields[subfield_index].value = subfield.value.gsub(/^\(uri\)(.*)$/, '\1')
+        subfield.value = subfield.value.dup.delete_prefix('(uri)')
       end
     end
     record
