@@ -24,16 +24,46 @@ RSpec.describe 'field 040 methods' do
   end
 
   describe 'multiple_no_040b?' do
-    let(:fields) do
-      [
-        { '001' => '9970534203506421' },
-        { '040' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
-                     'subfields' => [{ 'b' => 'eng' }] } }
-      ]
+    context 'one 040b' do
+      let(:fields) do
+        [
+          { '001' => '9970534203506421' },
+          { '040' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'b' => 'eng' }] } }
+        ]
+      end
+      it 'does not trigger an error' do
+        expect(MarcCleanup.multiple_no_040b?(record)).to eq false
+      end
     end
-    it 'checks if a record has multiple or no 040 fields' do
-      expect(MarcCleanup.multiple_no_040b?(record)).to eq false
+
+    context 'one 040b with spaces only' do
+      let(:fields) do
+        [
+          { '001' => '9970534203506421' },
+          { '040' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'b' => '   ' }] } }
+        ]
+      end
+      it 'triggers an error' do
+        expect(MarcCleanup.multiple_no_040b?(record)).to eq true
+      end
+    end
+
+    context 'multiple 040b in one field' do
+      let(:fields) do
+        [
+          { '001' => '9970534203506421' },
+          { '040' => { 'indicator1' => ' ',
+                       'indicator2' => ' ',
+                       'subfields' => [{ 'b' => 'eng' }, { 'b' => 'spa' }] } }
+        ]
+      end
+      it 'triggers an error' do
+        expect(MarcCleanup.multiple_no_040b?(record)).to eq true
+      end
     end
   end
 
