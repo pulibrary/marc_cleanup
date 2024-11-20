@@ -46,16 +46,34 @@ end
 RSpec.describe 'empty_subfields?' do
   let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
   let(:leader) { '01104naa a2200289 i 4500' }
-  let(:fields) do
-    [
-      { '245' => { 'ind1' => ' ',
-                   'ind2' => ' ',
-                   'subfields' => [{ 'a' => ' ' }, { 'b' => 'a tale' }] } }
-    ]
+
+  context 'record has an empty subfield' do
+    let(:fields) do
+      [
+        { '245' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [{ 'a' => ' ' }, { 'b' => 'a tale' }] } }
+      ]
+    end
+
+    it 'finds an empty subfield' do
+      expect(MarcCleanup.empty_subfields?(record)).to eq true
+    end
   end
 
-  it 'finds an empty subfield' do
-    expect(MarcCleanup.empty_subfields?(record)).to eq true
+  context 'record has no empty subfield' do
+    let(:fields) do
+      [
+        { '245' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [{ 'a' => 'Headphones :' },
+                                     { 'b' => 'a tale' }] } }
+      ]
+    end
+
+    it 'does not trigger an error' do
+      expect(MarcCleanup.empty_subfields?(record)).to eq false
+    end
   end
 end
 

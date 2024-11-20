@@ -187,53 +187,6 @@ module MarcCleanup
     results
   end
 
-  def extra_space_gsub(string)
-    string.gsub!(/([[:blank:]]){2,}/, '\1')
-    string.gsub!(/^(.*)[[:blank:]]+$/, '\1')
-    string.gsub(/^[[:blank:]]+(.*)$/, '\1')
-  end
-
-  ### Remove extra spaces from all fields that are not positionally defined
-  def extra_space_fix(record)
-    record.fields.each do |field|
-      next unless field.class == MARC::DataField && field.tag != '010'
-
-      field_index = record.fields.index(field)
-      curr_subfield = -1
-      case field.tag
-      when /^[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
-        field.subfields.each do |subfield|
-          curr_subfield += 1
-          next if subfield.value.nil?
-
-          record.fields[field_index].subfields[curr_subfield].value = extra_space_gsub(subfield.value)
-        end
-      when '533'
-        field.subfields.each do |subfield|
-          curr_subfield += 1
-          next if subfield.code == '7' || subfield.value.nil?
-
-          record.fields[field_index].subfields[curr_subfield].value = extra_space_gsub(subfield.value)
-        end
-      when /^7[6-8]./
-        field.subfields.each do |subfield|
-          curr_subfield += 1
-          next if subfield.code =~ /[^a-v3-8]/ || subfield.value.nil?
-
-          record.fields[field_index].subfields[curr_subfield].value = extra_space_gsub(subfield.value)
-        end
-      when /^8../
-        field.subfields.each do |subfield|
-          curr_subfield += 1
-          next if %w[w 7].include?(subfield.code) || subfield.value.nil?
-
-          record.fields[field_index].subfields[curr_subfield].value = extra_space_gsub(subfield.value)
-        end
-      end
-    end
-    record
-  end
-
   ### Scrub invalid UTF-8 byte sequences within field values,
   #     replacing with nothing; indicators, subfield codes, and tags must be
   #     handled separately
