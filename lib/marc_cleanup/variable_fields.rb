@@ -469,16 +469,15 @@ module MarcCleanup
       field_index = record.fields.index(field)
       curr_subfield = 0
       field.subfields.each do |subfield|
-        fixed_subfield = ''
         prevalue = subfield.value
         if prevalue =~ /^.*[\u0653\u0654\u0655].*$/
           prevalue = prevalue.unicode_normalize(:nfc)
         end
-        prevalue.each_codepoint do |c|
-          char = c.chr(Encoding::UTF_8)
-          char.unicode_normalize!(:nfd) if c < 1570 || (7_680..10_792).cover?(c)
-          fixed_subfield << char
-        end
+        fixed_subfield = prevalue.codepoints.map do |codepoint|
+          char = codepoint.chr(Encoding::UTF_8)
+          char.unicode_normalize!(:nfd) if codepoint < 1570 || (7_680..10_792).cover?(codepoint)
+          char
+        end.join
         record.fields[field_index].subfields[curr_subfield].value = fixed_subfield
         curr_subfield += 1
       end
