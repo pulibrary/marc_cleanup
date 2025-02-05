@@ -54,8 +54,8 @@ RSpec.describe 'validate_marc' do
   describe 'invalid tag' do
     let(:fields) do
       [
-        { '011' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '011' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'Invalid field' }] } }
       ]
     end
@@ -204,6 +204,20 @@ RSpec.describe 'validate_marc' do
       record_errors = MarcCleanup.validate_marc(record: record)
       error_message = 'Invalid linked field tag 591 in instance 1 of 880'
       expect(record_errors[:invalid_fields]['880']).to include error_message
+    end
+  end
+  describe 'record has non-numeric tag' do
+    let(:fields) do
+      [
+        { 'a35' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [{ 'a' => 'Invalid field tag' }] } }
+      ]
+    end
+    let(:record) { MARC::Record.new_from_hash('fields' => fields) }
+    it 'identifies the invalid non-numeric tag' do
+      record_errors = MarcCleanup.validate_marc(record: record)
+      expect(record_errors[:invalid_tags]).to eq ['a35']
     end
   end
 end

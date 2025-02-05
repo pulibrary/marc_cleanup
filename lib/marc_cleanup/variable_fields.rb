@@ -158,26 +158,6 @@ module MarcCleanup
     false
   end
 
-  def invalid_indicators?(record)
-    record.fields.each do |field|
-      next unless field.instance_of?(MARC::DataField)
-      return true unless field.indicator1.match?(/^[0-9 ]$/)
-      return true unless field.indicator2.match?(/^[0-9 ]$/)
-    end
-    false
-  end
-
-  def invalid_subfield_code?(record)
-    record.fields.each do |field|
-      next unless field.instance_of?(MARC::DataField)
-
-      field.subfields.each do |subfield|
-        return true unless subfield.code =~ /^[0-9a-z]$/
-      end
-    end
-    false
-  end
-
   def empty_subfields?(record)
     record.fields.each do |field|
       next unless field.instance_of?(MARC::DataField)
@@ -294,19 +274,6 @@ module MarcCleanup
 
   def multiple_no_245?(record)
     record.fields('245').size != 1
-  end
-
-  def f245_subfield_errors?(record)
-    fields = record.fields('245')
-    return true if fields.empty?
-
-    fields.each do |field|
-      subfields = field.subfields.map(&:code)
-      return true if subfields.count('a') != 1
-      return true if subfields.count('b') > 1
-      return true if subfields.count('c') > 1
-    end
-    false
   end
 
   def missing_040c?(record)
