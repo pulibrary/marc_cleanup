@@ -299,19 +299,13 @@ module MarcCleanup
   ### Replace field from a record that matches a string version of the field
   ###   with the supplied field object, which can be either a ControlField
   ###   or a DataField
-  def replace_field(field_string:, replacement_field:, record:)
-    orig_string = field_string.dup
-    orig_string.scrub!('')
-    orig_string.strip!
-    field_tag = orig_string[0..2]
-    target_fields = record.fields(field_tag)
+  def replace_field(source_field:, replacement_field:, record:)
+    source_field_content = source_field.to_s[4..-1]
+    target_fields = record.fields(source_field.tag)
     return record if target_fields.empty?
 
     target_fields.each do |field|
-      string = field.to_s
-      string.scrub!('')
-      string.strip!
-      next unless string == orig_string
+      next unless field.to_s[4..-1] == source_field_content
 
       field_index = record.fields.index(field)
       record.fields[field_index] = replacement_field
