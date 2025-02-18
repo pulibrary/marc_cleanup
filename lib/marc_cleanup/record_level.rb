@@ -301,12 +301,12 @@ module MarcCleanup
   ###   or a DataField
   def replace_field(source_field:, replacement_field:, record:, ignore_indicators: false)
     start_pos = field_content_start(source_field: source_field, ignore_indicators: ignore_indicators)
-    source_field_content = source_field.to_s[start_pos..-1]
+    source_field_content = source_field.to_s[start_pos..]
     target_fields = record.fields(source_field.tag)
     return record if target_fields.empty?
 
     target_fields.each do |field|
-      next unless field.to_s[start_pos..-1] == source_field_content
+      next unless field.to_s[start_pos..] == source_field_content
 
       field_index = record.fields.index(field)
       record.fields[field_index] = replacement_field
