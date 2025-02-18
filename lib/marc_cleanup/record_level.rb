@@ -296,21 +296,30 @@ module MarcCleanup
     record
   end
 
-  ### Replace field from a record that matches a string version of the field
-  ###   with the supplied field object, which can be either a ControlField
+  ### Replace field from a record that matches a supplied source field
+  ###   with the supplied replacement field, which can be either a ControlField
   ###   or a DataField
-  def replace_field(source_field:, replacement_field:, record:)
-    source_field_content = source_field.to_s[4..-1]
+  def replace_field(source_field:, replacement_field:, record:, ignore_indicators: false)
+    start_pos = field_content_start(source_field: source_field, ignore_indicators: ignore_indicators)
+    source_field_content = source_field.to_s[start_pos..-1]
     target_fields = record.fields(source_field.tag)
     return record if target_fields.empty?
 
     target_fields.each do |field|
-      next unless field.to_s[4..-1] == source_field_content
+      next unless field.to_s[start_pos..-1] == source_field_content
 
       field_index = record.fields.index(field)
       record.fields[field_index] = replacement_field
     end
     record
+  end
+
+  def field_content_start(source_field:, ignore_indicators:)
+    if ignore_indicators && source_field.instance_of?(MARC::DataField)
+      7
+    else
+      4
+    end
   end
 
   ### Perform multiple field replacements on a record;
