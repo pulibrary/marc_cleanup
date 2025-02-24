@@ -323,13 +323,18 @@ module MarcCleanup
   end
 
   ### Perform multiple field replacements on a record;
-  ###   input is a hash with field strings as keys
-  ###   and replacement fields as values
-  def replace_fields(field_hash:, record:)
-    field_hash.each do |field_string, replacement_field|
-      record = replace_field(field_string: field_string,
-                             replacement_field: replacement_field,
-                             record: record)
+  ###   input is an array of hashes with the following attributes:
+  ###   - source_field: ruby-marc field (DataField or ControlField)
+  ###   - replacement_field: ruby-marc field (DataField or ControlField)
+  ###   - ignore_indicators: optional Boolean to specify whether to ignore
+  ###     indicators for this replacement
+  def replace_fields(field_array:, record:)
+    field_array.each do |replacement|
+      replacement[:ignore_indicators] ||= false
+      record = replace_field(source_field: replacement[:source_field],
+                             replacement_field: replacement[:replacement_field],
+                             record: record,
+                             ignore_indicators: replacement[:ignore_indicators])
     end
     record
   end
