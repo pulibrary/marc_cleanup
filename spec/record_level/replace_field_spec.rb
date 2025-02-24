@@ -16,15 +16,16 @@ RSpec.describe 'replace_field' do
       expect(record['009'].value).to eq 'Mark'
     end
     it 'replaces content when indicators are not ignored' do
-      replace_field(source_field: source_field, replacement_field: replacement_field, record: record, ignore_indicators: true)
+      replace_field(source_field: source_field, replacement_field: replacement_field, record: record,
+                    ignore_indicators: true)
       expect(record['009'].value).to eq 'Mark'
     end
   end
   context 'source/target content match with different indicators' do
     let(:fields) do
       [
-        { '020' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '020' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => '9780316458759' }] } }
       ]
     end
@@ -38,7 +39,8 @@ RSpec.describe 'replace_field' do
       expect(record['500']).to be_nil
     end
     it 'changes record when indicators are ignored' do
-      replace_field(source_field: source_field, replacement_field: replacement_field, record: record, ignore_indicators: true)
+      replace_field(source_field: source_field, replacement_field: replacement_field, record: record,
+                    ignore_indicators: true)
       expect(record['020']).to be_nil
       expect(record['500'].indicator1).to eq '1'
       expect(record['500'].indicator2).to eq '0'
@@ -48,8 +50,8 @@ RSpec.describe 'replace_field' do
   context 'source/target subfield code mismatch with matching content' do
     let(:fields) do
       [
-        { '020' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '020' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'b' => '9780316458759' }] } }
       ]
     end
