@@ -6,11 +6,11 @@ RSpec.describe 'field_count' do
     let(:fields) do
       [
         { '001' => '1234' },
-        { '100' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '100' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'field 1a' }] } },
-        { '130' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '130' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'field 2a' }, { 'd' => 'field 2d' }, { 'd' => 'field 2d2' }] } }
 
       ]

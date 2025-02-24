@@ -10,11 +10,11 @@ RSpec.describe 'field 040 methods' do
     let(:fields) do
       [
         { '001' => '9970534203506421' },
-        { '040' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '040' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'DLC' }] } },
-        { '040' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '040' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'DLC' }] } }
       ]
     end
@@ -28,8 +28,8 @@ RSpec.describe 'field 040 methods' do
       let(:fields) do
         [
           { '001' => '9970534203506421' },
-          { '040' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '040' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'b' => 'eng' }] } }
         ]
       end
@@ -42,8 +42,8 @@ RSpec.describe 'field 040 methods' do
       let(:fields) do
         [
           { '001' => '9970534203506421' },
-          { '040' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '040' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'b' => '   ' }] } }
         ]
       end
@@ -56,8 +56,8 @@ RSpec.describe 'field 040 methods' do
       let(:fields) do
         [
           { '001' => '9970534203506421' },
-          { '040' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '040' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'b' => 'eng' }, { 'b' => 'spa' }] } }
         ]
       end
@@ -72,8 +72,8 @@ RSpec.describe 'field 040 methods' do
       let(:fields) do
         [
           { '001' => '9970534203506421' },
-          { '040' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '040' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'c' => 'DLC' }] } }
         ]
       end
@@ -86,8 +86,8 @@ RSpec.describe 'field 040 methods' do
       let(:fields) do
         [
           { '001' => '9970534203506421' },
-          { '040' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '040' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => 'DLC' }] } }
         ]
       end
@@ -102,8 +102,8 @@ RSpec.describe 'field 040 methods' do
       let(:fields) do
         [
           { '001' => '9970534203506421' },
-          { '040' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '040' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => 'DLC' },
                                        { 'b' => 'eng' }] } }
         ]
@@ -117,8 +117,8 @@ RSpec.describe 'field 040 methods' do
       let(:fields) do
         [
           { '001' => '9970534203506421' },
-          { '040' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '040' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => 'DLC' },
                                        { 'b' => 'eng' },
                                        { 'c' => 'DLC' }] } }
@@ -138,8 +138,8 @@ RSpec.describe 'field 041 methods' do
   describe 'f041_errors?' do
     let(:fields) do
       [
-        { '041' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '041' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'eng' }] } }
       ]
     end
@@ -152,8 +152,8 @@ RSpec.describe 'field 041 methods' do
     context 'has incomplete language code in subfield' do
       let(:fields) do
         [
-          { '041' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '041' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'b' => 'engit' }] } }
         ]
       end
@@ -166,8 +166,8 @@ RSpec.describe 'field 041 methods' do
     context 'has multiple complete language codes in subfield' do
       let(:fields) do
         [
-          { '041' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '041' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'b' => 'engitager' }] } }
         ]
       end
@@ -195,8 +195,8 @@ RSpec.describe 'field 042 methods' do
     context 'has no 042 field' do
       let(:fields) do
         [
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'This record has no 042' }] } }
         ]
       end
@@ -208,11 +208,11 @@ RSpec.describe 'field 042 methods' do
     context 'has multiple 042 fields' do
       let(:fields) do
         [
-          { '042' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '042' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => 'sanb' }] } },
-          { '042' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '042' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => 'pcc' }] } }
         ]
       end
@@ -224,8 +224,8 @@ RSpec.describe 'field 042 methods' do
     context 'has one valid auth_code and one invalid auth_code' do
       let(:fields) do
         [
-          { '042' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '042' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => 'sanb' }, { 'a' => 'pcl' }] } }
         ]
       end
@@ -237,8 +237,8 @@ RSpec.describe 'field 042 methods' do
     context 'has one valid auth_code' do
       let(:fields) do
         [
-          { '042' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '042' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => 'sanb' }] } }
         ]
       end
@@ -257,8 +257,8 @@ RSpec.describe 'field 046 methods' do
     context 'has no 046 field' do
       let(:fields) do
         [
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'This record has no 046' }] } }
         ]
       end
@@ -270,8 +270,8 @@ RSpec.describe 'field 046 methods' do
     context 'subfield b with no subfield a' do
       let(:fields) do
         [
-          { '046' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '046' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'b' => '1937' }] } }
         ]
       end
@@ -283,8 +283,8 @@ RSpec.describe 'field 046 methods' do
     context 'subfield b with invalid subfield a value' do
       let(:fields) do
         [
-          { '046' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '046' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => 'a' }, { 'b' => '1937' }] } }
         ]
       end
@@ -296,8 +296,8 @@ RSpec.describe 'field 046 methods' do
     context 'subfield b with valid subfield a value' do
       let(:fields) do
         [
-          { '046' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '046' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => 'r' }, { 'b' => '1937' }] } }
         ]
       end

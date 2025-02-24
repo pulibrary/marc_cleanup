@@ -26,11 +26,11 @@ RSpec.describe 'generate_field_yaml' do
   describe '130/240 conflict' do
     let(:fields) do
       [
-        { '130' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '130' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'Title main entry' }] } },
-        { '240' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '240' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'Uniform title' }] } }
       ]
     end
@@ -43,8 +43,8 @@ RSpec.describe 'generate_field_yaml' do
   describe 'missing required 245 field' do
     let(:fields) do
       [
-        { '035' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '035' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'Missing 245' }] } }
       ]
     end
@@ -57,8 +57,8 @@ RSpec.describe 'generate_field_yaml' do
   describe 'invalid tag' do
     let(:fields) do
       [
-        { '011' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '011' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'Invalid field' }] } }
       ]
     end

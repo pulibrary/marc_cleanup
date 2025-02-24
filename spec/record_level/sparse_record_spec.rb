@@ -33,11 +33,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '773' => { 'indicator1' => '0',
-                       'indicator2' => ' ',
+          { '773' => { 'ind1' => '0',
+                       'ind2' => ' ',
                        'subfields' => [{ 'w' => '(OCoLC)123' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -48,8 +48,8 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -64,14 +64,14 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '100' => { 'indicator1' => '0',
-                       'indicator2' => ' ',
+          { '100' => { 'ind1' => '0',
+                       'ind2' => ' ',
                        'subfields' => [
                                         { 'a' => 'Cher' },
                                         { 'd' => '1946-' }
                                       ] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -82,11 +82,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '264' => { 'indicator1' => ' ',
-                       'indicator2' => '1',
+          { '264' => { 'ind1' => ' ',
+                       'ind2' => '1',
                        'subfields' => [{ 'b' => 'Springer' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -97,17 +97,17 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '100' => { 'indicator1' => '0',
-                       'indicator2' => ' ',
+          { '100' => { 'ind1' => '0',
+                       'ind2' => ' ',
                        'subfields' => [
                                         { 'a' => 'Cher' },
                                         { 'd' => '1946-' }
                                       ] } },
-          { '264' => { 'indicator1' => ' ',
-                       'indicator2' => '1',
+          { '264' => { 'ind1' => ' ',
+                       'ind2' => '1',
                        'subfields' => [{ 'b' => 'Springer' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -118,17 +118,17 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '100' => { 'indicator1' => '0',
-                       'indicator2' => ' ',
+          { '100' => { 'ind1' => '0',
+                       'ind2' => ' ',
                        'subfields' => [
                                         { 'a' => 'Cher' },
                                         { 'd' => '1946-' }
                                       ] } },
-          { '260' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '260' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'b' => 'Springer' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -139,17 +139,17 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '100' => { 'indicator1' => '0',
-                       'indicator2' => ' ',
+          { '100' => { 'ind1' => '0',
+                       'ind2' => ' ',
                        'subfields' => [
                                         { 'a' => 'Cher' },
                                         { 'd' => '1946-' }
                                       ] } },
-          { '533' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '533' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'c' => 'Acme Corp.' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -160,17 +160,17 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '100' => { 'indicator1' => '0',
-                       'indicator2' => ' ',
+          { '100' => { 'ind1' => '0',
+                       'ind2' => ' ',
                        'subfields' => [
                                         { 'a' => 'Cher' },
                                         { 'd' => '1946-' }
                                       ] } },
-          { '264' => { 'indicator1' => ' ',
-                       'indicator2' => '1',
+          { '264' => { 'ind1' => ' ',
+                       'ind2' => '1',
                        'subfields' => [{ 'a' => 'New York' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -185,8 +185,8 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414c19999999xx ||||| |||||||| ||eng||' },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -197,11 +197,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '264' => { 'indicator1' => ' ',
-                       'indicator2' => '1',
+          { '264' => { 'ind1' => ' ',
+                       'ind2' => '1',
                        'subfields' => [{ 'b' => 'Springer' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -212,11 +212,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '260' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '260' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'b' => 'Springer' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -227,11 +227,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '533' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '533' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'c' => 'Acme Corp.' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -242,11 +242,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '264' => { 'indicator1' => '1',
-                       'indicator2' => ' ',
+          { '264' => { 'ind1' => '1',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => 'New York' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -261,8 +261,8 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -273,11 +273,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '533' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '533' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => 'Photocopy.' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -288,11 +288,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '533' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '533' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'e' => '1 book' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -303,11 +303,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '300' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '300' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'c' => '20 cm' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -318,11 +318,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '300' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '300' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => '1 volume' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -333,11 +333,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '100' => { 'indicator1' => '0',
-                       'indicator2' => ' ',
+          { '100' => { 'ind1' => '0',
+                       'ind2' => ' ',
                        'subfields' => [{ 'd' => '1946-' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -348,14 +348,14 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx ||||| |||||||| ||eng||' },
-          { '100' => { 'indicator1' => '0',
-                       'indicator2' => ' ',
+          { '100' => { 'ind1' => '0',
+                       'ind2' => ' ',
                        'subfields' => [
                                         { 'a' => 'Cher' },
                                         { 'd' => '1946-' }
                                       ] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -370,11 +370,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
-          { '264' => { 'indicator1' => '1',
-                       'indicator2' => ' ',
+          { '264' => { 'ind1' => '1',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => 'New York' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -386,8 +386,8 @@ RSpec.describe 'sparse_record?' do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
           { '007' => 'aj canzn' },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -399,11 +399,11 @@ RSpec.describe 'sparse_record?' do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
           { '007' => 'ou' },
-          { '264' => { 'indicator1' => ' ',
-                       'indicator2' => '1',
+          { '264' => { 'ind1' => ' ',
+                       'ind2' => '1',
                        'subfields' => [{ 'b' => 'Springer' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -414,14 +414,14 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
-          { '300' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '300' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => '1 volume' }] } },
-          { '264' => { 'indicator1' => ' ',
-                       'indicator2' => '1',
+          { '264' => { 'ind1' => ' ',
+                       'ind2' => '1',
                        'subfields' => [{ 'a' => 'New York' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -432,14 +432,14 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
-          { '338' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '338' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'b' => 'nb' }] } },
-          { '533' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '533' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'e' => '1 book' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -450,14 +450,14 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
-          { '533' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '533' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'e' => '1 book' }] } },
-          { '260' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '260' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'c' => '1989' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -472,8 +472,8 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -485,8 +485,8 @@ RSpec.describe 'sparse_record?' do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
           { '007' => 'ou' },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -497,11 +497,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
-          { '300' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '300' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'c' => '20 cm' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -512,11 +512,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
-          { '338' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '338' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'b' => 'nb' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -527,11 +527,11 @@ RSpec.describe 'sparse_record?' do
       let(:fields) do
         [
           { '008' => '230414s9999    xx        a     0   eng d' },
-          { '533' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '533' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'e' => '1 book' }] } },
-          { '245' => { 'indicator1' => '0',
-                       'indicator2' => '0',
+          { '245' => { 'ind1' => '0',
+                       'ind2' => '0',
                        'subfields' => [{ 'a' => 'Title' }] } }
         ]
       end
@@ -546,8 +546,8 @@ RSpec.describe 'sparse_record?' do
           [
             { '007' => 'ou' },
             { '008' => '230414s9999    xx 120            aleng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -558,8 +558,8 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx 120            mleng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -570,11 +570,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx 120            aleng d' },
-            { '300' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '300' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'c' => '20 cm' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -585,11 +585,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx 120            aleng d' },
-            { '345' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '345' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => '48 fps' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -600,11 +600,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx 120            aleng d' },
-            { '346' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '346' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => 'Beta' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -615,11 +615,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx 120            aleng d' },
-            { '538' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '538' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'i' => 'Digital version' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -635,8 +635,8 @@ RSpec.describe 'sparse_record?' do
           [
             { '007' => 'ou' },
             { '008' => '230414s9999    xx 120            aleng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -648,11 +648,11 @@ RSpec.describe 'sparse_record?' do
           [
             { '007' => 'mz cdaizqcndnnnac20240104' },
             { '008' => '230414s9999    xx 120            aleng d' },
-            { '260' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '260' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'c' => '1989' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -663,11 +663,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx 120            mleng d' },
-            { '264' => { 'indicator1' => ' ',
-                         'indicator2' => '1',
+            { '264' => { 'ind1' => ' ',
+                         'ind2' => '1',
                          'subfields' => [{ 'b' => 'Springer' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -678,14 +678,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx 120            aleng d' },
-            { '338' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '338' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'nb' }] } },
-            { '533' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '533' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'e' => '1 book' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -696,14 +696,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx 120            aleng d' },
-            { '264' => { 'indicator1' => ' ',
-                         'indicator2' => '1',
+            { '264' => { 'ind1' => ' ',
+                         'ind2' => '1',
                          'subfields' => [{ 'b' => 'Springer' }] } },
-            { '300' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '300' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => '1 videodisc' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -714,14 +714,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx 120            aleng d' },
-            { '264' => { 'indicator1' => ' ',
-                         'indicator2' => '1',
+            { '264' => { 'ind1' => ' ',
+                         'ind2' => '1',
                          'subfields' => [{ 'b' => 'Springer' }] } },
-            { '345' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '345' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => '48 fps' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -732,14 +732,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx 120            aleng d' },
-            { '264' => { 'indicator1' => ' ',
-                         'indicator2' => '1',
+            { '264' => { 'ind1' => ' ',
+                         'ind2' => '1',
                          'subfields' => [{ 'b' => 'Springer' }] } },
-            { '346' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '346' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => 'Beta' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -750,14 +750,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx 120            aleng d' },
-            { '264' => { 'indicator1' => ' ',
-                         'indicator2' => '1',
+            { '264' => { 'ind1' => ' ',
+                         'ind2' => '1',
                          'subfields' => [{ 'b' => 'Springer' }] } },
-            { '538' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '538' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'i' => 'Digital version' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -772,8 +772,8 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx bdnn             eng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -785,8 +785,8 @@ RSpec.describe 'sparse_record?' do
           [
             { '008' => '230414s9999    xx bdnn             eng d' },
             { '007' => 'ou' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -797,11 +797,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx bdnn             eng d' },
-            { '300' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '300' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => '1 videodisc' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -812,11 +812,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx bdnn             eng d' },
-            { '338' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '338' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'nb' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -827,11 +827,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx bdnn             eng d' },
-            { '344' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '344' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'g' => 'stereo' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -842,11 +842,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx bdnn             eng d' },
-            { '538' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '538' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'i' => 'Digital version' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -862,8 +862,8 @@ RSpec.describe 'sparse_record?' do
           [
             { '007' => 'ou' },
             { '008' => '230414c19999999xx bdnn             eng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -875,11 +875,11 @@ RSpec.describe 'sparse_record?' do
           [
             { '007' => 'sd fsngnnmmncd' },
             { '008' => '230414c19999999xx bdnn             eng d' },
-            { '260' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '260' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'c' => '1989' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -890,14 +890,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx bdnn             eng d' },
-            { '300' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '300' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => '1 compact disc' }] } },
-            { '264' => { 'indicator1' => ' ',
-                         'indicator2' => '1',
+            { '264' => { 'ind1' => ' ',
+                         'ind2' => '1',
                          'subfields' => [{ 'a' => 'New York' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -908,14 +908,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx bdnn             eng d' },
-            { '533' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '533' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'e' => '1 book' }] } },
-            { '338' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '338' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'nb' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -926,14 +926,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx bdnn             eng d' },
-            { '344' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '344' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'g' => 'stereo' }] } },
-            { '533' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '533' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'c' => 'Princeton University' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -944,14 +944,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx bdnn             eng d' },
-            { '538' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '538' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => 'Compact disc' }] } },
-            { '533' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '533' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'c' => 'Princeton University' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -967,8 +967,8 @@ RSpec.describe 'sparse_record?' do
           [
             { '007' => 'ou' },
             { '008' => '230414s9999    xx nnn            dneng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -979,8 +979,8 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx nnn            aneng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -991,11 +991,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx nnn            dneng d' },
-            { '300' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '300' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => '1 sheet' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1006,11 +1006,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx nnn            dneng d' },
-            { '338' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '338' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'nb' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1025,8 +1025,8 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx nnn            dneng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1037,11 +1037,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx nnn            aneng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } },
-            { '264' => { 'indicator1' => ' ',
-                         'indicator2' => '1',
+            { '264' => { 'ind1' => ' ',
+                         'ind2' => '1',
                          'subfields' => [{ 'b' => 'Springer' }] } },
           ]
         end
@@ -1052,14 +1052,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx nnn            dneng d' },
-            { '300' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '300' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => '1 sheet' }] } },
-            { '264' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '264' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'c' => '1989' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1070,14 +1070,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx nnn            dneng d' },
-            { '338' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '338' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'nb' }] } },
-            { '260' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '260' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'c' => '1989' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1089,11 +1089,11 @@ RSpec.describe 'sparse_record?' do
           [
             { '008' => '230414c19999999xx nnn            dneng d' },
             { '007' => 'ka ac ' },
-            { '533' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '533' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => 'Photocopy.' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1108,8 +1108,8 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx      q  a        eng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1121,8 +1121,8 @@ RSpec.describe 'sparse_record?' do
           [
             { '007' => 'cj ba 008apnan' },
             { '008' => '230414s9999    xx      q  a        eng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1133,11 +1133,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx      q  a        eng d' },
-            { '300' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '300' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'c' => '20 cm' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1148,11 +1148,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx      q  a        eng d' },
-            { '338' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '338' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'nb' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1163,11 +1163,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx      q  a        eng d' },
-            { '347' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '347' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => 'text file' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1178,11 +1178,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx      q  a        eng d' },
-            { '538' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '538' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'i' => 'Digital version' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1198,11 +1198,11 @@ RSpec.describe 'sparse_record?' do
           [
             { '008' => '230414c19999999xx      q  a        eng d' },
             { '007' => 'cj ba 008apnan'},
-            { '260' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '260' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'c' => '1989' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1213,14 +1213,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx      q  a        eng d' },
-            { '300' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '300' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => '1 disc' }] } },
-            { '264' => { 'indicator1' => ' ',
-                         'indicator2' => '1',
+            { '264' => { 'ind1' => ' ',
+                         'ind2' => '1',
                          'subfields' => [{ 'b' => 'Springer' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1231,14 +1231,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx      q  a        eng d' },
-            { '338' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '338' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'nb' }] } },
-            { '533' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '533' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => 'Photocopy.' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1249,14 +1249,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx      q  a        eng d' },
-            { '260' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '260' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'Springer' }] } },
-            { '347' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '347' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => 'text file' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1267,14 +1267,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx      q  a        eng d' },
-            { '538' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '538' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => 'Compact disc' }] } },
-            { '260' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '260' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'Springer' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1289,8 +1289,8 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx nnn            bneng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1301,11 +1301,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx nnn            nneng d' },
-            { '300' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '300' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'c' => '20 cm' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1316,11 +1316,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx nnn            nneng d' },
-            { '338' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '338' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'nb' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1335,8 +1335,8 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx nnn            bneng d' },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1347,14 +1347,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx nnn            nneng d' },
-            { '300' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '300' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'a' => '1 volume' }] } },
-            { '260' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '260' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'Springer' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1365,14 +1365,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx nnn            nneng d' },
-            { '264' => { 'indicator1' => ' ',
-                         'indicator2' => '1',
+            { '264' => { 'ind1' => ' ',
+                         'ind2' => '1',
                          'subfields' => [{ 'a' => 'New York' }] } },
-            { '338' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '338' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'nb' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1383,14 +1383,14 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414c19999999xx nnn            nneng d' },
-            { '533' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '533' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'c' => 'Acme Corp.' }] } },
-            { '338' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '338' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'nb' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1405,11 +1405,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx                  eng d' },
-            { '100' => { 'indicator1' => '0',
-                         'indicator2' => ' ',
+            { '100' => { 'ind1' => '0',
+                         'ind2' => ' ',
                          'subfields' => [{ 'd' => '1946-' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1420,11 +1420,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx                  eng d' },
-            { '300' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '300' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'c' => '20 cm' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1435,11 +1435,11 @@ RSpec.describe 'sparse_record?' do
         let(:fields) do
           [
             { '008' => '230414s9999    xx                  eng d' },
-            { '338' => { 'indicator1' => ' ',
-                         'indicator2' => ' ',
+            { '338' => { 'ind1' => ' ',
+                         'ind2' => ' ',
                          'subfields' => [{ 'b' => 'nb' }] } },
-            { '245' => { 'indicator1' => '0',
-                         'indicator2' => '0',
+            { '245' => { 'ind1' => '0',
+                         'ind2' => '0',
                          'subfields' => [{ 'a' => 'Title' }] } }
           ]
         end
@@ -1453,11 +1453,11 @@ RSpec.describe 'sparse_record?' do
           let(:fields) do
             [
               { '008' => '230414s9999    xx                  eng d' },
-              { '100' => { 'indicator1' => '0',
-                           'indicator2' => ' ',
+              { '100' => { 'ind1' => '0',
+                           'ind2' => ' ',
                            'subfields' => [{ 'd' => '1946-' }] } },
-              { '245' => { 'indicator1' => '0',
-                           'indicator2' => '0',
+              { '245' => { 'ind1' => '0',
+                           'ind2' => '0',
                            'subfields' => [{ 'a' => 'Title' }] } }
             ]
           end
