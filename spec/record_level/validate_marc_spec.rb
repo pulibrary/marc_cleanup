@@ -5,11 +5,11 @@ RSpec.describe 'validate_marc' do
   describe 'conflicting 1xx fields' do
     let(:fields) do
       [
-        { '100' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '100' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => '1xx field 1' }] } },
-        { '130' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '130' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => '1xx field 2' }] } }
 
       ]
@@ -23,11 +23,11 @@ RSpec.describe 'validate_marc' do
   describe '130/240 conflict' do
     let(:fields) do
       [
-        { '130' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '130' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'Title main entry' }] } },
-        { '240' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '240' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'Uniform title' }] } }
       ]
     end
@@ -40,8 +40,8 @@ RSpec.describe 'validate_marc' do
   describe 'missing required 245 field' do
     let(:fields) do
       [
-        { '035' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '035' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => 'Missing 245' }] } }
       ]
     end

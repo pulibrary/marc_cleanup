@@ -8,8 +8,8 @@ RSpec.describe 'field_020' do
     describe 'when isbn check digit is invalid' do
       let(:fields) do
         [
-          { '020' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '020' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => '9780316458759' }] } },
         ]
       end
@@ -22,8 +22,8 @@ RSpec.describe 'field_020' do
     describe 'when an isbn_10 is valid' do
       let(:fields) do
         [
-          { '020' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
+          { '020' => { 'ind1' => ' ',
+                       'ind2' => ' ',
                        'subfields' => [{ 'a' => '0316458759' }] } },
         ]
       end
@@ -36,9 +36,9 @@ RSpec.describe 'field_020' do
     describe 'when isbn 13 is valid' do
       let(:fields) do
         [
-          { '020' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
-                       'subfields' => [{ 'a' => '9780316458757' }] } },          
+          { '020' => { 'ind1' => ' ',
+                       'ind2' => ' ',
+                       'subfields' => [{ 'a' => '9780316458757' }] } },
         ]
       end
       let(:record) { MARC::Record.new_from_hash('fields' => fields) }
@@ -50,9 +50,9 @@ RSpec.describe 'field_020' do
     describe 'when an isbn is between 7 and 8 digits long' do
       let(:fields) do
         [
-          { '020' => { 'indicator1' => ' ',
-                       'indicator2' => ' ',
-                       'subfields' => [{ 'a' => '71543724' }] } },          
+          { '020' => { 'ind1' => ' ',
+                       'ind2' => ' ',
+                       'subfields' => [{ 'a' => '71543724' }] } },
         ]
       end
       let(:record) { MARC::Record.new_from_hash('fields' => fields) }
@@ -65,8 +65,8 @@ RSpec.describe 'field_020' do
   describe 'new_020_q' do
     let(:fields) do
       [
-        { '020' => { 'indicator1' => ' ',
-                     'indicator2' => ' ',
+        { '020' => { 'ind1' => ' ',
+                     'ind2' => ' ',
                      'subfields' => [{ 'a' => '9780316458757(set)' }] } },
       ]
     end
@@ -74,7 +74,7 @@ RSpec.describe 'field_020' do
     it 'moves parathenticals to subfield q of an 020' do
       new_020_q(record)
       expect(record['020']['a']).to eq '9780316458757'
-      expect(record['020']['q']).to eq '(set)' 
+      expect(record['020']['q']).to eq '(set)'
     end
   end
 end
