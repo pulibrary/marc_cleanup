@@ -40,10 +40,10 @@ RSpec.describe 'replace_fields' do
       expect(record['902']).to be_nil
       expect(record['903']['a']).to eq 'Cathy'
       expect(record['903'].indicator1).to eq '1'
-      expect(record['903'].indicator1).to eq '1'
+      expect(record['903'].indicator2).to eq '1'
       expect(record['904']['a']).to eq 'Paul'
       expect(record['904'].indicator1).to eq '1'
-      expect(record['904'].indicator1).to eq '1'
+      expect(record['904'].indicator2).to eq '1'
     end
   end
 end
