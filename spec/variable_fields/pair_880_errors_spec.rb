@@ -52,6 +52,35 @@ RSpec.describe 'pair_880_errors?' do
     end
   end
 
+  context 'has field with 2 corresponding 880 fields' do
+    let(:fields) do
+      [
+        { '880' => { 'ind1' => '0',
+                     'ind2' => '0',
+                     'subfields' => [
+                       { '6' => '245-01' },
+                       { 'a' => 'Τίτλος' }
+                     ] } },
+        { '880' => { 'ind1' => '0',
+                     'ind2' => '0',
+                     'subfields' => [
+                       { '6' => '245-01' },
+                       { 'a' => 'Заголовок' }
+                     ] } },
+        { '245' => { 'ind1' => '0',
+                     'ind2' => '0',
+                     'subfields' => [
+                       { '6' => '880-01' },
+                       { 'a' => 'Titlos' }
+                     ] } }
+      ]
+    end
+
+    it 'reports an error' do
+      expect(pair_880_errors?(record)).to be true
+    end
+  end
+
   context 'has a valid 880 field with no corresponding other field' do
     let(:fields) do
       [
