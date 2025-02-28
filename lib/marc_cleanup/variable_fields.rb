@@ -283,25 +283,29 @@ module MarcCleanup
   end
 
   def pair_880_errors?(record)
-    pair_880s = []
-    linked_fields = []
-    return false unless record['880']
+    return true if record.fields('880').select { |field| field['6'].nil? }.size.positive?
 
-    record.fields.each do |field|
-      return true if field.tag == '880' && field['6'].nil?
+    pair_880s = f880_pairings(record)
+    linked_fields = linked_field_pairings(record)
+    pair_880s.uniq != pair_880s || pair_880s.uniq.sort != linked_fields.uniq.sort
+  end
 
-      next unless field.tag =~ /^[0-8]..$/ && field.class == MARC::DataField && field['6']
-
-      if field.tag == '880'
-        pair_880s << field['6'].gsub(/^([0-9]{3}-[0-9]{2}).*$/, '\1')
-      else
-        linked_fields << "#{field.tag}-#{field['6'].gsub(/^880-([0-9]{2}).*$/, '\1').chomp}"
-      end
+  def f880_pairings(record)
+    target_fields = record.fields('880').select do |field|
+      field['6'] =~ /^[0-9]{3}-[0-9][1-9]/
     end
-    pair_880s.delete_if { |x| x =~ /^.*-00/ }
-    return true if pair_880s.uniq != pair_880s || pair_880s.uniq.sort != linked_fields.uniq.sort
+    target_fields.map do |field|
+      field['6'].gsub(/^([0-9]{3}-[0-9]{2}).*$/, '\1')
+    end
+  end
 
-    false
+  def linked_field_pairings(record)
+    target_fields = record.fields('010'..'899').select do |field|
+      field.tag != '880' && field['6']
+    end
+    target_fields.map do |field|
+      "#{field.tag}-#{field['6'].gsub(/^880-([0-9]{2}).*$/, '\1')}"
+    end
   end
 
   def has_130_240?(record)
