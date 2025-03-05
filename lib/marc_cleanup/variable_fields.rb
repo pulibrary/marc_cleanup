@@ -600,28 +600,31 @@ module MarcCleanup
   end
 
   ### Sort subfields for target fields with an arbitrary order
-  def subfield_sort(record, target_tags, order_array = nil)
-    target_fields = record.fields.select { |f| target_tags.include?(f.tag) }
-    return record if target_fields.empty?
+  ### Example order_array: ['a', 'b', 'c']
+  def subfield_sort(record:, target_tags:, order_array: nil)
+    record.fields(target_tags).each do |field|
+      next if field.instance_of?(MARC::ControlField)
 
-    target_fields.each do |field|
-      next unless field.class == MARC::DataField
-
-      orig_codes = field.subfields.map { |subfield| subfield.code }.uniq.sort
-      order_array = orig_codes if order_array.nil?
-      new_subfields = []
-      order_array.each do |code|
-        next unless orig_codes.include?(code)
-
-        target_subf = field.subfields.select { |subfield| subfield.code == code }
-        target_subf.each { |subfield| new_subfields << subfield }
-      end
-      rem_subfields = field.subfields.select { |subf| !order_array.include?(subf.code) }
-      rem_subfields.each do |subfield|
-        new_subfields << subfield
-      end
+      order_array ||= field.subfields.map(&:code).uniq.sort
+      new_subfields = sort_listed_subfields(field: field, order_array: order_array)
+      new_subfields += find_unlisted_subfields(field: field, order_array: order_array)
       field.subfields = new_subfields
     end
     record
+  end
+
+  def find_unlisted_subfields(field:, order_array:)
+    field.subfields.reject do |subfield|
+      order_array.include?(subfield.code)
+    end
+  end
+
+  def sort_listed_subfields(field:, order_array:)
+    listed_subfields = field.subfields.select do |subfield|
+      order_array.include?(subfield.code)
+    end
+    listed_subfields.sort_by! do |subfield|
+      order_array.index { |code| code == subfield.code }
+    end
   end
 end
