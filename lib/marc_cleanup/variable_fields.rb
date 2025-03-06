@@ -317,43 +317,38 @@ module MarcCleanup
   end
 
   def relator_chars?(record)
-    record.fields.each do |field|
-      if field.tag =~ /[17][01]0/
-        field.subfields.each do |subfield|
-          next unless subfield.code == 'e' && subfield.value =~ /.*[^a-z, \.].*/
-
-          return true
-        end
-      elsif field.tag =~ /[17]11/
-        field.subfields.each do |subfield|
-          next unless subfield.code == 'j' && subfield.value =~ /.*[^a-z, \.].*/
-
-          return true
-        end
-      end
+    record.fields(%w[100 110 111 700 710 711]).each do |field|
+      target_subfields = relator_chars_target_subfields(field)
+      return true if target_subfields.select do |subfield|
+        subfield.value =~ /[^a-z\-, .]/
+      end.size.positive?
     end
     false
+  end
+
+  def relator_chars_target_subfields(field)
+    case field.tag
+    when '111', '711'
+      field.subfields.select { |subf| subf.code == 'j' }
+    else
+      field.subfields.select { |subf| subf.code == 'e' }
+    end
   end
 
   def x00_subfq?(record)
     record.fields(%w[100 600 700 800]).each do |field|
       field.subfields.each do |subfield|
-        next unless subfield.code == 'q' && subfield.value =~ /^(?!\([^\)]*\))$/
-
-        return true
+        return true if subfield.code == 'q' && subfield.value =~ /^[^(].*[^)]$/
       end
     end
     false
   end
 
-  def no_comma_x00?(record)
+  def x00_subfd_no_comma?(record)
     record.fields(%w[100 600 700 800]).each do |field|
-      code_array = ''
-      field.subfields.each do |subfield|
-        code_array << subfield.code
-      end
-      subfx_d_index = code_array.index(/.d/)
-      return true if subfx_d_index && field.subfields[subfx_d_index].value =~ /^.*[^,]$/
+      subf_d_index = field.subfields.index { |subfield| subfield.code == 'd' }
+      next unless subf_d_index
+      return true if field.subfields[subf_d_index - 1].value =~ /[^,]$/
     end
     false
   end
@@ -389,15 +384,6 @@ module MarcCleanup
       end
       last_heading_subfield_index = code_array.index(/[a-vx-z8][^a-vx-z8]*$/)
       return true if last_heading_subfield_index && field.subfields[last_heading_subfield_index].value =~ punct_regex
-    end
-    false
-  end
-
-  def lowercase_headings?(record)
-    record.fields.each do |field|
-      next unless field.tag =~ /[1678]../
-
-      return true if field['a'] =~ /^[a-z]{3,}/
     end
     false
   end
