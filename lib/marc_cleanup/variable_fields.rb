@@ -354,38 +354,52 @@ module MarcCleanup
   end
 
   def relator_comma?(record)
-    comma_regex = /^.*[^,]$/
-    record.fields.each do |field|
-      next unless field.tag =~ /[17][01][01]/
-
-      code_array = ''
-      field.subfields.each do |subfield|
-        code_array << subfield.code
-      end
-      if field.tag =~ /[17][01]0/
-        subfx_e_index = code_array.index(/.e/)
-        return true if subfx_e_index && field.subfields[subfx_e_index].value =~ comma_regex
-      elsif field.tag =~ /[17]11/
-        subfx_j_index = code_array.index(/.j/)
-        return true if subfx_j_index && field.subfields[subfx_j_index].value =~ comma_regex
-      end
+    record.fields(%w[100 110 111 700 710 711]).each do |field|
+      relator_index = relator_subfield_index(field)
+      next unless relator_index
+      return true if field.subfields[relator_index - 1].value =~ /[^,]$/
     end
     false
   end
 
-  def heading_end_punct?(record)
-    punct_regex = /.*[^"\).\!\?\-]$/
-    record.fields.each do |field|
-      next unless field.tag =~ /^[167][0-5].$/ && field.indicator2 =~ /[^47]/
+  def relator_subfield_index(field)
+    case field.tag
+    when '111', '711'
+      field.subfields.index { |subfield| subfield.code == 'j' }
+    else
+      field.subfields.index { |subfield| subfield.code == 'e' }
+    end
+  end
 
-      code_array = ''
-      field.subfields.each do |subfield|
-        code_array << subfield.code
-      end
-      last_heading_subfield_index = code_array.index(/[a-vx-z8][^a-vx-z8]*$/)
-      return true if last_heading_subfield_index && field.subfields[last_heading_subfield_index].value =~ punct_regex
+  def heading_end_punct?(record)
+    punct_regex = /[^").!?-]$/
+    record.fields(punctuated_heading_fields).each do |field|
+      last_heading_subfield = last_heading_subfield(field)
+      next unless last_heading_subfield
+      return true if last_heading_subfield.value =~ punct_regex
     end
     false
+  end
+
+  def punctuated_heading_fields
+    %w[
+      100 110 111 130
+      600 610 611 630 650 651 654 655 656 657 658 662
+      700 710 711 730 740 752 754
+      800 810 811 830
+    ]
+  end
+
+  def last_heading_subfield(field)
+    regex = /[^02345]/
+    heading_subfields = field.subfields.select do |subfield|
+      subfield.code =~ regex
+    end
+    if heading_subfields.empty?
+      nil
+    else
+      heading_subfields[-1]
+    end
   end
 
   def subf_0_uri?(record)
