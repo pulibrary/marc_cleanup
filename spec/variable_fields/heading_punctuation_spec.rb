@@ -75,7 +75,7 @@ RSpec.describe 'x00_subfq?' do
   let(:record) { MARC::Record.new_from_hash('fields' => fields, 'leader' => leader) }
   let(:leader) { '01104naa a2200289 i 4500' }
 
-  context '100 field has subfield q with no parentheses' do
+  context '100 field subfield q with no parentheses' do
     let(:fields) do
       [
         { '100' => { 'ind1' => '0',
@@ -89,7 +89,7 @@ RSpec.describe 'x00_subfq?' do
     end
   end
 
-  context '100 field has subfield q with parentheses' do
+  context '100 field subfield q with parentheses' do
     let(:fields) do
       [
         { '100' => { 'ind1' => '0',
@@ -98,7 +98,7 @@ RSpec.describe 'x00_subfq?' do
                                      { 'q' => '(Xavier)' }] } }
       ]
     end
-    it 'does not returns an error' do
+    it 'does not return an error' do
       expect(MarcCleanup.x00_subfq?(record)).to be false
     end
   end
