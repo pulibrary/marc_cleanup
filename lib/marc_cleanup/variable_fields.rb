@@ -409,23 +409,6 @@ module MarcCleanup
     false
   end
 
-  def bad_uri?(record)
-    target_fields = record.fields('856')
-    return false if target_fields.empty?
-
-    target_fields.each do |field|
-      next unless field['u']
-
-      field.subfields.each do |subfield|
-        next unless subfield.code == 'u'
-
-        string = subfield.value
-        return true unless URI.escape(URI.unescape(string).scrub) == string
-      end
-    end
-    false
-  end
-
   ### Normalize to the NFC (combined) form of diacritics for characters with
   #     Arabic diacritics; normalize to NFD for characters below U+622 and
   #     between U+1E00 and U+2A28
@@ -492,28 +475,6 @@ module MarcCleanup
       end
     end
     record
-  end
-
-  ### Escape URIs
-  def uri_escape(record)
-    target_fields = record.fields('856')
-    return record if target_fields.empty?
-
-    fixed_record = record
-    target_fields.each do |field|
-      next unless field['u']
-
-      field_index = fixed_record.fields.index(field)
-      field.subfields.each do |subfield|
-        next unless subfield.code == 'u'
-
-        subfield_index = field.subfields.index(subfield)
-        string = subfield.value
-        fixed_string = URI.escape(URI.unescape(string).scrub)
-        fixed_record.fields[field_index].subfields[subfield_index].value = fixed_string
-      end
-    end
-    fixed_record
   end
 
   ### Make the 040 $b 'eng' if it doesn't have a value
