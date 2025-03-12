@@ -65,7 +65,7 @@ RSpec.describe 'replace_fields' do
           case_sensitive: case_sensitive_b }
       ]
     end
-    it 'changes field only where ignore_indicators is set to true' do
+    it 'changes field only where case_sensitive is set to true' do
       replace_fields(field_array: field_array, record: record)
       expect(record['901']['a']).to eq 'loc'
       expect(record['902']).to be_nil
