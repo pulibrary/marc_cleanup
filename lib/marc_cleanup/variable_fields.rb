@@ -6,8 +6,10 @@ module MarcCleanup
     record.fields('020').each do |f020|
       f020.subfields.each do |subfield|
         next unless subfield.code == 'a'
-        isbn_parts = /^\s*([\d\-]+)\s*(\(.*?\))\s*$/.match(subfield.value)
+
+        isbn_parts = /^\s*([\d-]+)\s*(\(.*?\))\s*$/.match(subfield.value)
         next if isbn_parts.nil?
+
         subfield.value = isbn_parts[1]
         f020.append(MARC::Subfield.new('q', isbn_parts[2]))
       end
@@ -16,20 +18,20 @@ module MarcCleanup
   end
 
   ### Convert ISBN-10 to ISBN-13
-  def isbn10_to_13(isbn)
+  def isbn10_to_isbn13(isbn)
     stem = isbn[0..8]
     return nil if stem =~ /\D/
 
     existing_check = isbn[9]
-    return nil if existing_check && existing_check != checkdigit_10(stem)
+    return nil if existing_check && existing_check != checkdigit_isbn10(stem)
 
     main = ISBN13PREFIX + stem
-    checkdigit = checkdigit_13(main)
+    checkdigit = checkdigit_isbn13(main)
     main + checkdigit
   end
 
   ### Calculate check digit for ISBN-10
-  def checkdigit_10(stem)
+  def checkdigit_isbn10(stem)
     int_index = 0
     int_sum = 0
     stem.each_char do |digit|
@@ -41,7 +43,7 @@ module MarcCleanup
   end
 
   ### Calculate check digit for ISBN-13
-  def checkdigit_13(stem)
+  def checkdigit_isbn13(stem)
     int_index = 0
     int_sum = 0
     stem.each_char do |digit|
@@ -62,20 +64,17 @@ module MarcCleanup
       int_sum += int_index.even? ? digit.to_i : digit.to_i * 3
       int_index += 1
     end
-    checkdigit = checkdigit_13(stem)
+    checkdigit = checkdigit_isbn13(stem)
     return nil if raw_isbn[12] && raw_isbn[12] != checkdigit
 
     stem + checkdigit
   end
 
-  ### Normalize any given string that is supposed to include an ISBN
-  def isbn_normalize(isbn)
-    return nil unless isbn
-
+  def clean_isbn(isbn)
     raw_isbn = isbn.dup
     raw_isbn.delete!('-')
     raw_isbn.delete!('\\')
-    raw_isbn.gsub!(/\([^\)]*\)/, '')
+    raw_isbn.gsub!(/\([^)]*\)/, '')
     raw_isbn.gsub!(/^(.*)\$c.*$/, '\1')
     raw_isbn.gsub!(/^(.*)\$q.*$/, '\1')
     raw_isbn.gsub!(/^\D+([0-9].*)$/, '\1')
@@ -87,16 +86,25 @@ module MarcCleanup
     end
     raw_isbn.gsub!(/^([0-9]{9,13}[xX]?)[^0-9xX].*$/, '\1')
     raw_isbn.gsub!(/^([0-9]+?)\D.*$/, '\1')
-    if raw_isbn.length > 6 && raw_isbn.length < 9 && raw_isbn =~ /^[0-9]+$/
-      raw_isbn = raw_isbn.ljust(9, '0')
-    end
-    valid_lengths = [9, 10, 12, 13] # ISBN10 and ISBN13 with/out check digits
-    return nil unless valid_lengths.include? raw_isbn.length
-
-    if raw_isbn.length < 12
-      isbn10_to_13(raw_isbn)
+    if raw_isbn.length.between?(7, 8) && raw_isbn =~ /^[0-9]+$/
+      raw_isbn.ljust(9, '0')
     else
-      isbn13_normalize(raw_isbn)
+      raw_isbn
+    end
+  end
+
+  ### Normalize any given string that is supposed to include an ISBN
+  def isbn_normalize(isbn)
+    return nil unless isbn
+
+    clean_isbn = clean_isbn(isbn)
+    valid_lengths = [9, 10, 12, 13] # ISBN10 and ISBN13 with/out check digits
+    return nil unless valid_lengths.include? clean_isbn.length
+
+    if clean_isbn.length < 12
+      isbn10_to_isbn13(clean_isbn)
+    else
+      isbn13_normalize(clean_isbn)
     end
   end
 
@@ -106,6 +114,7 @@ module MarcCleanup
     record.fields('020').each do |f020|
       f020.subfields.each do |subfield|
         next unless subfield.code == 'a'
+
         isbn = subfield.value
         normalized_isbn = isbn_normalize(isbn)
         if normalized_isbn
@@ -345,6 +354,7 @@ module MarcCleanup
     record.fields(%w[100 600 700 800]).any? do |field|
       subf_d_index = field.subfields.index { |subfield| subfield.code == 'd' }
       next unless subf_d_index
+
       field.subfields[subf_d_index - 1].value =~ /[^,]$/
     end
   end
@@ -353,6 +363,7 @@ module MarcCleanup
     record.fields(%w[100 110 111 700 710 711]).any? do |field|
       relator_index = relator_subfield_index(field)
       next unless relator_index
+
       field.subfields[relator_index - 1].value =~ /[^,]$/
     end
   end
@@ -373,6 +384,7 @@ module MarcCleanup
 
       last_heading_subfield = last_heading_subfield(field)
       next unless last_heading_subfield
+
       last_heading_subfield.value =~ punct_regex
     end
   end
@@ -414,15 +426,13 @@ module MarcCleanup
   #     between U+1E00 and U+2A28
   def composed_chars_normalize(record)
     record.fields.each do |field|
-      next unless field.class == MARC::DataField
+      next unless field.instance_of?(MARC::DataField)
 
       field_index = record.fields.index(field)
       curr_subfield = 0
       field.subfields.each do |subfield|
         prevalue = subfield.value
-        if prevalue =~ /^.*[\u0653\u0654\u0655].*$/
-          prevalue = prevalue.unicode_normalize(:nfc)
-        end
+        prevalue = prevalue.unicode_normalize(:nfc) if prevalue =~ /^.*[\u0653\u0654\u0655].*$/
         fixed_subfield = prevalue.codepoints.map do |codepoint|
           char = codepoint.chr(Encoding::UTF_8)
           char.unicode_normalize!(:nfd) if codepoint < 1570 || (7_680..10_792).cover?(codepoint)
