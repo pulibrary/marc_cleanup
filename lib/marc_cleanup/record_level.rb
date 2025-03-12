@@ -299,14 +299,16 @@ module MarcCleanup
   ### Replace field from a record that matches a supplied source field
   ###   with the supplied replacement field, which can be either a ControlField
   ###   or a DataField
-  def replace_field(source_field:, replacement_field:, record:, ignore_indicators: false)
+  def replace_field(source_field:, replacement_field:, record:, ignore_indicators: false, case_sensitive: true)
     start_pos = field_content_start(source_field: source_field, ignore_indicators: ignore_indicators)
     source_field_content = source_field.to_s[start_pos..]
     target_fields = record.fields(source_field.tag)
     return record if target_fields.empty?
 
     target_fields.each do |field|
-      next unless field.to_s[start_pos..] == source_field_content
+      target_field_content = field.to_s[start_pos..]
+      next unless (target_field_content == source_field_content) ||
+                  (!case_sensitive && target_field_content.casecmp(source_field_content))
 
       field_index = record.fields.index(field)
       record.fields[field_index] = replacement_field
@@ -328,13 +330,17 @@ module MarcCleanup
   ###   - replacement_field: ruby-marc field (DataField or ControlField)
   ###   - ignore_indicators: optional Boolean to specify whether to ignore
   ###     indicators for this replacement
+  ###   - case_sensitive: optional Boolean to specify whether matching
+  ###     should be case-sensitive
   def replace_fields(field_array:, record:)
     field_array.each do |replacement|
-      replacement[:ignore_indicators] ||= false
+      replacement[:ignore_indicators] = false unless replacement.key?(:ignore_indicators)
+      replacement[:case_sensitive] = true unless replacement.key?(:case_sensitive)
       record = replace_field(source_field: replacement[:source_field],
                              replacement_field: replacement[:replacement_field],
                              record: record,
-                             ignore_indicators: replacement[:ignore_indicators])
+                             ignore_indicators: replacement[:ignore_indicators],
+                             case_sensitive: replacement[:case_sensitive])
     end
     record
   end

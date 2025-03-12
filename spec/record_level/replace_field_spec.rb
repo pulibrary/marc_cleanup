@@ -64,4 +64,18 @@ RSpec.describe 'replace_field' do
       expect(record['020']['z']).to be_nil
     end
   end
+  context 'source/target case-insensitive match' do
+    let(:fields) { [{ '009' => 'LoC' }] }
+    let(:source_field) { MARC::ControlField.new('009', 'loc') }
+    let(:replacement_field) { MARC::ControlField.new('009', 'OCLC') }
+    it 'does not replace content when case-sensitive is true' do
+      replace_field(source_field: source_field, replacement_field: replacement_field, record: record)
+      expect(record['009'].value).to eq 'LoC'
+    end
+    it 'replaces content when case-insensitive is false' do
+      replace_field(source_field: source_field, replacement_field: replacement_field, record: record,
+                    case_sensitive: false)
+      expect(record['009'].value).to eq 'OCLC'
+    end
+  end
 end
