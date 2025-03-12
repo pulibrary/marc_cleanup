@@ -42,4 +42,35 @@ RSpec.describe 'replace_fields' do
       expect(record['904'].indicator2).to eq '1'
     end
   end
+  context 'all field pairings match in a case-insensitive way' do
+    let(:fields) do
+      [
+        { '901' => { 'ind1' => '0', 'ind2' => '0', 'subfields' => [{ 'a' => 'loc' }] } },
+        { '902' => { 'ind1' => '0', 'ind2' => '0', 'subfields' => [{ 'a' => 'OCLC' }] } }
+      ]
+    end
+    let(:source_field_a) { MARC::DataField.new('901', '0', '0', MARC::Subfield.new('a', 'LoC')) }
+    let(:replacement_field_a) { MARC::DataField.new('903', '0', '0', MARC::Subfield.new('a', 'LC')) }
+
+    let(:source_field_b) { MARC::DataField.new('902', '0', '0', MARC::Subfield.new('a', 'oclc')) }
+    let(:replacement_field_b) { MARC::DataField.new('904', '0', '0', MARC::Subfield.new('a', 'OCoLC')) }
+    let(:case_sensitive_b) { false }
+
+    let(:field_array) do
+      [
+        { source_field: source_field_a,
+          replacement_field: replacement_field_a },
+        { source_field: source_field_b,
+          replacement_field: replacement_field_b,
+          case_sensitive: case_sensitive_b }
+      ]
+    end
+    it 'changes field only where ignore_indicators is set to true' do
+      replace_fields(field_array: field_array, record: record)
+      expect(record['901']['a']).to eq 'loc'
+      expect(record['902']).to be_nil
+      expect(record['903']).to be_nil
+      expect(record['904']['a']).to eq 'OCoLC'
+    end
+  end
 end
