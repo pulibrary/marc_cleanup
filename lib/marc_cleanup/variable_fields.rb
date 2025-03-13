@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module MarcCleanup
+  BLANK_REGEX = /^.*[[:blank:]]{2,}.*$|^.*[[:blank:]]+$|^[[:blank:]]+(.*)$/
   ### Remove non-numerical strings and append a new 020$q with the string
   def new_020_q(record)
     record.fields('020').each do |f020|
@@ -178,37 +179,70 @@ module MarcCleanup
     false
   end
 
-  def extra_spaces?(record)
-    blank_regex = /^.*[[:blank:]]{2,}.*$|^.*[[:blank:]]+$|^[[:blank:]]+(.*)$/
-    record.fields.each do |field|
-      next unless field.instance_of?(MARC::DataField) && field.tag != '010'
-
-      case field.tag
-      when /[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
-        field.subfields.each do |subfield|
-          return true if subfield.value =~ blank_regex
+  def extra_space_f880_f533(record)
+    record.fields('880').select do |field|
+      field['6'] =~ /^533/ &&
+        field.subfields.any? do |subfield|
+          subfield.code != '7' && subfield.value =~ BLANK_REGEX
         end
-      when '533'
-        field.subfields.each do |subfield|
-          next if subfield.code == '7'
+    end
+  end
 
-          return true if subfield.value =~ blank_regex
-        end
-      when /7[6-8]./
-        field.subfields.each do |subfield|
-          next unless subfield.code =~ /[a-v3-8]/
-
-          return true if subfield.value =~ blank_regex
-        end
-      when /8../
-        field.subfields.each do |subfield|
-          next unless subfield.code =~ /[^w7]/
-
-          return true if subfield.value =~ blank_regex
-        end
+  def extra_space_f533(record)
+    fields = record.fields('533').select do |field|
+      field.subfields.any? do |subfield|
+        subfield.code != '7' && subfield.value =~ BLANK_REGEX
       end
     end
-    false
+    fields + extra_space_f880_f533(record)
+  end
+
+  def extra_space_f880_f76x_f830(record)
+    record.fields('880').select do |field|
+      field['6'] &&
+        ('760'..'830').include?(field['6'][0..2]) &&
+        field.subfields.any? do |subfield|
+          subfield.code != '7' && subfield.value =~ BLANK_REGEX
+        end
+    end
+  end
+
+  def extra_space_f76x_f830(record)
+    fields = record.fields('760'..'830').select do |field|
+      field.subfields.any? do |subfield|
+        !%w[w 7].include?(subfield.code) && subfield.value =~ BLANK_REGEX
+      end
+    end
+    fields + extra_space_f880_f76x_f830(record)
+  end
+
+  def extra_space_f880_other_fields(record)
+    tag_regex = /[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
+    record.fields('880').select do |field|
+      field['6'] &&
+        field['6'][0..2] =~ tag_regex &&
+        field.subfields.any? do |subfield|
+          subfield.value =~ BLANK_REGEX
+        end
+    end
+  end
+
+  def extra_space_other_fields(record)
+    tag_regex = /[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
+    fields = record.fields.select do |field|
+      field.tag =~ tag_regex &&
+        field.subfields.any? do |subfield|
+          subfield.value =~ BLANK_REGEX
+        end
+    end
+    fields + extra_space_f880_other_fields(record)
+  end
+
+  def extra_spaces?(record)
+    return true if extra_space_f533(record).size.positive?
+    return true if extra_space_f76x_f830(record).size.positive?
+
+    extra_space_other_fields(record).size.positive?
   end
 
   def extra_space_gsub(string)
@@ -217,37 +251,25 @@ module MarcCleanup
     string.gsub(/^[[:blank:]]+(.*)$/, '\1')
   end
 
+  def extra_space_fix_field(field:, skip_subfields: [])
+    field.subfields.each do |subfield|
+      next if skip_subfields.include?(subfield.code) || subfield.value.nil?
+
+      subfield.value = extra_space_gsub(subfield.value.dup)
+    end
+    field
+  end
+
   ### Remove extra spaces from all fields that are not positionally defined
   def extra_space_fix(record)
-    record.fields.each do |field|
-      next unless field.instance_of?(MARC::DataField) && field.tag != '010'
-
-      case field.tag
-      when /^[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
-        field.subfields.each do |subfield|
-          next if subfield.value.nil?
-
-          subfield.value = extra_space_gsub(subfield.value.dup)
-        end
-      when '533'
-        field.subfields.each do |subfield|
-          next if subfield.code == '7' || subfield.value.nil?
-
-          subfield.value = extra_space_gsub(subfield.value.dup)
-        end
-      when /^7[6-8]./
-        field.subfields.each do |subfield|
-          next if subfield.code =~ /[^a-v3-8]/ || subfield.value.nil?
-
-          subfield.value = extra_space_gsub(subfield.value.dup)
-        end
-      when /^8../
-        field.subfields.each do |subfield|
-          next if %w[w 7].include?(subfield.code) || subfield.value.nil?
-
-          subfield.value = extra_space_gsub(subfield.value.dup)
-        end
-      end
+    extra_space_f533(record).each do |field|
+      extra_space_fix_field(field: field, skip_subfields: %w[7])
+    end
+    extra_space_f76x_f830(record).each do |field|
+      extra_space_fix_field(field: field, skip_subfields: %w[w 7])
+    end
+    extra_space_other_fields(record).each do |field|
+      extra_space_fix_field(field: field)
     end
     record
   end
