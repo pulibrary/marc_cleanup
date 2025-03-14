@@ -143,6 +143,22 @@ RSpec.describe 'extra_space_fix' do
     end
   end
 
+  context '880 field linked to a 533 field has extra spaces' do
+    let(:fields) do
+      [
+        { '880' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { '6' => '533-00' },
+                       { 'a' => ' Μικροφίλμ' }
+                     ] } }
+      ]
+    end
+    it 'removes the extra spaces' do
+      expect(MarcCleanup.extra_space_fix(record)['880']['a']).to eq 'Μικροφίλμ'
+    end
+  end
+
   context '775 field has extra spaces in main entry' do
     let(:fields) do
       [
