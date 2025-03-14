@@ -296,20 +296,30 @@ module MarcCleanup
     record
   end
 
+  def replace_field_targets(record:, start_pos:, case_sensitive:, source_field:)
+    source_field_content = source_field.to_s[start_pos..]
+    if case_sensitive
+      record.fields(source_field.tag).select do |field|
+        field.to_s[start_pos..] == source_field_content
+      end
+    else
+      record.fields(source_field.tag).select do |field|
+        field.to_s[start_pos..].casecmp?(source_field_content)
+      end
+    end
+  end
+
   ### Replace field from a record that matches a supplied source field
   ###   with the supplied replacement field, which can be either a ControlField
   ###   or a DataField
   def replace_field(source_field:, replacement_field:, record:, ignore_indicators: false, case_sensitive: true)
-    start_pos = field_content_start(source_field: source_field, ignore_indicators: ignore_indicators)
-    source_field_content = source_field.to_s[start_pos..]
-    target_fields = record.fields(source_field.tag)
-    return record if target_fields.empty?
-
+    start_pos = field_content_start(source_field: source_field,
+                                    ignore_indicators: ignore_indicators)
+    target_fields = replace_field_targets(record: record,
+                                          source_field: source_field,
+                                          start_pos: start_pos,
+                                          case_sensitive: case_sensitive)
     target_fields.each do |field|
-      target_field_content = field.to_s[start_pos..]
-      next unless (target_field_content == source_field_content) ||
-                  (!case_sensitive && target_field_content.casecmp(source_field_content))
-
       field_index = record.fields.index(field)
       record.fields[field_index] = replacement_field
     end
