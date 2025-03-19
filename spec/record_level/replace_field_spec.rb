@@ -78,4 +78,37 @@ RSpec.describe 'replace_field' do
       expect(record['009'].value).to eq 'OCLC'
     end
   end
+  context 'source has multiple subfields' do
+    let(:fields) do
+      [
+        { '653' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                        { 'a' => 'Mark' },
+                        { 'a' => 'Tom' },
+                        { 'b' => 'Paul' }] } }
+      ]
+    end
+    let(:source_field_a) { MARC::DataField.new('653', ' ', ' ', 
+                          MARC::Subfield.new('a', 'Mark'),
+                          MARC::Subfield.new('a', 'Tom'),
+                          MARC::Subfield.new('b', 'Paul'))
+                       }
+    let(:source_field_b) { MARC::DataField.new('653', ' ', ' ', 
+                          MARC::Subfield.new('a', 'Tom'),
+                          MARC::Subfield.new('a', 'Mark'),
+                          MARC::Subfield.new('b', 'Paul'))
+                       }
+    let(:replacement_field) { MARC::DataField.new('650', ' ', ' ', MARC::Subfield.new('a', 'Mark, Tom, and Paul')) }
+    it 'replaces the field when source/target subfields are in the same order' do
+      replace_field(source_field: source_field_a, replacement_field: replacement_field, record: record)
+      expect(record['653']).to be_nil
+      expect(record['650']['a']).to eq 'Mark, Tom, and Paul'
+    end
+    it 'does not replace the field when source/target subfields are in a different order' do
+      replace_field(source_field: source_field_b, replacement_field: replacement_field, record: record)
+      expect(record['653'].to_s).to eq '653    $a Mark $a Tom $b Paul '
+      expect(record['650']).to be_nil
+    end
+  end
 end
