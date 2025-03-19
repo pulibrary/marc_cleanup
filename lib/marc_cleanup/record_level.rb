@@ -320,8 +320,7 @@ module MarcCleanup
                                           start_pos: start_pos,
                                           case_sensitive: case_sensitive)
     target_fields.each do |field|
-      field_index = record.fields.index(field)
-      record.fields[field_index] = replacement_field
+      record.fields[record.fields.index(field)] = replacement_field
     end
     record
   end
