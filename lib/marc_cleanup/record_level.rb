@@ -355,43 +355,26 @@ module MarcCleanup
     record
   end
 
+  def sort_0xx_fields(source:, new_record:)
+    source.fields('001'..'009').sort_by(&:tag).each do |field|
+      new_record.append(field)
+    end
+    source.fields('010'..'099').each do |field|
+      new_record.append(field)
+    end
+    new_record
+  end
+
   ### Default field sort: sort fixed fields numerically, then sort the rest
   ###   in groups, leaving the order of fields within the group alone
   def field_sort(record)
     new_rec = MARC::Record.new
     new_rec.leader = record.leader
-    record.fields('001'..'009').sort_by { |field| field.tag }.each do |field|
-      new_rec.append(field)
-    end
-    record.fields('010'..'099').each do |field|
-      new_rec.append(field)
-    end
-    record.fields('100'..'199').each do |field|
-      new_rec.append(field)
-    end
-    record.fields('200'..'299').each do |field|
-      new_rec.append(field)
-    end
-    record.fields('300'..'399').each do |field|
-      new_rec.append(field)
-    end
-    record.fields('400'..'499').each do |field|
-      new_rec.append(field)
-    end
-    record.fields('500'..'599').each do |field|
-      new_rec.append(field)
-    end
-    record.fields('600'..'699').each do |field|
-      new_rec.append(field)
-    end
-    record.fields('700'..'799').each do |field|
-      new_rec.append(field)
-    end
-    record.fields('800'..'899').each do |field|
-      new_rec.append(field)
-    end
-    record.fields('900'..'999').each do |field|
-      new_rec.append(field)
+    new_rec = sort_0xx_fields(source: record, new_record: new_rec)
+    1.upto(9).each do |tag_start|
+      record.fields("#{tag_start}00".."#{tag_start}99").each do |field|
+        new_rec.append(field)
+      end
     end
     new_rec
   end

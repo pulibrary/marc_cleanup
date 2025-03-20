@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns='http://www.loc.gov/MARC21/slim'
+      xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+      xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+    <record>
+        <leader>01104nam a2200289 i 4500</leader>
+        <datafield tag="505" ind1=" " ind2=" ">
+            <subfield code="a">13th field</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">14th field</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">15th field</subfield>
+        </datafield>
+        <controlfield tag="007">2nd field</controlfield>
+        <controlfield tag="001">1st field</controlfield>
+        <datafield tag="490" ind1=" " ind2=" ">
+            <subfield code="a">11th field</subfield>
+        </datafield>
+        <datafield tag="440" ind1=" " ind2=" ">
+            <subfield code="a">12th field</subfield>
+        </datafield>
+        <datafield tag="710" ind1=" " ind2=" ">
+            <subfield code="a">18th field</subfield>
+        </datafield>
+        <datafield tag="700" ind1=" " ind2=" ">
+            <subfield code="a">19th field</subfield>
+        </datafield>
+        <datafield tag="336" ind1=" " ind2=" ">
+            <subfield code="a">9th field</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">10th field</subfield>
+        </datafield>
+        <datafield tag="100" ind1=" " ind2=" ">
+            <subfield code="a">5th field</subfield>
+        </datafield>
+        <datafield tag="130" ind1=" " ind2=" ">
+            <subfield code="a">6th field</subfield>
+        </datafield>
+        <datafield tag="250" ind1=" " ind2=" ">
+            <subfield code="a">7th field</subfield>
+        </datafield>
+        <datafield tag="245" ind1=" " ind2=" ">
+            <subfield code="a">8th field</subfield>
+        </datafield>
+        <datafield tag="020" ind1=" " ind2=" ">
+            <subfield code="a">3rd field</subfield>
+        </datafield>
+        <datafield tag="010" ind1=" " ind2=" ">
+            <subfield code="a">4th field</subfield>
+        </datafield>
+        <datafield tag="980" ind1=" " ind2=" ">
+            <subfield code="a">22nd field</subfield>
+        </datafield>
+        <datafield tag="982" ind1=" " ind2=" ">
+            <subfield code="a">23rd field field</subfield>
+        </datafield>
+        <datafield tag="600" ind1=" " ind2=" ">
+            <subfield code="a">16th field</subfield>
+        </datafield>
+        <datafield tag="600" ind1=" " ind2=" ">
+            <subfield code="a">17th field</subfield>
+        </datafield>
+        <datafield tag="800" ind1=" " ind2=" ">
+            <subfield code="a">20th field</subfield>
+        </datafield>
+        <datafield tag="830" ind1=" " ind2=" ">
+            <subfield code="a">21st field</subfield>
+        </datafield>
+    </record>
+</collection>
