@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MarcCleanup
   def non_repeatable_field_errors?(record:, schema: RECORD_SCHEMA)
     field_count = record.fields.group_by(&:tag).map { |key, value| { tag: key, count: value.size } }
@@ -13,16 +15,55 @@ module MarcCleanup
     record.to_s.scrub != record.to_s
   end
 
-  def bad_utf8_identify(record)
-    record.fields.each do |field|
-      field_index = record.fields.index(field)
-      if field.class == MARC::DataField
-        field.subfields.each do |subfield|
-          subfield_index = record.fields[field_index].subfields.index(subfield)
-          record.fields[field_index].subfields[subfield_index].value.scrub! { |bytes| '░' + bytes.unpack('H*')[0] + '░' }.force_encoding('UTF-8')
-        end
+  def bad_utf8_scrub_datafield(record:, field:, field_index:)
+    field.subfields.each_with_index do |subfield, subfield_index|
+      new_value = bad_utf8_scrub_value(subfield.value)
+      record.fields[field_index].subfields[subfield_index].value = new_value
+    end
+    record
+  end
+
+  def bad_utf8_scrub_value(string)
+    string.scrub('').force_encoding('UTF-8')
+  end
+
+  ### Scrub invalid UTF-8 byte sequences within field values,
+  #     replacing with nothing; indicators, subfield codes, and tags must be
+  #     handled separately
+  def bad_utf8_scrub(record)
+    record.fields.each_with_index do |field, field_index|
+      if field.instance_of?(MARC::DataField)
+        record = bad_utf8_scrub_datafield(record: record,
+                                          field: field,
+                                          field_index: field_index)
       else
-        record.fields[field_index].value.scrub! { |bytes| '░' + bytes.unpack('H*')[0] + '░' }.force_encoding('UTF-8')
+        record.fields[field_index].value = bad_utf8_scrub_value(field.value)
+      end
+    end
+    record
+  end
+
+  def bad_utf8_identify_value(string)
+    string.scrub { |bytes| "░#{bytes.unpack1('H*')}░" }
+          .force_encoding('UTF-8')
+  end
+
+  def bad_utf8_identify_datafield(record:, field:, field_index:)
+    field.subfields.each_with_index do |subfield, subfield_index|
+      new_value = bad_utf8_identify_value(subfield.value)
+      record.fields[field_index].subfields[subfield_index].value = new_value
+    end
+    record
+  end
+
+  def bad_utf8_identify(record)
+    record.fields.each_with_index do |field, field_index|
+      if field.instance_of?(MARC::DataField)
+        record = bad_utf8_identify_datafield(record: record,
+                                             field: field,
+                                             field_index: field_index)
+      else
+        record.fields[field_index].value = bad_utf8_identify_value(field.value)
       end
     end
     record
@@ -183,24 +224,6 @@ module MarcCleanup
     results
   end
 
-  ### Scrub invalid UTF-8 byte sequences within field values,
-  #     replacing with nothing; indicators, subfield codes, and tags must be
-  #     handled separately
-  def bad_utf8_fix(record)
-    record.fields.each do |field|
-      field_index = record.fields.index(field)
-      if field.class == MARC::DataField
-        field.subfields.each do |subfield|
-          subfield_index = record.fields[field_index].subfields.index(subfield)
-          record.fields[field_index].subfields[subfield_index].value.scrub!('').force_encoding('UTF-8')
-        end
-      else
-        record.fields[field_index].value.scrub!('').force_encoding('UTF-8')
-      end
-    end
-    record
-  end
-
   ### Replace invalid XML 1.0 characters with a space
   def invalid_xml_fix(record)
     bad_xml_range = /[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/
@@ -263,7 +286,7 @@ module MarcCleanup
   end
 
   def recap_fixes(record)
-    record = bad_utf8_fix(record)
+    record = bad_utf8_scrub(record)
     record = field_delete(['959'], record)
     record = field_delete(['856'], record)
     record = leaderfix(record)
