@@ -73,16 +73,11 @@ module MarcCleanup
 
   def tab_newline_char?(record)
     pattern = /[\x09\n\r]/
-    record.fields.each do |field|
-      if field.class == MARC::DataField
-        field.subfields.each do |subfield|
-          return true if subfield.value =~ pattern
-        end
-      elsif field.value =~ pattern
-        return true
-      end
+    return true if record.leader =~ pattern
+
+    record.fields.any? do |field|
+      field.to_s =~ pattern
     end
-    false
   end
 
   def invalid_xml_identify(record)
@@ -246,24 +241,32 @@ module MarcCleanup
     record
   end
 
+  def tab_newline_fix_datafield(field)
+    regex = /[\u0009\n\r]/
+    new_field = MARC::DataField.new(field.tag)
+    new_field.indicator1 = field.indicator1.gsub(regex, ' ')
+    new_field.indicator2 = field.indicator2.gsub(regex, ' ')
+    field.subfields.each do |subfield|
+      new_value = subfield.value.gsub(regex, ' ')
+      new_field.append(MARC::Subfield.new(subfield.code, new_value))
+    end
+    new_field
+  end
+
+  def tab_newline_fix_controlfield(field)
+    regex = /[\u0009\n\r]/
+    MARC::ControlField.new(field.tag, field.value.gsub(regex, ' '))
+  end
+
   ### Replace tab and newline characters with a space
   def tab_newline_fix(record)
-    regex = /[\x09\n\r]/
-    record.leader.gsub!(regex, ' ')
-    record.fields.each do |field|
-      field_index = record.fields.index(field)
-      if field.class == MARC::DataField
-        curr_subfield = 0
-        final_subfield = field.subfields.length
-        field.indicator1.gsub!(regex, ' ') if field.indicator1
-        field.indicator2.gsub!(regex, ' ') if field.indicator2
-        while curr_subfield < final_subfield
-          record.fields[field_index].subfields[curr_subfield].value.gsub!(regex, ' ')
-          curr_subfield += 1
-        end
-      else
-        record.fields[field_index].value.gsub!(regex, ' ')
-      end
+    record.leader = record.leader.gsub(/[\u0009\n\r]/, ' ')
+    record.fields.each_with_index do |field, field_index|
+      record.fields[field_index] = if field.instance_of?(MARC::DataField)
+                                     tab_newline_fix_datafield(field)
+                                   else
+                                     tab_newline_fix_controlfield(field)
+                                   end
     end
     record
   end
