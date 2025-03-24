@@ -15,12 +15,16 @@ module MarcCleanup
     record.to_s.scrub != record.to_s
   end
 
-  def bad_utf8_scrub_datafield(record:, field:, field_index:)
-    field.subfields.each_with_index do |subfield, subfield_index|
+  def bad_utf8_scrub_datafield(field)
+    new_field = MARC::DataField.new(field.tag,
+                                    field.indicator1,
+                                    field.indicator2)
+    field.subfields.each do |subfield|
       new_value = bad_utf8_scrub_value(subfield.value)
-      record.fields[field_index].subfields[subfield_index].value = new_value
+      new_subfield = MARC::Subfield.new(subfield.code, new_value)
+      new_field.append(new_subfield)
     end
-    record
+    new_field
   end
 
   def bad_utf8_scrub_value(string)
@@ -33,9 +37,7 @@ module MarcCleanup
   def bad_utf8_scrub(record)
     record.fields.each_with_index do |field, field_index|
       if field.instance_of?(MARC::DataField)
-        record = bad_utf8_scrub_datafield(record: record,
-                                          field: field,
-                                          field_index: field_index)
+        record.fields[field_index] = bad_utf8_scrub_datafield(field)
       else
         record.fields[field_index].value = bad_utf8_scrub_value(field.value)
       end
