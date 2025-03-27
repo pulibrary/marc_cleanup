@@ -50,23 +50,29 @@ module MarcCleanup
           .force_encoding('UTF-8')
   end
 
-  def bad_utf8_identify_datafield(record:, field:, field_index:)
-    field.subfields.each_with_index do |subfield, subfield_index|
+  def bad_utf8_identify_controlfield(field)
+    new_value = bad_utf8_identify_value(field.value)
+    MARC::ControlField.new(field.tag, new_value)
+  end
+
+  def bad_utf8_identify_datafield(field)
+    new_field = MARC::DataField.new(field.tag)
+    new_field.indicator1 = field.indicator1
+    new_field.indicator2 = field.indicator2
+    field.subfields.each do |subfield|
       new_value = bad_utf8_identify_value(subfield.value)
-      record.fields[field_index].subfields[subfield_index].value = new_value
+      new_field.append(MARC::Subfield.new(subfield.code, new_value))
     end
-    record
+    new_field
   end
 
   def bad_utf8_identify(record)
     record.fields.each_with_index do |field, field_index|
-      if field.instance_of?(MARC::DataField)
-        record = bad_utf8_identify_datafield(record: record,
-                                             field: field,
-                                             field_index: field_index)
-      else
-        record.fields[field_index].value = bad_utf8_identify_value(field.value)
-      end
+      record.fields[field_index] = if field.instance_of?(MARC::DataField)
+                                     bad_utf8_identify_datafield(field)
+                                   else
+                                     bad_utf8_identify_controlfield(field)
+                                   end
     end
     record
   end
@@ -80,27 +86,55 @@ module MarcCleanup
     end
   end
 
+  def invalid_xml_identify_value(string)
+    regex = /[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/
+    new_string = ''.dup
+    string.chars.each do |char|
+      new_string << if char =~ regex
+                      "░#{char}░"
+                    else
+                      char
+                    end
+    end
+    new_string
+  end
+
+  def invalid_xml_identify_datafield(field)
+    regex = /[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/
+    new_field = MARC::DataField.new(field.tag)
+    new_field.indicator1 = field.indicator1.gsub(regex, '░')
+    new_field.indicator2 = field.indicator2.gsub(regex, '░')
+    field.subfields.each do |subfield|
+      new_value = invalid_xml_identify_value(subfield.value)
+      new_field.append(MARC::Subfield.new(subfield.code, new_value))
+    end
+    new_field
+  end
+
+  def invalid_xml_identify_controlfield(field)
+    new_value = invalid_xml_identify_value(field.value)
+    MARC::ControlField.new(field.tag, new_value)
+  end
+
+  ### Replaces the invalid XML in the Leader and indicators with the special
+  ###   character, so as not to invalidate the MARC format
   def invalid_xml_identify(record)
-    pattern = /[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/
-    0.upto(record.fields.size - 1) do |field_num|
-      next unless record.fields[field_num].to_s =~ pattern
-
-      if record.fields[field_num].class == MARC::DataField
-        0.upto(record.fields[field_num].subfields.size - 1) do |subf_num|
-          next if record.fields[field_num].subfields[subf_num].value.nil?
-
-          record.fields[field_num].subfields[subf_num].value.gsub!(pattern, '░\1░')
-        end
-      else
-        record.fields[field_num].value.gsub!(pattern, '░\1░') unless record.fields[field_num].value.nil?
-      end
+    regex = /[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/
+    record.leader = record.leader.gsub(regex, '░')
+    record.fields.each_with_index do |field, field_index|
+      record.fields[field_index] = if field.instance_of?(MARC::DataField)
+                                     invalid_xml_identify_datafield(field)
+                                   else
+                                     invalid_xml_identify_controlfield(field)
+                                   end
     end
     record
   end
 
+  ### Finds characters that are discouraged in the XML 1.1 standard
   def invalid_xml_chars?(record)
-    pattern = /[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/
-    record.to_s =~ pattern ? true : false
+    regex = /[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/
+    record.to_s =~ regex ? true : false
   end
 
   def combining_chars_identify(record)
@@ -221,22 +255,33 @@ module MarcCleanup
     results
   end
 
+  def invalid_xml_fix_datafield(field)
+    regex = /[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/
+    new_field = MARC::DataField.new(field.tag)
+    new_field.indicator1 = field.indicator1.gsub(regex, ' ')
+    new_field.indicator2 = field.indicator2.gsub(regex, ' ')
+    field.subfields.each do |subfield|
+      new_value = subfield.value.gsub(regex, ' ')
+      new_field.append(MARC::Subfield.new(subfield.code, new_value))
+    end
+    new_field
+  end
+
+  def invalid_xml_fix_controlfield(field)
+    regex = /[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/
+    MARC::ControlField.new(field.tag, field.value.gsub(regex, ' '))
+  end
+
   ### Replace invalid XML 1.0 characters with a space
   def invalid_xml_fix(record)
-    bad_xml_range = /[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/
-    record.leader.gsub!(bad_xml_range, ' ')
-    record.fields.each do |field|
-      field_index = record.fields.index(field)
-      if field.class == MARC::DataField
-        curr_subfield = 0
-        final_subfield = field.subfields.length
-        while curr_subfield < final_subfield
-          record.fields[field_index].subfields[curr_subfield].value.gsub!(bad_xml_range, ' ')
-          curr_subfield += 1
-        end
-      else
-        record.fields[field_index].value.gsub!(bad_xml_range, ' ')
-      end
+    regex = /[\u0000-\u0008\u000B\u000C\u000E-\u001C\u007F-\u0084\u0086-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF]/
+    record.leader = record.leader.gsub(regex, ' ')
+    record.fields.each_with_index do |field, field_index|
+      record.fields[field_index] = if field.instance_of?(MARC::DataField)
+                                     invalid_xml_fix_datafield(field)
+                                   else
+                                      invalid_xml_fix_controlfield(field)
+                                   end
     end
     record
   end
