@@ -273,27 +273,22 @@ module MarcCleanup
 
   ## Can delete fields based on tags alone, or with
   ## optional indicator values provided in arrays
-  def field_delete(tags, record, indicators = {})
-    if indicators.empty?
-      record.fields.delete_if { |field| tags.include? field.tag }
-    else
-      ind_1 = indicators[:ind_1]
-      ind_2 = indicators[:ind_2]
-      if ind_1 && ind_2
-        record.fields.delete_if { |field| (tags.include? field.tag) && (ind_1.include? field.indicator1) && (ind_2.include? field.indicator2) }
-      elsif ind_1
-        record.fields.delete_if { |field| (tags.include? field.tag) && (ind_1.include? field.indicator1) }
-      else
-        record.fields.delete_if { |field| (tags.include? field.tag) && (ind_2.include? field.indicator2) }
-      end
+  def field_delete_by_tags(record:, tags:, indicators: {})
+    full_indicator_array = [' ']
+    full_indicator_array += %w[0 1 2 3 4 5 6 7 8 9]
+    indicators[:ind1] ||= full_indicator_array
+    indicators[:ind2] ||= full_indicator_array
+    record.fields.delete_if do |field|
+      tags.include?(field.tag) &&
+        indicators[:ind1].include?(field.indicator1) &&
+        indicators[:ind2].include?(field.indicator2)
     end
     record
   end
 
   def recap_fixes(record)
     record = bad_utf8_scrub(record)
-    record = field_delete(['959'], record)
-    record = field_delete(['856'], record)
+    record = field_delete_by_tags(record: record, tags: %w[959 856])
     record = leaderfix(record)
     record = extra_space_fix(record)
     record = invalid_xml_fix(record)
