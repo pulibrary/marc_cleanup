@@ -428,16 +428,16 @@ module MarcCleanup
     record
   end
 
-  ### Duplicate record to preserve original when making modifications
+  ### Duplicate record to preserve original when making modifications;
+  ###   must scrub any invalid UTF-8 before duplicating
   def duplicate_record(record)
-    raw_marc = ''
-    writer = MARC::Writer.new(StringIO.new(raw_marc, 'w'))
+    raw_marc = ''.dup
+    writer = MARC::XMLWriter.new(StringIO.new(raw_marc, 'w'))
+    record = bad_utf8_scrub(record)
     writer.write(record)
     writer.close
-    reader = MARC::Reader.new(StringIO.new(raw_marc, 'r'),
-                              external_encoding: 'UTF-8',
-                              invalid: :replace,
-                              replace: '')
+    reader = MARC::XMLReader.new(StringIO.new(raw_marc, 'r'),
+                                 external_encoding: 'UTF-8')
     reader.first
   end
 
