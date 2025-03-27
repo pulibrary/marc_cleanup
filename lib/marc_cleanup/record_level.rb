@@ -156,50 +156,6 @@ module MarcCleanup
     record.to_s =~ pattern ? true : false
   end
 
-  def invalid_chars?(record)
-    good_chars = CHARSET
-    record.fields.each do |field|
-      if field.class == MARC::DataField
-        field.subfields.each do |subfield|
-          next if subfield.value.nil?
-
-          subfield.value.each_char do |c|
-            return true unless good_chars.include?(c.ord)
-          end
-        end
-      else
-        field.value.each_char do |c|
-          return true unless good_chars.include?(c.ord)
-        end
-      end
-    end
-    false
-  end
-
-  def invalid_chars_identify(record)
-    good_chars = CHARSET
-    0.upto(record.fields.size - 1) do |field_num|
-      if record.fields[field_num].class == MARC::DataField
-        0.upto(record.fields[field_num].subfields.size - 1) do |subf_num|
-          next if record.fields[field_num].subfields[subf_num].value.nil?
-
-          temp_value = ''
-          record.fields[field_num].subfields[subf_num].value.each_char do |c|
-            good_chars.include?(c.ord) ? (temp_value << c) : (temp_value << '░' + c + '░')
-          end
-          record.fields[field_num].subfields[subf_num].value = temp_value
-        end
-      elsif record.fields[field_num].value
-        temp_value = ''
-        record.fields[field_num].value.each_char do |c|
-          good_chars.include?(c.ord) ? (temp_value << c) : (temp_value << '░' + c + '░')
-        end
-        record.fields[field_num].value = temp_value
-      end
-    end
-    record
-  end
-
   def composed_chars_errors?(record)
     record.fields.each do |field|
       if field.class == MARC::DataField
