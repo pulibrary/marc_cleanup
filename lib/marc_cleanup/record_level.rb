@@ -137,21 +137,42 @@ module MarcCleanup
     record.to_s =~ regex ? true : false
   end
 
+  def combining_chars_identify_value(string)
+    regex = /([^\p{L}\p{M}]\p{M}+)/
+    string.gsub(regex, '░\1░')
+  end
+
+  def combining_chars_datafield(field)
+    regex = /([^\p{L}\p{M}]\p{M}+)/
+    new_field = MARC::DataField.new(field.tag)
+    new_field.indicator1 = field.indicator1.gsub(regex, '░')
+    new_field.indicator2 = field.indicator2.gsub(regex, '░')
+    field.subfields.each do |subfield|
+      new_value = combining_chars_identify_value(subfield.value)
+      new_field.append(MARC::Subfield.new(subfield.code, new_value))
+    end
+    new_field
+  end
+
+  def combining_chars_controlfield(field)
+    new_value = combining_chars_identify_value(field.value)
+    MARC::ControlField.new(field.tag, new_value)
+  end
+
   def combining_chars_identify(record)
-    pattern = /([^\p{L}\p{M}]\p{M}+)/
-    0.upto(record.fields.size - 1) do |field_num|
-      if record.fields[field_num].class == MARC::DataField
-        0.upto(record.fields[field_num].subfields.size - 1) do |subf_num|
-          record.fields[field_num].subfields[subf_num].value.gsub!(pattern, '░\1░')
-        end
-      else
-        record.fields[field_num].value.gsub!(pattern, '░\1░')
-      end
+    regex = /([^\p{L}\p{M}]\p{M}+)/
+    record.leader = record.leader.gsub(regex, '░')
+    record.fields.each_with_index do |field, field_index|
+      record.fields[field_index] = if field.instance_of?(MARC::DataField)
+                                     combining_chars_datafield(field)
+                                   else
+                                     combining_chars_controlfield(field)
+                                   end
     end
     record
   end
 
-  def combining_char_errors?(record)
+  def combining_chars_errors?(record)
     pattern = /[^\p{L}\p{M}]\p{M}+/
     record.to_s =~ pattern ? true : false
   end
