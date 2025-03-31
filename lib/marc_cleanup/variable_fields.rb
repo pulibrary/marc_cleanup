@@ -443,30 +443,6 @@ module MarcCleanup
     false
   end
 
-  ### Normalize to the NFC (combined) form of diacritics for characters with
-  #     Arabic diacritics; normalize to NFD for characters below U+622 and
-  #     between U+1E00 and U+2A28
-  def composed_chars_normalize(record)
-    record.fields.each do |field|
-      next unless field.instance_of?(MARC::DataField)
-
-      field_index = record.fields.index(field)
-      curr_subfield = 0
-      field.subfields.each do |subfield|
-        prevalue = subfield.value
-        prevalue = prevalue.unicode_normalize(:nfc) if prevalue =~ /^.*[\u0653\u0654\u0655].*$/
-        fixed_subfield = prevalue.codepoints.map do |codepoint|
-          char = codepoint.chr(Encoding::UTF_8)
-          char.unicode_normalize!(:nfd) if codepoint < 1570 || (7_680..10_792).cover?(codepoint)
-          char
-        end.join
-        record.fields[field_index].subfields[curr_subfield].value = fixed_subfield
-        curr_subfield += 1
-      end
-    end
-    record
-  end
-
   ### Replace empty indicators with a space;
   ###   scrub indicators with bad UTF-8;
   ###   The ruby-marc gem converts nil subfields to spaces
