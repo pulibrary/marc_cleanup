@@ -44,7 +44,7 @@ RSpec.describe 'combining_chars_errors?' do
       [
         { '020' => { 'ind1' => ' ',
                      'ind2' => ' ',
-                     'subfields' => [{ 'a' => '9780316458759' }] } }
+                     'subfields' => [{ 'a' => "9780316458759 i\u{0300}sbn" }] } }
       ]
     end
     let(:leader) { '01104naa a2200289 i 4500' }
