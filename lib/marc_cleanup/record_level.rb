@@ -156,28 +156,25 @@ module MarcCleanup
     record.to_s =~ pattern ? true : false
   end
 
+  def composed_chars_string_error?(string)
+    if string =~ /[\u{0653}\u{0654}\u{0655}]/ && !string.unicode_normalized?(:nfc)
+      true
+    else
+      string.codepoints.any? do |codepoint|
+        codepoint < 1570 || (7680..10_792).cover?(codepoint) &&
+          !codepoint.chr(Encoding::UTF_8).unicode_normalized?(:nfd)
+      end
+    end
+  end
+
   def composed_chars_errors?(record)
     record.fields.each do |field|
-      if field.class == MARC::DataField
-        field.subfields.each do |subfield|
-          subfield.value.each_codepoint do |c|
-            next unless c < 1570 || (7680..10_792).cover?(c)
-
-            return true unless c.chr(Encoding::UTF_8).unicode_normalized?(:nfd)
-          end
-          if subfield.value =~ /^.*[\u0653\u0654\u0655].*$/
-            return true unless subfield.value.unicode_normalized?(:nfc)
-          end
+      if field.instance_of?(MARC::DataField)
+        return true if field.subfields.any? do |subfield|
+          composed_chars_string_error?(subfield.value)
         end
-      else
-        field.value.each_codepoint do |c|
-          next unless c < 1570 || (7680..10_792).cover?(c)
-
-          return true unless c.chr(Encoding::UTF_8).unicode_normalized?(:nfd)
-        end
-        if field.value =~ /^.*[\u0653\u0654\u0655].*$/
-          return true unless field.value.unicode_normalized?(:nfc)
-        end
+      elsif composed_chars_string_error?(field.value)
+        return true
       end
     end
     false
