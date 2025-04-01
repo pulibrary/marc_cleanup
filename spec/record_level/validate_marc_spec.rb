@@ -34,7 +34,7 @@ RSpec.describe 'validate_marc' do
     let(:record) { MARC::Record.new_from_hash('fields' => fields) }
     it 'reports 130/240 conflict' do
       record_errors = MarcCleanup.validate_marc(record: record)
-      expect(record_errors[:has_130_240]).to eq true
+      expect(record_errors[:has_f130_f240]).to eq true
     end
   end
   describe 'missing required 245 field' do
@@ -48,7 +48,7 @@ RSpec.describe 'validate_marc' do
     let(:record) { MARC::Record.new_from_hash('fields' => fields) }
     it 'reports the missing 245 field' do
       record_errors = MarcCleanup.validate_marc(record: record)
-      expect(record_errors[:multiple_no_245]).to eq true
+      expect(record_errors[:multiple_no_f245]).to eq true
     end
   end
   describe 'invalid tag' do

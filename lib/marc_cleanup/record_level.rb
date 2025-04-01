@@ -5,8 +5,8 @@ module MarcCleanup
     field_count = record.fields.group_by(&:tag).map { |key, value| { tag: key, count: value.size } }
     nr_fields = field_count.select do |field|
       field[:count] > 1 &&
-      schema[field[:tag]] &&
-      schema[field[:tag]]['repeat'] == false
+        schema[field[:tag]] &&
+        schema[field[:tag]]['repeat'] == false
     end
     !nr_fields.empty?
   end
@@ -241,32 +241,53 @@ module MarcCleanup
     record
   end
 
-  ### Count fields in a record; set :subfields to True to drill down to subfields
-  def field_count(record, opts = {})
+  def field_count_controlfields(record)
     results = {}
+    record.fields.each do |field|
+      next unless field.instance_of?(MARC::ControlField)
+
+      tag = field.tag.scrub('')
+      results[tag] ||= 0
+      results[tag] += 1
+    end
+    results
+  end
+
+  def field_count_subfields(field)
+    results = {}
+    tag = field.tag.scrub('')
+    field.subfields.each do |subfield|
+      key = tag + subfield.code.to_s.scrub('')
+      results[key] = 0 unless results[key]
+      results[key] += 1
+    end
+    results
+  end
+
+  def field_count_datafield(field:, opts:)
     if opts[:subfields]
-      record.fields.each do |field|
-        tag = field.tag.scrub('')
-        case tag
-        when /^00/
-          results[tag] = 0 unless results[tag]
-          results[tag] += 1
-        else
-          field.subfields.each do |subfield|
-            key = tag + subfield.code.to_s.scrub('')
-            results[key] = 0 unless results[key]
-            results[key] += 1
-          end
-        end
-      end
+      field_count_subfields(field)
     else
-      record.fields.each do |field|
-        tag = field.tag.scrub('')
-        results[tag] = 0 unless results[tag]
-        results[tag] += 1
+      { field.tag.scrub('') => 1 }
+    end
+  end
+
+  def field_count_append_datafields(record:, opts:, results:)
+    record.fields.each do |field|
+      next unless field.instance_of?(MARC::DataField)
+
+      field_count_datafield(field: field, opts: opts).each do |key, number|
+        results[key] ||= 0
+        results[key] += number
       end
     end
     results
+  end
+
+  ### Count fields in a record; set :subfields to True to drill down to subfields
+  def field_count(record, opts = {})
+    results = field_count_controlfields(record)
+    field_count_append_datafields(record: record, opts: opts, results: results)
   end
 
   def invalid_xml_fix_datafield(field)
@@ -294,7 +315,7 @@ module MarcCleanup
       record.fields[field_index] = if field.instance_of?(MARC::DataField)
                                      invalid_xml_fix_datafield(field)
                                    else
-                                      invalid_xml_fix_controlfield(field)
+                                     invalid_xml_fix_controlfield(field)
                                    end
     end
     record
@@ -474,8 +495,7 @@ module MarcCleanup
 
   def remove_duplicate_fields(record)
     field_array = []
-    record.fields.reverse_each do |field|
-      field_index = record.fields.index(field)
+    record.fields.each_with_index do |field, field_index|
       string = field.to_s
       if field_array.include?(string)
         record.fields.delete_at(field_index)
@@ -1045,7 +1065,7 @@ module MarcCleanup
     type = record.leader[6]
     blvl = record.leader[7]
     form = bib_form(record)
-    return true unless %w[\  a b c d f o q r s].include?(form)
+    return true unless [' ', 'a', 'b', 'c', 'd', 'f', 'o', 'q', 'r', 's'].include?(form)
 
     f245 = record['245']
     return true unless f245 && (f245['a'] || f245['k'])
@@ -1096,19 +1116,17 @@ module MarcCleanup
   def validate_marc(record:, schema: RECORD_SCHEMA)
     hash = {}
     hash[:multiple_1xx] = multiple_1xx?(record)
-    hash[:has_130_240] = has_130_240?(record)
-    hash[:multiple_no_245] = multiple_no_245?(record)
+    hash[:has_f130_f240] = has_f130_f240?(record)
+    hash[:multiple_no_f245] = multiple_no_f245?(record)
     hash[:non_repeatable_field_errors] = non_repeatable_field_errors?(record: record, schema: schema)
     hash[:invalid_tags] = record.fields.select do |field|
-      field.class == MARC::DataField &&
-      field.tag[0] != '9' &&
-      !schema.keys.include?(field.tag)
-    end.map { |f| f.tag }
+      field.tag[0] != '9' && !schema.keys.include?(field.tag)
+    end.map(&:tag)
     hash[:invalid_fields] = {}
     record.fields('010'..'899').each do |field|
       next unless schema[field.tag]
 
-      field_num = record.fields(field.tag).index { |f| field }
+      field_num = record.fields(field.tag).index { |_f| field }
       field_num += 1
       tag = field.tag
       if field.tag == '880'
@@ -1137,12 +1155,12 @@ module MarcCleanup
       next unless schema[tag]
 
       unless schema[tag]['ind1'].include?(field.indicator1.to_s)
-        error = "Invalid indicator1 value #{field.indicator1.to_s} in instance #{field_num}"
+        error = "Invalid indicator1 value #{field.indicator1} in instance #{field_num}"
         hash[:invalid_fields][field.tag] ||= []
         hash[:invalid_fields][field.tag] << error
       end
       unless schema[tag]['ind2'].include?(field.indicator2.to_s)
-        error = "Invalid indicator2 value #{field.indicator2.to_s} in instance #{field_num}"
+        error = "Invalid indicator2 value #{field.indicator2} in instance #{field_num}"
         hash[:invalid_fields][field.tag] ||= []
         hash[:invalid_fields][field.tag] << error
       end
@@ -1171,10 +1189,7 @@ module MarcCleanup
   end
 
   def rda_convention_correction(record)
-    if rda_convention_mismatch(record) == true
-      record.leader[18] = "i"
-    end
+    record.leader[18] = 'i' if rda_convention_mismatch(record) == true
     record
   end
-
 end
