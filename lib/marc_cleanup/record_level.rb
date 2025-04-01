@@ -349,10 +349,10 @@ module MarcCleanup
     record = bad_utf8_scrub(record)
     record = field_delete_by_tags(record: record, tags: %w[959 856])
     record = leaderfix(record)
-    record = extra_space_fix(record)
     record = invalid_xml_fix(record)
     record = composed_chars_normalize(record)
     record = tab_newline_fix(record)
+    record = extra_space_fix(record)
     empty_subfield_fix(record)
   end
 
