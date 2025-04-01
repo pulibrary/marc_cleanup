@@ -303,7 +303,7 @@ module MarcCleanup
     false
   end
 
-  def multiple_no_245?(record)
+  def multiple_no_f245?(record)
     record.fields('245').size != 1
   end
 
@@ -339,7 +339,7 @@ module MarcCleanup
     end
   end
 
-  def has_130_240?(record)
+  def has_f130_f240?(record)
     (%w[130 240] - record.tags).empty?
   end
 
