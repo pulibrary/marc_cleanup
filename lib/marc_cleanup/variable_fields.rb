@@ -339,7 +339,7 @@ module MarcCleanup
     end
   end
 
-  def has_f130_f240?(record)
+  def f130_f240?(record)
     (%w[130 240] - record.tags).empty?
   end
 

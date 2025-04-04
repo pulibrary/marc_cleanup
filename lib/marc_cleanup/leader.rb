@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MarcCleanup
   def leader_errors?(record)
     error = false
@@ -43,7 +45,8 @@ module MarcCleanup
     multipart = leader[19]
     multipart.gsub!(/[^abc\s]/, ' ') # Assume it is not a multipart resource
     final4 = '4500'
-    fixed_leader = [length, status, record_type, bib_level, control, character_scheme, indsub, base_addr, enc_level, cat_form, multipart, final4].join
+    fixed_leader = [length, status, record_type, bib_level, control, character_scheme, indsub, base_addr, enc_level,
+                    cat_form, multipart, final4].join
     record.leader = fixed_leader
     record
   end

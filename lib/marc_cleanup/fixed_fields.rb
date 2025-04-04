@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MarcCleanup
-  def no_001?(record)
+  def no_f001?(record)
     record['001'].nil?
   end
 
