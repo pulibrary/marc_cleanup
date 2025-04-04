@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ### Derived from
 ###   https://github.com/reeset/marcrulesfiles/blob/master/marcrules.txt;
 ### 1xx and required 245 rules (global rules) were removed from the file and
@@ -14,15 +16,16 @@
 module MarcCleanup
   def generate_field_yaml(source:, output:)
     hash = {}
-    while line = source.gets
+    while (line = source.gets)
       line.chomp!
-      if line == ''
+      case line
+      when ''
         output.puts("'#{hash[:tag]}':")
         output.puts("  repeat: #{hash[:field_repeat]}")
         output.puts("  description: #{hash[:field_description]}")
-        output.puts("  ind1: #{hash[:ind1].to_s}")
-        output.puts("  ind2: #{hash[:ind2].to_s}")
-        output.puts("  subfields:")
+        output.puts("  ind1: #{hash[:ind1]}")
+        output.puts("  ind2: #{hash[:ind2]}")
+        output.puts('  subfields:')
         hash[:subfields].each do |subfield|
           output.puts("    '#{subfield[:code]}':")
           output.puts("      repeat: #{subfield[:subf_repeat]}")
@@ -30,13 +33,13 @@ module MarcCleanup
         end
         output.puts('')
         hash = {}
-      elsif line =~ /^[0-9]{3}/
+      when /^[0-9]{3}/
         parts = line.split("\t")
         hash[:tag] = parts[0]
         repeat = parts[1]
-        hash[:field_repeat] = repeat == 'R' ? true : false
+        hash[:field_repeat] = repeat == 'R'
         hash[:field_description] = parts[2]
-      elsif line =~ /^ind1/
+      when /^ind1/
         parts = line.split("\t")
         values = parts[1]
         if values == 'blank'
@@ -45,7 +48,7 @@ module MarcCleanup
           values.gsub!(/b/, ' ')
           hash[:ind1] = values.chars
         end
-      elsif line =~ /^ind2/
+      when /^ind2/
         parts = line.split("\t")
         values = parts[1]
         if values == 'blank'
@@ -54,13 +57,13 @@ module MarcCleanup
           values.gsub!(/b/, ' ')
           hash[:ind2] = values.chars
         end
-      elsif line =~ /^[0-9a-z]\t/
+      when /^[0-9a-z]\t/
         hash[:subfields] ||= []
         parts = line.split("\t")
         s_hash = {}
         s_hash[:code] = parts[0]
         subf_repeat = parts[1]
-        s_hash[:subf_repeat] = subf_repeat == 'R' ? true : false
+        s_hash[:subf_repeat] = subf_repeat == 'R'
         s_hash[:subf_description] = parts[2]
         hash[:subfields] << s_hash
       end

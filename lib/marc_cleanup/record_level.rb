@@ -1096,7 +1096,7 @@ module MarcCleanup
   def validate_marc(record:, schema: RECORD_SCHEMA)
     hash = {}
     hash[:multiple_1xx] = multiple_1xx?(record)
-    hash[:has_f130_f240] = has_f130_f240?(record)
+    hash[:f130_f240] = f130_f240?(record)
     hash[:multiple_no_f245] = multiple_no_f245?(record)
     hash[:non_repeatable_field_errors] = non_repeatable_field_errors?(record: record, schema: schema)
     hash[:invalid_tags] = record.fields.select do |field|
