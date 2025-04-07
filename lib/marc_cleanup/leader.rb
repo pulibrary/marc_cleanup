@@ -1,21 +1,37 @@
 # frozen_string_literal: true
 
 module MarcCleanup
+  LEADER_REGEX = /
+    [0-9]{5} # record length
+    [acdnp] # record status
+    [ac-gijkmoprt] # type of record
+    [a-dims] # bibliographic level
+    [a\s]{2} # type of control and character coding scheme
+    22 # indicator and subfield code count
+    [0-9]{5} # base address of data
+    [1-578uzIJM\s] # encoding level
+    [acinu\s] # descriptive cataloging form
+    [abc\s] # multipart resource record level
+    4500 # final 4 characters
+  /x
+
   def leader_errors?(record)
-    error = false
-    leader = record.leader
-    error = true if leader[0..4] =~ /[^0-9]/ # record length
-    error = true if leader[5] =~ /[^acdnp]/ # record status
-    error = true if leader[6] =~ /[^ac-gijkmoprt]/ # type of record
-    error = true if leader[7] =~ /[^a-dims]/ # bibliographic level
-    error = true if leader[8..9] =~ /[^a\s]/ # type of control and coding scheme
-    error = true if leader[10..11] != '22' # indicator and subfield count
-    error = true if leader[12..16] =~ /[^0-9]/ # base address of data
-    error = true if leader[17] =~ /[^1-578uzIJM\s]/ # OCLC encoding levels
-    error = true if leader[18] =~ /[^acinu\s]/ # descriptive cataloging form
-    error = true if leader[19] =~ /[^abc\s]/ # multipart resource record level
-    error = true if leader[20..23] != '4500' # fixed values
-    error
+    return true unless record.leader =~ LEADER_REGEX
+
+    false
+  end
+
+  def leader_substitutions(leader)
+    pieces = /^(.{5})(.)(.{2})(.)(.)(.{2})(.{5})(.)(.)(.)(.*)$/.match(leader)
+                                                               .to_a
+    pieces[2].gsub!(/[^acdnp]/, 'n') # assume it is a new record
+    pieces[4].gsub!(/[^a\s]/, ' ') # assume not archival
+    pieces[6] = '22' # indicator count and subfield code length are fixed
+    pieces[8].gsub!(/[^1-578uzIJM\s]/, 'u') # assume unknown encoding level
+    pieces[9].gsub!(/[^acinu\s]/, 'u') # assume unknown cataloging form
+    pieces[10].gsub!(/[^abc\s]/, ' ') # assume not multipart
+    pieces[11] = '4500' # lengths of leader portions are fixed
+    pieces
   end
 
   ### Replaces obsolete values with the current value;
@@ -24,30 +40,8 @@ module MarcCleanup
   #     normalize the indicator length and subfield code length to 2;
   #     make the last 4 positions the only possible value of '4500'
   def leaderfix(record)
-    correct_leader = /[0-9]{5}[acdnp][ac-gijkmoprt][a-dims][a\s]{2}22[0-9]{5}[1-578uzIJM\s][acinu\s][abc\s]4500/
-    leader = record.leader
-    return record if leader =~ correct_leader
-
-    length = leader[0..4]
-    status = leader[5]
-    status.gsub!(/[^acdnp]/, 'n') # Assume it is a new record
-    record_type = leader[6]
-    bib_level = leader[7]
-    control = leader[8]
-    control.gsub!(/[^a\s]/, ' ') # Assume it is not an archival description
-    character_scheme = leader[9] # Not assuming it's Unicode or MARC-8
-    indsub = '22'
-    base_addr = leader[12..16]
-    enc_level = leader[17]
-    enc_level.gsub!(/[^1-578uzIJM\s]/, 'u') # If not valid, level is unknown
-    cat_form = leader[18]
-    cat_form.gsub!(/[^acinu\s]/, 'u') # If not valid, cataloging form is unknown
-    multipart = leader[19]
-    multipart.gsub!(/[^abc\s]/, ' ') # Assume it is not a multipart resource
-    final4 = '4500'
-    fixed_leader = [length, status, record_type, bib_level, control, character_scheme, indsub, base_addr, enc_level,
-                    cat_form, multipart, final4].join
-    record.leader = fixed_leader
+    leader_pieces = leader_substitutions(record.leader)
+    record.leader = leader_pieces[1..].join
     record
   end
 end
