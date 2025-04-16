@@ -33,11 +33,9 @@ module MarcCleanup
 
   ### Calculate check digit for ISBN-10
   def checkdigit_isbn10(stem)
-    int_index = 0
     int_sum = 0
-    stem.each_char do |digit|
-      int_sum += digit.to_i * (10 - int_index)
-      int_index += 1
+    stem.each_char.with_index do |char, index|
+      int_sum += char.to_i * (10 - index)
     end
     mod = (11 - (int_sum % 11)) % 11
     mod == 10 ? 'X' : mod.to_s
@@ -45,52 +43,53 @@ module MarcCleanup
 
   ### Calculate check digit for ISBN-13
   def checkdigit_isbn13(stem)
-    int_index = 0
     int_sum = 0
-    stem.each_char do |digit|
-      int_sum += int_index.even? ? digit.to_i : digit.to_i * 3
-      int_index += 1
+    stem.each_char.with_index do |char, index|
+      digit = char.to_i
+      int_sum += index.even? ? digit : digit * 3
     end
     ((10 - (int_sum % 10)) % 10).to_s
   end
 
   ### Normalize ISBN-13
   def isbn13_normalize(raw_isbn)
-    int_sum = 0
     stem = raw_isbn[0..11]
     return nil if stem =~ /\D/
 
-    int_index = 0
-    stem.each_char do |digit|
-      int_sum += int_index.even? ? digit.to_i : digit.to_i * 3
-      int_index += 1
-    end
     checkdigit = checkdigit_isbn13(stem)
-    return nil if raw_isbn[12] && raw_isbn[12] != checkdigit
+    if raw_isbn[12] && raw_isbn[12] != checkdigit
+      nil
+    else
+      stem + checkdigit
+    end
+  end
 
-    stem + checkdigit
+  def initial_clean_isbn(isbn)
+    isbn.delete('-')
+        .delete('\\')
+        .gsub(/\([^)]*\)/, '')
+        .gsub(/^(.*)\$[cq].*$/, '\1')
+        .gsub(/^\D+([0-9].*)$/, '\1')
+  end
+
+  def clean_isbn_13digit_vs_10digit(isbn)
+    if isbn =~ /^978/
+      isbn.gsub(/^(978[0-9 ]+).*$/, '\1')
+          .delete(' ')
+    else
+      isbn.gsub(/([0-9])\s*([0-9]{4})\s*([0-9]{4})\s*([0-9xX]).*$/, '\1\2\3\4')
+    end
   end
 
   def clean_isbn(isbn)
-    raw_isbn = isbn.dup
-    raw_isbn.delete!('-')
-    raw_isbn.delete!('\\')
-    raw_isbn.gsub!(/\([^)]*\)/, '')
-    raw_isbn.gsub!(/^(.*)\$c.*$/, '\1')
-    raw_isbn.gsub!(/^(.*)\$q.*$/, '\1')
-    raw_isbn.gsub!(/^\D+([0-9].*)$/, '\1')
-    if raw_isbn =~ /^978/
-      raw_isbn.gsub!(/^(978[0-9 ]+).*$/, '\1')
-      raw_isbn.delete!(' ')
+    new_isbn = initial_clean_isbn(isbn)
+    new_isbn = clean_isbn_13digit_vs_10digit(new_isbn)
+    new_isbn = new_isbn.gsub(/^([0-9]{9,13}[xX]?)[^0-9xX].*$/, '\1')
+                       .gsub(/^([0-9]+?)\D.*$/, '\1')
+    if new_isbn.length.between?(7, 8) && new_isbn =~ /^[0-9]+$/
+      new_isbn.ljust(9, '0')
     else
-      raw_isbn.gsub!(/([0-9])\s*([0-9]{4})\s*([0-9]{4})\s*([0-9xX]).*$/, '\1\2\3\4')
-    end
-    raw_isbn.gsub!(/^([0-9]{9,13}[xX]?)[^0-9xX].*$/, '\1')
-    raw_isbn.gsub!(/^([0-9]+?)\D.*$/, '\1')
-    if raw_isbn.length.between?(7, 8) && raw_isbn =~ /^[0-9]+$/
-      raw_isbn.ljust(9, '0')
-    else
-      raw_isbn
+      new_isbn
     end
   end
 
@@ -109,20 +108,25 @@ module MarcCleanup
     end
   end
 
+  def modify_invalid_isbn_subfield(subfield)
+    normalized_isbn = isbn_normalize(subfield.value)
+    if normalized_isbn
+      MARC::Subfield.new(subfield.code, normalized_isbn)
+    else
+      MARC::Subfield.new('z', subfield.value)
+    end
+  end
+
   ### If the ISBN is invalid, change the subfield code to z
   ### Otherwise, replace ISBN with normalized ISBN
   def move_invalid_isbn(record)
-    record.fields('020').each do |f020|
-      f020.subfields.each do |subfield|
+    record.fields('020').each do |field|
+      field.subfields.each do |subfield|
         next unless subfield.code == 'a'
 
-        isbn = subfield.value
-        normalized_isbn = isbn_normalize(isbn)
-        if normalized_isbn
-          subfield.value = normalized_isbn
-        else
-          subfield.code = 'z'
-        end
+        new_subfield = modify_invalid_isbn_subfield(subfield)
+        subfield.value = new_subfield.value
+        subfield.code = new_subfield.code
       end
     end
     record
@@ -158,10 +162,11 @@ module MarcCleanup
   end
 
   def auth_code_error?(record)
-    return false unless record['042']
-    return true if record.fields('042').size > 1
+    f042 = record.fields('042')
+    return false if f042.empty?
+    return true if f042.size > 1
 
-    record['042'].subfields.each do |subfield|
+    f042.first.subfields.each do |subfield|
       next if subfield.code != 'a'
       return true unless auth_codes_f042.include?(subfield.value)
     end
@@ -253,7 +258,8 @@ module MarcCleanup
 
   def extra_space_fix_field(field:, skip_subfields: [])
     field.subfields.each do |subfield|
-      next if skip_subfields.include?(subfield.code) || subfield.value.nil?
+      next if skip_subfields.include?(subfield.code)
+      next unless subfield.value
 
       subfield.value = extra_space_gsub(subfield.value.dup)
     end
@@ -279,28 +285,24 @@ module MarcCleanup
   end
 
   def multiple_no_040b?(record)
-    f040 = record.fields('040')
-    return true if f040.size != 1
+    return true if multiple_no_040?(record)
 
-    f040 = f040.first
-    b040 = f040.subfields.select { |subfield| subfield.code == 'b' }
-    return true if b040.size != 1
+    f040b = record['040'].subfields.select { |subfield| subfield.code == 'b' }
+    return true if f040b.size != 1
 
-    b040.first.value.match?(/^\s*$/)
+    f040b.first.value.match?(/^\s*$/)
   end
 
   def f046_errors?(record)
     subf_codes = %w[b c d e]
     subf_a_values = %w[r s p t x q n i k r m t x n]
     f046 = record.fields('046')
-    return false if f046.empty?
-
-    f046.each do |field|
+    f046.any? do |field|
       codes = field.subfields.map(&:code)
-      return true if field['a'] && !subf_a_values.include?(field['a'])
-      return true if field['a'].nil? && (subf_codes & codes).size.positive?
+      field_a = field['a']
+      (field_a && !subf_a_values.include?(field_a)) ||
+        (field_a.to_s.empty? && (subf_codes & codes).size.positive?)
     end
-    false
   end
 
   def multiple_no_f245?(record)
@@ -433,14 +435,13 @@ module MarcCleanup
   end
 
   def subf_0_uri?(record)
-    record.fields.each do |field|
-      next unless field.instance_of?(MARC::DataField) && field.tag =~ /^[^9]/ && field['0']
-
-      field.subfields.each do |subfield|
-        return true if subfield.code == '0' && subfield.value =~ /^\(uri\)/
-      end
+    record.fields.any? do |field|
+      field.instance_of?(MARC::DataField) &&
+        field.tag =~ /^[^9]/ &&
+        field.subfields.any? do |subfield|
+          subfield.code == '0' && subfield.value =~ /^\(uri\)/
+        end
     end
-    false
   end
 
   ### Replace empty indicators with a space;
@@ -465,7 +466,7 @@ module MarcCleanup
     record.fields.each do |field|
       next unless field.instance_of?(MARC::DataField)
 
-      field.subfields.delete_if { |subfield| subfield.value.nil? || subfield.value.empty? }
+      field.subfields.delete_if { |subfield| subfield.value.to_s.empty? }
     end
     record.fields.delete_if { |field| field.instance_of?(MARC::DataField) && field.subfields.empty? }
     record
@@ -474,10 +475,10 @@ module MarcCleanup
   ### Remove the (uri) prefix from subfield 0s
   def subf_0_uri_fix(record)
     record.fields.each do |field|
-      next unless field.instance_of?(MARC::DataField) && field.tag[0] != '9' && field['0']
+      next unless field.instance_of?(MARC::DataField) && field.tag[0] != '9'
 
       field.subfields.each do |subfield|
-        next unless subfield.code == '0' && subfield.value =~ /^\(uri\)/
+        next unless subfield.code == '0'
 
         subfield.value = subfield.value.dup.delete_prefix('(uri)')
       end
@@ -490,41 +491,42 @@ module MarcCleanup
     return record unless record.fields('040').size == 1
 
     f040 = record['040']
-    field_index = record.fields.index(f040)
-    b040 = f040.subfields.select { |subfield| subfield.code == 'b' }
-    return record unless b040.empty?
+    return record if f040['b']
 
-    subf_codes = f040.subfields.map(&:code)
-    subf_index = if f040['a']
-                   (subf_codes.index { |i| i == 'a' }) + 1
-                 else
-                   0
-                 end
+    field_index = record.fields.index(f040)
+    subf_index = f040.subfields.index('a').to_i + 1
     subf_b = MARC::Subfield.new('b', 'eng')
     record.fields[field_index].subfields.insert(subf_index, subf_b)
     record
   end
 
+  def split_f041_subfield(subfield)
+    subfields = []
+    if (subfield.value.size % 3).zero?
+      subfield.value.scan(/.../).each do |language|
+        subfields.append(MARC::Subfield.new(subfield.code, language))
+      end
+    else
+      subfields.append(MARC::Subfield.new(subfield.code, subfield.value))
+    end
+    subfields
+  end
+
+  def split_f041_field(field)
+    new_field = MARC::DataField.new('041', field.indicator1, field.indicator2)
+    field.subfields.each do |subfield|
+      new_subfields = split_f041_subfield(subfield)
+      new_subfields.each { |new_subfield| new_field.append(new_subfield) }
+    end
+    new_field
+  end
+
   ### Split up subfields that contain multiple 3-letter language codes
   def fix_f041(record)
     f041 = record.fields('041')
-    return record if f041.empty?
-
     f041.each do |field|
       f_index = record.fields.index(field)
-      new_field = MARC::DataField.new('041', field.indicator1, field.indicator2)
-      field.subfields.each do |subfield|
-        code = subfield.code
-        val = subfield.value
-        if (val.size % 3).zero?
-          langs = val.scan(/.../)
-          langs.each do |lang|
-            new_field.append(MARC::Subfield.new(code, lang))
-          end
-        else
-          new_field.append(MARC::Subfield.new(code, val))
-        end
-      end
+      new_field = split_f041_field(field)
       record.fields[f_index] = new_field
     end
     record
