@@ -241,32 +241,50 @@ module MarcCleanup
     record
   end
 
-  ### Count fields in a record; set :subfields to True to drill down to subfields
-  def field_count(record, opts = {})
+  def subfield_count_datafield(field)
     results = {}
-    if opts[:subfields]
-      record.fields.each do |field|
-        tag = field.tag.scrub('')
-        case tag
-        when /^00/
-          results[tag] = 0 unless results[tag]
-          results[tag] += 1
-        else
-          field.subfields.each do |subfield|
-            key = tag + subfield.code.to_s.scrub('')
-            results[key] = 0 unless results[key]
-            results[key] += 1
-          end
-        end
-      end
-    else
-      record.fields.each do |field|
-        tag = field.tag.scrub('')
-        results[tag] = 0 unless results[tag]
-        results[tag] += 1
+    field.subfields.each do |subfield|
+      key = field.tag + subfield.code.to_s.scrub('')
+      results[key] ||= 0
+      results[key] += 1
+    end
+    results
+  end
+
+  def field_count_controlfields(fields)
+    results = {}
+    fields.each do |field|
+      results[field.tag] ||= 0
+      results[field.tag] += 1
+    end
+    results
+  end
+
+  def field_count_datafields(fields:, opts:)
+    results = {}
+    fields.each do |field|
+      if opts[:subfields]
+        results.merge!(subfield_count_datafield(field))
+      else
+        results[field.tag] ||= 0
+        results[field.tag] += 1
       end
     end
     results
+  end
+
+  ### Count fields in a record; set :subfields to True to drill down to subfields
+  def field_count(record, opts = {})
+    record.fields.each { |field| field.tag = field.tag.scrub('') }
+    controlfields = record.fields.select do |field|
+      field.instance_of?(MARC::ControlField)
+    end
+    controlfield_count = field_count_controlfields(controlfields)
+    datafields = record.fields.select do |field|
+      field.instance_of?(MARC::DataField)
+    end
+    controlfield_count.merge(field_count_datafields(fields: datafields,
+                                                    opts: opts))
   end
 
   def invalid_xml_fix_datafield(field)
