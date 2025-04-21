@@ -4469,12 +4469,12 @@
     'v':
       repeat: false
       description: Volume number/sequential designation
-    'x':
-      repeat: false
-      description: International Standard Serial Number
     'w':
       repeat: true
       description: Bibliographic record control number
+    'x':
+      repeat: false
+      description: International Standard Serial Number
     '0':
       repeat: true
       description: Authority record control number
@@ -4503,12 +4503,21 @@
     'x':
       repeat: false
       description: International Standard Serial Number
+    'y':
+      repeat: true
+      description: Incorrect ISSN
+    'z':
+      repeat: true
+      description: Cancelled ISSN
     '3':
       repeat: false
       description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4531,6 +4540,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4550,6 +4562,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4581,6 +4596,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4628,6 +4646,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4656,9 +4677,21 @@
     'f':
       repeat: true
       description: Standard terminology for access restiction
+    'g':
+      repeat: true
+      description: Availability date
+    'q':
+      repeat: false
+      description: Supplying agency
     'u':
       repeat: true
       description: Uniform Resource Identifier
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
@@ -4677,7 +4710,7 @@
 
 '507':
   repeat: false
-  description: SCALE NOTE FOR GRAPHIC MATERIAL
+  description: SCALE NOTE FOR VISUAL MATERIALS
   ind1: [" "]
   ind2: [" "]
   subfields:
@@ -4703,9 +4736,15 @@
     'a':
       repeat: false
       description: Creation/production credits note
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4725,6 +4764,9 @@
     'c':
       repeat: false
       description: Location within source
+    'u':
+      repeat: true
+      description: Uniform Resource Identifier
     'x':
       repeat: false
       description: International Standard Serial Number
@@ -4734,6 +4776,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4747,6 +4792,9 @@
     'a':
       repeat: false
       description: Participant or performer note
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
@@ -4840,6 +4888,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4869,12 +4920,33 @@
     'a':
       repeat: false
       description: Date/time and place of an event note
+    'd':
+      repeat: true
+      description: Date of event
+    'o':
+      repeat: true
+      description: Other event information
+    'p':
+      repeat: true
+      description: Place of event
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of term
     '3':
       repeat: false
       description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4906,6 +4978,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5054,6 +5129,25 @@
       repeat: true
       description: Field link and sequence number
 
+'532':
+  repeat: true
+  description: ACCESSIBILITY NOTE
+  ind1: ["0", "1", "2", "8"]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Summary of accessibility
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
 '533':
   repeat: true
   description: REPRODUCTION NOTE
@@ -5084,6 +5178,9 @@
     'n':
       repeat: true
       description: Note about reproduction
+    'y':
+      repeat: true
+      description: Data provenance
     '3':
       repeat: false
       description: Materials specified
@@ -5148,6 +5245,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
@@ -5269,9 +5369,27 @@
     'd':
       repeat: false
       description: Authorized users
+    'f':
+      repeat: true
+      description: Standardized terminology for use and reproduction rights
+    'g':
+      repeat: true
+      description: Availability date
+    'q':
+      repeat: false
+      description: Supplying agency
     'u':
       repeat: true
       description: Uniform Resource Identifier
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of term
     '3':
       repeat: false
       description: Materials specified
@@ -5382,6 +5500,9 @@
     'o':
       repeat: false
       description: Research date
+    'p':
+      repeat: true
+      description: Country of publication or creation
     'q':
       repeat: false
       description: Assigning agency
@@ -5478,6 +5599,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5510,6 +5634,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5608,6 +5735,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5752,6 +5882,18 @@
     'a':
       repeat: false
       description: Methodology note
+    'b':
+      repeat: true
+      description: Controlled term
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of term
     '6':
       repeat: false
       description: Linkage
@@ -5768,6 +5910,9 @@
     'a':
       repeat: false
       description: Linking entry complexity note
+    '5':
+      repeat: false
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
@@ -5863,6 +6008,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
