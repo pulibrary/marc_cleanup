@@ -1107,7 +1107,7 @@ module MarcCleanup
     record.fields('010'..'899').each do |field|
       next unless schema[field.tag]
 
-      field_num = record.fields(field.tag).index { |_f| field }
+      field_num = record.fields(field.tag).index(field)
       field_num += 1
       tag = field.tag
       if field.tag == '880'
@@ -1122,6 +1122,10 @@ module MarcCleanup
           hash[:invalid_fields][field.tag] << error
         elsif field['6'] !~ /^[0-9]{3}-[0-9]+/
           error = "Invalid field linkage in instance #{field_num} of 880"
+          hash[:invalid_fields][field.tag] ||= []
+          hash[:invalid_fields][field.tag] << error
+        elsif field['6'] =~ /^00[0-9]-[0-9]+/
+          error = "Invalid linked fixed field tag in instance #{field_num} of 880"
           hash[:invalid_fields][field.tag] ||= []
           hash[:invalid_fields][field.tag] << error
         else

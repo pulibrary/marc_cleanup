@@ -190,6 +190,26 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:invalid_fields]['880']).to include error_message
     end
   end
+  describe '880 field with valid linkage to a fixed field' do
+    let(:fields) do
+      [
+        { '880' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [{ 'a' => '500 field subf a' },
+                                     { '6' => '500-00' }] } },
+        { '880' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [{ 'a' => 'a' },
+                                     { '6' => '007-01' }] } }
+      ]
+    end
+    let(:record) { MARC::Record.new_from_hash('fields' => fields) }
+    it 'reports an error for a linked fixed field' do
+      record_errors = MarcCleanup.validate_marc(record: record)
+      error_message = 'Invalid linked fixed field tag in instance 2 of 880'
+      expect(record_errors[:invalid_fields]['880']).to include error_message
+    end
+  end
   describe '880 field with valid linkage and with invalid linked tag' do
     let(:fields) do
       [

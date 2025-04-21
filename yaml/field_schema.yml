@@ -2701,6 +2701,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -2752,6 +2755,15 @@
     'b':
       repeat: false
       description: Date of current publication frequency
+    '0':
+      repeat: false
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source
     '6':
       repeat: false
       description: Linkage
@@ -2771,6 +2783,15 @@
     'b':
       repeat: false
       description: Dates of former publication frequency
+    '0':
+      repeat: false
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source
     '6':
       repeat: false
       description: Linkage
@@ -2867,6 +2888,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -2972,6 +2996,9 @@
     'k':
       repeat: true
       description: Layout
+    'l':
+      repeat: true
+      description: Binding
     'm':
       repeat: true
       description: Book format
@@ -2981,6 +3008,12 @@
     'o':
       repeat: true
       description: Polarity
+    'p':
+      repeat: true
+      description: Illustrative content
+    'q':
+      repeat: true
+      description: Reduction ratio designator
     '0':
       repeat: true
       description: Authority record control number or standard number
@@ -3085,6 +3118,9 @@
     'm':
       repeat: false
       description: Azimuthal angle
+    'n':
+      repeat: false
+      description: Azimuth measure point longitude or straight vertical longitude from pole
     'o':
       repeat: false
       description: Landsat number and path number
@@ -3192,9 +3228,18 @@
     'h':
       repeat: true
       description: Special playback characteristics
+    'i':
+      repeat: true
+      description: Sound content
+    'j':
+      repeat: true
+      description: Original capture and storage technique
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
@@ -3210,7 +3255,7 @@
 
 '345':
   repeat: true
-  description: PROJECTION CHARACTERISTICS OF MOVING IMAGE
+  description: MOVING IMAGE CHARACTERISTICS
   ind1: [" "]
   ind2: [" "]
   subfields:
@@ -3220,9 +3265,18 @@
     'b':
       repeat: true
       description: Projection speed
+    'c':
+      repeat: true
+      description: Aspect ratio value
+    'd':
+      repeat: true
+      description: Aspect ratio designator
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
@@ -3251,6 +3305,9 @@
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
@@ -3291,6 +3348,9 @@
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
@@ -3306,7 +3366,7 @@
 
 '348':
   repeat: true
-  description: Format of Notated Music
+  description: NOTATED MUSIC CHARACTERISTICS
   ind1: [" "]
   ind2: [" "]
   subfields:
@@ -3316,9 +3376,18 @@
     'b':
       repeat: true
       description: Format of notated music code
+    'c':
+      repeat: true
+      description: Form of musical notation term
+    'd':
+      repeat: true
+      description: Form of musical notation code
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
@@ -3328,6 +3397,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3388,7 +3460,7 @@
       repeat: false
       description: Indirect reference description
     'q':
-      repeat: true
+      repeat: false
       description: Format of the digital image
     '6':
       repeat: false
@@ -3489,6 +3561,64 @@
     '6':
       repeat: false
       description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'361':
+  repeat: true
+  description: STRUCTURED OWNERSHIP AND CUSTODIAL HISTORY
+  ind1: [" ", "0", "1"]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Name
+    'f':
+      repeat: true
+      description: Ownership and custodial history evidence term
+    'k':
+      repeat: false
+      description: Formatted date
+    'l':
+      repeat: false
+      description: Date
+    'o':
+      repeat: true
+      description: Type of ownership and custodial history information
+    's':
+      repeat: false
+      description: Shelf mark of copy described
+    'u':
+      repeat: true
+      description: Uniform Resource Identifier
+    'x':
+      repeat: true
+      description: Nonpublic note
+    'y':
+      repeat: false
+      description: Identifier of the copy described
+    'z':
+      repeat: true
+      description: Public note
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '3':
+      repeat: false
+      description: Materials specified
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3689,6 +3819,9 @@
     'g':
       repeat: true
       description: Place of origin of work
+    'i':
+      repeat: true
+      description: Relationship information
     's':
       repeat: false
       description: Start period
@@ -3703,13 +3836,25 @@
       description: Source of information
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3726,12 +3871,24 @@
     'l':
       repeat: true
       description: Language term
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3747,13 +3904,22 @@
       description: Form of work
     '0':
       repeat: true
-      description: Record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3775,13 +3941,22 @@
       description: Source of information
     '0':
       repeat: true
-      description: Record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3789,7 +3964,7 @@
 '382':
   repeat: true
   description: MEDIUM OF PERFORMANCE
-  ind1: [" ", "0", "1"]
+  ind1: [" ", "0", "1", "2", "3"]
   ind2: [" ", "0", "1"]
   subfields:
     'a':
@@ -3837,6 +4012,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3844,7 +4022,7 @@
 '383':
   repeat: true
   description: NUMERIC DESIGNATION OF MUSICAL WORK
-  ind1: [" "]
+  ind1: [" ", "0", "1"]
   ind2: [" "]
   subfields:
     'a':
@@ -3865,25 +4043,43 @@
     '2':
       repeat: false
       description: Source
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
-      repeat: false
+      repeat: true
       description: Field link and sequence number
 
 '384':
   repeat: false
   description: KEY
-  ind1: [" ", "0", "1"]
+  ind1: [" ", "0", "1", "2"]
   ind2: [" "]
   subfields:
     'a':
       repeat: false
       description: Key
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3909,6 +4105,9 @@
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
@@ -3918,6 +4117,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3934,6 +4136,9 @@
     'b':
       repeat: true
       description: Creator/contributor code
+    'i':
+      repeat: true
+      description: Relationship information
     'm':
       repeat: false
       description: Demographic group term
@@ -3943,15 +4148,91 @@
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
     '3':
       repeat: false
       description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'387':
+  repeat: true
+  description: REPRESENTATIVE EXPRESSION CHARACTERISTICS
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: true
+      description: Aspect ratio of representative expression
+    'b':
+      repeat: true
+      description: Color content of representative expression
+    'c':
+      repeat: true
+      description: Content type of representative expression
+    'd':
+      repeat: true
+      description: Date of capture of representative expression
+    'e':
+      repeat: true
+      description: Date of representative expression
+    'f':
+      repeat: true
+      description: Duration of representative expression
+    'g':
+      repeat: true
+      description: Intended audience of representative expression
+    'h':
+      repeat: true
+      description: Language of representative expression
+    'i':
+      repeat: true
+      description: Place of capture of representative expression
+    'j':
+      repeat: true
+      description: Projection of cartographic content of representative expression
+    'k':
+      repeat: true
+      description: Scale of representative expression
+    'l':
+      repeat: true
+      description: Script of representative expression
+    'm':
+      repeat: true
+      description: Sound content of representative expression
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of term
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3968,6 +4249,9 @@
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
@@ -3977,6 +4261,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
