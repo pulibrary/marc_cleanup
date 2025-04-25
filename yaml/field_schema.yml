@@ -6200,6 +6200,9 @@
     '0':
       repeat: true
       description: Authority record control number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -6212,6 +6215,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -6291,6 +6297,9 @@
     '0':
       repeat: true
       description: Authority record control number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -6303,6 +6312,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -6376,6 +6388,9 @@
     '0':
       repeat: true
       description: Authority record control number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -6388,6 +6403,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -6458,6 +6476,9 @@
     '0':
       repeat: true
       description: Authority record control number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -6470,6 +6491,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -6495,9 +6519,6 @@
     'g':
       repeat: true
       description: Miscellaneous information
-    '4':
-      repeat: true
-      description: Relationship
     'v':
       repeat: true
       description: Form subdivision
@@ -6522,6 +6543,9 @@
     '3':
       repeat: false
       description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6538,6 +6562,9 @@
     'a':
       repeat: false
       description: Chronological term
+    'e':
+      repeat: true
+      description: Relator term
     'v':
       repeat: true
       description: Form subdivision
@@ -6553,15 +6580,24 @@
     '0':
       repeat: true
       description: Authority record control number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -6587,6 +6623,9 @@
     'e':
       repeat: false
       description: Relator term
+    'g':
+      repeat: true
+      description: Miscellaneous information
     'v':
       repeat: true
       description: Form subdivision
@@ -6601,7 +6640,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -6614,6 +6656,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -6630,6 +6675,9 @@
     'e':
       repeat: true
       description: Relator term
+    'g':
+      repeat: true
+      description: Miscellaneous information
     'v':
       repeat: true
       description: Form subdivision
@@ -6644,7 +6692,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -6657,6 +6708,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -6670,9 +6724,21 @@
     'a':
       repeat: true
       description: Uncontrolled term
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '5':
+      repeat: false
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -6706,7 +6772,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -6715,7 +6784,7 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6752,10 +6821,13 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
-      description: Source of term
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
@@ -6765,6 +6837,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -6795,7 +6870,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
@@ -6832,7 +6910,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
@@ -6864,6 +6945,12 @@
     'd':
       repeat: false
       description: Correlation factor
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term or code
@@ -6907,12 +6994,15 @@
     '0':
       repeat: true
       description: Authority record control number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
