@@ -2663,7 +2663,7 @@
       description: Public note
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -4321,7 +4321,7 @@
       description: International Standard Serial Number
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -4382,7 +4382,7 @@
       description: International Standard Serial Number
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -4443,7 +4443,7 @@
       description: International Standard Serial Number
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6211,7 +6211,7 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6308,7 +6308,7 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6399,7 +6399,7 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6487,7 +6487,7 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6652,7 +6652,7 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6704,7 +6704,7 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7010,6 +7010,43 @@
       repeat: true
       description: Field link and sequence number
 
+'688':
+  repeat: true
+  description: SUBJECT ADDED ENTRY--TYPE OF ENTITY UNSPECIFIED
+  ind1: [" "]
+  ind2: [" ", "7"]
+  subfields:
+    'a':
+      repeat: false
+      description: Name, title, or term
+    'e':
+      repeat: true
+      description: Relator term
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    '0':
+      repeat: true
+      description: Authority record control number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of name, title, or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
 '700':
   repeat: true
   description: ADDED ENTRY--PERSONAL NAME
@@ -7035,7 +7072,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -7071,7 +7108,7 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -7088,18 +7125,24 @@
     '1':
       repeat: true
       description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '5':
       repeat: false
       description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -7117,7 +7160,7 @@
       repeat: true
       description: Subordinate unit
     'c':
-      repeat: false
+      repeat: true
       description: Location of meeting
     'd':
       repeat: true
@@ -7129,11 +7172,14 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
       description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Form subheading
@@ -7156,7 +7202,7 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -7169,19 +7215,28 @@
       description: International Standard Serial Number
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '5':
       repeat: false
       description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -7196,10 +7251,10 @@
       repeat: false
       description: Meeting name or jurisdiction name as entry element
     'c':
-      repeat: false
+      repeat: true
       description: Location of meeting
     'd':
-      repeat: false
+      repeat: true
       description: Date of meeting
     'e':
       repeat: true
@@ -7208,11 +7263,14 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
       description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
     'j':
       repeat: true
       description: Relator term
@@ -7232,7 +7290,7 @@
       repeat: false
       description: Name of meeting following jurisdiction name entry element
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -7245,19 +7303,28 @@
       description: International Standard Serial Number
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '5':
       repeat: false
       description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -7274,12 +7341,24 @@
     'e':
       repeat: true
       description: Relator term
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -7300,7 +7379,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -7327,7 +7406,7 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -7337,10 +7416,19 @@
       description: International Standard Serial Number
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
     '5':
       repeat: false
       description: Institution to which field applies
@@ -7391,9 +7479,15 @@
     'e':
       repeat: true
       description: Relator term
+    'g':
+      repeat: true
+      description: Miscellaneous information
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -7402,10 +7496,13 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -7417,17 +7514,20 @@
   ind2: [" "]
   subfields:
     'a':
-      repeat: false
+      repeat: true
       description: Country or larger entity
     'b':
       repeat: false
       description: First-order political jurisdiction
     'c':
-      repeat: false
+      repeat: true
       description: Intermediate political jurisdiction
     'd':
       repeat: false
       description: City
+    'e':
+      repeat: true
+      description: Relator term
     'f':
       repeat: true
       description: City subsection
@@ -7439,10 +7539,16 @@
       description: Extraterrestrial area
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7465,6 +7571,15 @@
     'c':
       repeat: false
       description: Operating system
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '6':
       repeat: false
       description: Linkage
@@ -7496,6 +7611,9 @@
     '0':
       repeat: true
       description: Authority record control number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of taxonomic identification
@@ -7563,13 +7681,16 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -7594,6 +7715,9 @@
     'y':
       repeat: false
       description: CODEN designation
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7624,13 +7748,16 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -7655,6 +7782,9 @@
     'y':
       repeat: false
       description: CODEN designation
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7685,16 +7815,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -7728,6 +7861,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7758,16 +7894,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -7801,6 +7940,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7831,16 +7973,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -7874,6 +8019,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7904,16 +8052,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -7947,6 +8098,9 @@
     'z':
       repeat: true
       description: International Stan dard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7974,16 +8128,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -8026,6 +8183,12 @@
     '3':
       repeat: false
       description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
@@ -8056,16 +8219,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -8099,6 +8265,12 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
@@ -8135,16 +8307,19 @@
       description: Country code
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -8178,6 +8353,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -8208,16 +8386,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -8251,6 +8432,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -8281,80 +8465,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
-    'k':
-      repeat: true
-      description: Series data for related item
-    'm':
-      repeat: false
-      description: Material-specific details
-    'n':
-      repeat: true
-      description: Note
-    'o':
-      repeat: true
-      description: Other item identifier
-    's':
-      repeat: false
-      description: Uniform title
-    't':
-      repeat: false
-      description: Title
-    'w':
-      repeat: true
-      description: Record control number
-    'x':
-      repeat: false
-      description: International Standard Serial Number
-    'y':
-      repeat: false
-      description: CODEN designation
-    '6':
-      repeat: false
-      description: Linkage
-    '7':
-      repeat: false
-      description: Control subfield
-    '8':
-      repeat: true
-      description: Field link and sequence number
-
-'780':
-  repeat: true
-  description: PRECEDING ENTRY
-  ind1: ["0", "1"]
-  ind2: ["0", "1", "2", "3", "4", "5", "6", "7"]
-  subfields:
-    'a':
-      repeat: false
-      description: Main entry heading
-    'b':
-      repeat: false
-      description: Edition
-    'c':
-      repeat: false
-      description: Qualifying information
-    'd':
-      repeat: false
-      description: Place, publisher, and date of publication
-    'g':
       repeat: true
       description: Relationship information
-    'h':
-      repeat: false
-      description: Physical description
-    'i':
-      repeat: false
-      description: Display text
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -8388,6 +8511,88 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: false
+      description: Control subfield
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'780':
+  repeat: true
+  description: PRECEDING ENTRY
+  ind1: ["0", "1"]
+  ind2: ["0", "1", "2", "3", "4", "5", "6", "7"]
+  subfields:
+    'a':
+      repeat: false
+      description: Main entry heading
+    'b':
+      repeat: false
+      description: Edition
+    'c':
+      repeat: false
+      description: Qualifying information
+    'd':
+      repeat: false
+      description: Place, publisher, and date of publication
+    'g':
+      repeat: true
+      description: Related parts
+    'h':
+      repeat: false
+      description: Physical description
+    'i':
+      repeat: true
+      description: Relationship information
+    'k':
+      repeat: true
+      description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
+    'm':
+      repeat: false
+      description: Material-specific details
+    'n':
+      repeat: true
+      description: Note
+    'o':
+      repeat: true
+      description: Other item identifier
+    'r':
+      repeat: true
+      description: Report number
+    's':
+      repeat: false
+      description: Uniform title
+    't':
+      repeat: false
+      description: Title
+    'u':
+      repeat: false
+      description: Standard Technical Report Number
+    'w':
+      repeat: true
+      description: Record control number
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    'y':
+      repeat: false
+      description: CODEN designation
+    'z':
+      repeat: true
+      description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -8418,16 +8623,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -8461,6 +8669,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -8491,19 +8702,22 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'j':
       repeat: false
       description: Period of content
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -8543,6 +8757,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -8573,16 +8790,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -8616,6 +8836,12 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
@@ -8709,7 +8935,7 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -8794,7 +9020,7 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -8873,7 +9099,7 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
