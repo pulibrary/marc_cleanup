@@ -892,7 +892,7 @@
       description: Authentication code
 
 '043':
-  repeat: false
+  repeat: true
   description: GEOGRAPHIC AREA CODE
   ind1: [" "]
   ind2: [" "]
@@ -2688,7 +2688,7 @@
       description: Field link and sequence number
 
 '310':
-  repeat: false
+  repeat: true
   description: CURRENT PUBLICATION FREQUENCY
   ind1: [" "]
   ind2: [" "]
@@ -4001,7 +4001,7 @@
       description: Field link and sequence number
 
 '384':
-  repeat: false
+  repeat: true
   description: KEY
   ind1: [" ", "0", "1", "2"]
   ind2: [" "]
