@@ -43,6 +43,55 @@
       repeat: true
       description: Field link and sequence number
 
+'012':
+  repeat: false
+  description: CONSER FIXED LENGTH FIELD (OCLC)
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Priority byte
+    'b':
+      repeat: false
+      description: Non-permanent distribution code
+    'c':
+      repeat: false
+      description: Major/minor change byte
+    'd':
+      repeat: false
+      description: Permanent distribution code
+    'e':
+      repeat: false
+      description: Special LC projects
+    'f':
+      repeat: false
+      description: OCAT certification
+    'g':
+      repeat: false
+      description: Type of cataloging code
+    'h':
+      repeat: false
+      description: Non-established name indicator
+    'i':
+      repeat: false
+      description: NST publication date code
+    'j':
+      repeat: false
+      description: ISSN distribution
+    'k':
+      repeat: false
+      description: ISSN on publication
+    'l':
+      repeat: false
+      description: Communication with publisher
+    'm':
+      repeat: false
+      description: Communication with USPS
+    'z':
+      repeat: false
+      description: Record status overrider
+
 '013':
   repeat: true
   description: PATENT CONTROL INFORMATION
@@ -99,6 +148,9 @@
     'a':
       repeat: true
       description: National bibliography number
+    'q':
+      repeat: true
+      description: Qualifying information
     'z':
       repeat: true
       description: Canceled/Invalid national bibliographic number
@@ -222,18 +274,49 @@
     'a':
       repeat: false
       description: International Standard Serial Number
-    'l':
-      repeat: false
-      description: ISSN-L
-    'm':
-      repeat: true
-      description: Canceled ISSN-L
     'y':
       repeat: true
       description: Incorrect ISSN
     'z':
       repeat: true
       description: Canceled ISSN
+    '0':
+      repeat: false
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'023':
+  repeat: true
+  description: CLUSTER ISSN
+  ind1: ["0", "1"]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Cluster ISSN
+    'y':
+      repeat: true
+      description: Incorrect Cluster ISSN
+    'z':
+      repeat: true
+      description: Canceled Cluster ISSN
+    '0':
+      repeat: false
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
@@ -259,6 +342,9 @@
     'd':
       repeat: false
       description: Additional codes following the standard number or code
+    'q':
+      repeat: true
+      description: Qualifying information
     'z':
       repeat: true
       description: Canceled/invalid standard number or code
@@ -328,6 +414,9 @@
     'a':
       repeat: false
       description: Standard technical report number
+    'q':
+      repeat: true
+      description: Qualifying information
     'z':
       repeat: true
       description: Canceled/invalid number
@@ -340,8 +429,8 @@
 
 '028':
   repeat: true
-  description: PUBLISHER NUMBER
-  ind1: ["0", "1", "2", "3", "4", "5"]
+  description: PUBLISHER OR DISTRIBUTOR NUMBER
+  ind1: ["0", "1", "2", "3", "4", "5", "6"]
   ind2: ["0", "1", "2", "3"]
   subfields:
     'a':
@@ -350,6 +439,9 @@
     'b':
       repeat: false
       description: Source
+    'q':
+      repeat: true
+      description: Qualifying information
     '6':
       repeat: false
       description: Linkage
@@ -473,7 +565,7 @@
       description: Postal registration number
     'b':
       repeat: false
-      description: Source (agency assigning number)
+      description: Source agency assigning number
     '6':
       repeat: false
       description: Linkage
@@ -496,6 +588,18 @@
     'c':
       repeat: true
       description: Geographic classification subarea code
+    'p':
+      repeat: true
+      description: Place of event
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: true
+      description: Source of term
     '3':
       repeat: false
       description: Materials specified
@@ -551,6 +655,9 @@
     'p':
       repeat: false
       description: Equinox
+    'r':
+      repeat: false
+      description: Distance from earth
     's':
       repeat: true
       description: G-ring latitude
@@ -566,9 +673,18 @@
     'z':
       repeat: false
       description: Name of extraterrestial body
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
+      repeat: true
+      description: Source of term
+    '3':
       repeat: false
-      description: Source
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
@@ -638,6 +754,12 @@
     'n':
       repeat: true
       description: Note
+    '3':
+      repeat: false
+      description: Materials specified
+    '5':
+      repeat: true
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
@@ -712,19 +834,49 @@
       description: Language code of table of contents
     'g':
       repeat: true
-      description: Language code of accompanying material other than librettos
+      description: Language code of accompanying material other than librettos and transcripts
     'h':
       repeat: true
-      description: Language code of original and/or intermediate translations of text
+      description: Language code of original
+    'i':
+      repeat: true
+      description: Language code of intertitles
     'j':
       repeat: true
-      description: Language code of subtitles or captions
+      description: Language code of subtitles
+    'k':
+      repeat: true
+      description: Language code of intermediate translations
+    'm':
+      repeat: true
+      description: Language code of original accompanying materials other than librettos
+    'n':
+      repeat: true
+      description: Language code of original libretto
+    'p':
+      repeat: true
+      description: Language code of captions
+    'q':
+      repeat: true
+      description: Language code of accessible audio
+    'r':
+      repeat: true
+      description: Language code of accessible visual language (non-textual)
+    't':
+      repeat: true
+      description: Language code of accompanying transcripts for audiovisual materials
     '2':
       repeat: false
       description: Source of code
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -740,7 +892,7 @@
       description: Authentication code
 
 '043':
-  repeat: false
+  repeat: true
   description: GEOGRAPHIC AREA CODE
   ind1: [" "]
   ind2: [" "]
@@ -754,9 +906,15 @@
     'c':
       repeat: true
       description: ISO code
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: true
-      description: Source of local code
+      description: Source of term
     '6':
       repeat: false
       description: Linkage
@@ -814,7 +972,7 @@
 '046':
   repeat: true
   description: SPECIAL CODED DATES
-  ind1: [" "]
+  ind1: [" ", "1", "2", "3"]
   ind2: [" "]
   subfields:
     'a':
@@ -847,9 +1005,24 @@
     'n':
       repeat: false
       description: End of date valid
+    'o':
+      repeat: false
+      description: Single or starting date for aggregated content
+    'p':
+      repeat: false
+      description: Ending date for aggregated content
+    'x':
+      repeat: true
+      description: Nonpublic note
+    'z':
+      repeat: true
+      description: Public note
     '2':
       repeat: false
       description: Source of date
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
@@ -956,6 +1129,12 @@
     'b':
       repeat: false
       description: Item number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '3':
       repeat: false
       description: Materials specified
@@ -1000,6 +1179,12 @@
     'd':
       repeat: true
       description: Populated place name
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Code source
@@ -1022,9 +1207,18 @@
     'b':
       repeat: false
       description: Item number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of call/class number
+    '6':
+      repeat: false
+      description: Linkage
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1041,6 +1235,12 @@
     'b':
       repeat: false
       description: Item number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1092,6 +1292,12 @@
     'b':
       repeat: false
       description: Item number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1168,6 +1374,12 @@
     'x':
       repeat: true
       description: Common auxiliary subdivision
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Edition identifier
@@ -1181,7 +1393,7 @@
 '082':
   repeat: true
   description: DEWEY DECIMAL CLASSIFICATION NUMBER
-  ind1: ["0", "1"]
+  ind1: ["0", "1", "7"]
   ind2: [" ", "0", "4"]
   subfields:
     'a':
@@ -1196,12 +1408,21 @@
     'q':
       repeat: false
       description: Assigning agency
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Edition number
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1209,7 +1430,7 @@
 '083':
   repeat: true
   description: ADDITIONAL DEWEY DECIMAL CLASSIFICATION NUMBER
-  ind1: ["0", "1"]
+  ind1: ["0", "1", "7"]
   ind2: [" "]
   subfields:
     'a':
@@ -1230,12 +1451,21 @@
     'z':
       repeat: true
       description: Table identification
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Edition number
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1252,12 +1482,24 @@
     'b':
       repeat: false
       description: Item number
+    'q':
+      repeat: false
+      description: Assigning agency
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of number
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1304,6 +1546,12 @@
     'z':
       repeat: true
       description: Table identification
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '6':
       repeat: false
       description: Linkage
@@ -1323,6 +1571,12 @@
     'z':
       repeat: true
       description: Canceled/invalid classification number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Number source
@@ -1393,6 +1647,41 @@
       repeat: false
       description: Edition information
 
+'096':
+  repeat: true
+  description: LOCALLY ASSIGNED NLM-TYPE CALL NUMBER (OCLC)
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Classification number
+    'b':
+      repeat: false
+      description: Item number
+    'e':
+      repeat: false
+      description: Feature heading
+    'f':
+      repeat: false
+      description: Filing suffix
+
+'098':
+  repeat: true
+  description: OTHER CLASSIFICATION SCHEMES (OCLC)
+  ind1: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  ind2: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  subfields:
+    'a':
+      repeat: true
+      description: Call number based on other classification scheme
+    'e':
+      repeat: false
+      description: Feature heading
+    'f':
+      repeat: false
+      description: Filing suffix
+
 '099':
   repeat: true
   description: LOCAL FREE-TEXT CALL NUMBER (OCLC)
@@ -1434,7 +1723,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'j':
       repeat: true
@@ -1462,13 +1751,22 @@
       description: Affiliation
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1498,7 +1796,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'k':
       repeat: true
@@ -1520,13 +1818,22 @@
       description: Affiliation
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1553,7 +1860,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'j':
       repeat: true
@@ -1581,13 +1888,22 @@
       description: Affiliation
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1608,7 +1924,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -1635,17 +1951,26 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
       description: Title of a work
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1668,6 +1993,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1707,7 +2035,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -1734,14 +2062,23 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1796,7 +2133,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -1823,7 +2160,7 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     '6':
       repeat: false
@@ -1871,6 +2208,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1891,7 +2231,7 @@
       repeat: false
       description: Date or sequential designation
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -1911,6 +2251,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1931,7 +2274,7 @@
       repeat: false
       description: Date or sequential designation
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -1948,6 +2291,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -1964,6 +2310,40 @@
     'b':
       repeat: false
       description: Remainder of edition statement
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'251':
+  repeat: true
+  description: VERSION INFORMATION
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: true
+      description: Version
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
@@ -2017,6 +2397,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -2033,19 +2416,31 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
 
 '257':
   repeat: true
-  description: COUNTRY OF PRODUCING ENTITY FOR ARCHIVAL FILMS
+  description: COUNTRY OF PRODUCING ENTITY
   ind1: [" "]
   ind2: [" "]
   subfields:
     'a':
       repeat: true
       description: Country of producing entity
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source
     '6':
       repeat: false
       description: Linkage
@@ -2055,7 +2450,7 @@
 
 '258':
   repeat: true
-  description: PHILATELIC ISSUE DATE
+  description: PHILATELIC ISSUE DATA
   ind1: [" "]
   ind2: [" "]
   subfields:
@@ -2087,9 +2482,6 @@
     'c':
       repeat: true
       description: Date of publication, distribution, etc.
-    'd':
-      repeat: false
-      description: Plate or publisher's number for music (Pre-AACR 2)
     'e':
       repeat: true
       description: Place of manufacture
@@ -2102,62 +2494,6 @@
     '3':
       repeat: false
       description: Materials specified
-    '6':
-      repeat: false
-      description: Linkage
-    '8':
-      repeat: true
-      description: Field link and sequence number
-
-'261':
-  repeat: false
-  description: IMPRINT STATEMENT FOR FILMS (Pre-AACR 1 Revised)
-  ind1: [" "]
-  ind2: [" "]
-  subfields:
-    'a':
-      repeat: true
-      description: Producing company
-    'b':
-      repeat: true
-      description: Releasing company (primary distributor)
-    'd':
-      repeat: true
-      description: Date of production, release, etc.
-    'e':
-      repeat: true
-      description: Contractual producer
-    'f':
-      repeat: true
-      description: Place of production, release, etc.
-    '6':
-      repeat: false
-      description: Linkage
-    '8':
-      repeat: true
-      description: Field link and sequence number
-
-'262':
-  repeat: false
-  description: IMPRINT STATEMENT FOR SOUND RECORDINGS (Pre-AACR 2)
-  ind1: [" "]
-  ind2: [" "]
-  subfields:
-    'a':
-      repeat: false
-      description: Place of production, release, etc.
-    'b':
-      repeat: false
-      description: Publisher or trade name
-    'c':
-      repeat: false
-      description: Date of production, release, etc.
-    'k':
-      repeat: false
-      description: Serial identification
-    'l':
-      repeat: false
-      description: Matrix and/or take number
     '6':
       repeat: false
       description: Linkage
@@ -2202,6 +2538,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -2268,7 +2607,7 @@
       description: Public note
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -2306,6 +2645,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -2346,7 +2688,7 @@
       description: Field link and sequence number
 
 '310':
-  repeat: false
+  repeat: true
   description: CURRENT PUBLICATION FREQUENCY
   ind1: [" "]
   ind2: [" "]
@@ -2357,6 +2699,15 @@
     'b':
       repeat: false
       description: Date of current publication frequency
+    '0':
+      repeat: false
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source
     '6':
       repeat: false
       description: Linkage
@@ -2376,9 +2727,80 @@
     'b':
       repeat: false
       description: Dates of former publication frequency
+    '0':
+      repeat: false
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source
     '6':
       repeat: false
       description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'334':
+  repeat: true
+  description: MODE OF ISSUANCE
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Mode of issuance term
+    'b':
+      repeat: false
+      description: Mode of issuance code
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'335':
+  repeat: true
+  description: EXTENSION PLAN
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Extension plan term
+    'b':
+      repeat: false
+      description: Extension plan code
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -2410,6 +2832,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -2515,6 +2940,9 @@
     'k':
       repeat: true
       description: Layout
+    'l':
+      repeat: true
+      description: Binding
     'm':
       repeat: true
       description: Book format
@@ -2524,9 +2952,55 @@
     'o':
       repeat: true
       description: Polarity
+    'p':
+      repeat: true
+      description: Illustrative content
+    'q':
+      repeat: true
+      description: Reduction ratio designator
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'341':
+  repeat: true
+  description: ACCESSIBILITY CONTENT
+  ind1: [" ", "0", "1"]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Content access mode
+    'b':
+      repeat: true
+      description: Textual assistive features
+    'c':
+      repeat: true
+      description: Visual assistive features
+    'd':
+      repeat: true
+      description: Auditory assistive features
+    'e':
+      repeat: true
+      description: Tactile assistive features
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
     '1':
       repeat: true
       description: Real World Object URI
@@ -2588,6 +3062,9 @@
     'm':
       repeat: false
       description: Azimuthal angle
+    'n':
+      repeat: false
+      description: Azimuth measure point longitude or straight vertical longitude from pole
     'o':
       repeat: false
       description: Landsat number and path number
@@ -2695,9 +3172,18 @@
     'h':
       repeat: true
       description: Special playback characteristics
+    'i':
+      repeat: true
+      description: Sound content
+    'j':
+      repeat: true
+      description: Original capture and storage technique
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
@@ -2713,7 +3199,7 @@
 
 '345':
   repeat: true
-  description: PROJECTION CHARACTERISTICS OF MOVING IMAGE
+  description: MOVING IMAGE CHARACTERISTICS
   ind1: [" "]
   ind2: [" "]
   subfields:
@@ -2723,9 +3209,18 @@
     'b':
       repeat: true
       description: Projection speed
+    'c':
+      repeat: true
+      description: Aspect ratio value
+    'd':
+      repeat: true
+      description: Aspect ratio designator
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
@@ -2754,6 +3249,9 @@
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
@@ -2794,6 +3292,9 @@
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
@@ -2809,7 +3310,7 @@
 
 '348':
   repeat: true
-  description: Format of Notated Music
+  description: NOTATED MUSIC CHARACTERISTICS
   ind1: [" "]
   ind2: [" "]
   subfields:
@@ -2819,9 +3320,18 @@
     'b':
       repeat: true
       description: Format of notated music code
+    'c':
+      repeat: true
+      description: Form of musical notation term
+    'd':
+      repeat: true
+      description: Form of musical notation code
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
@@ -2831,6 +3341,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -2891,8 +3404,39 @@
       repeat: false
       description: Indirect reference description
     'q':
-      repeat: true
+      repeat: false
       description: Format of the digital image
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'353':
+  repeat: true
+  description: SUPPLEMENTARY CONTENT CHARACTERISTICS
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: true
+      description: Supplementary content term
+    'b':
+      repeat: true
+      description: Supplementary content code
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
@@ -2961,6 +3505,64 @@
     '6':
       repeat: false
       description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'361':
+  repeat: true
+  description: STRUCTURED OWNERSHIP AND CUSTODIAL HISTORY
+  ind1: [" ", "0", "1"]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Name
+    'f':
+      repeat: true
+      description: Ownership and custodial history evidence term
+    'k':
+      repeat: false
+      description: Formatted date
+    'l':
+      repeat: false
+      description: Date
+    'o':
+      repeat: true
+      description: Type of ownership and custodial history information
+    's':
+      repeat: false
+      description: Shelf mark of copy described
+    'u':
+      repeat: true
+      description: Uniform Resource Identifier
+    'x':
+      repeat: true
+      description: Nonpublic note
+    'y':
+      repeat: false
+      description: Identifier of the copy described
+    'z':
+      repeat: true
+      description: Public note
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '3':
+      repeat: false
+      description: Materials specified
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3161,6 +3763,9 @@
     'g':
       repeat: true
       description: Place of origin of work
+    'i':
+      repeat: true
+      description: Relationship information
     's':
       repeat: false
       description: Start period
@@ -3175,13 +3780,25 @@
       description: Source of information
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3198,12 +3815,24 @@
     'l':
       repeat: true
       description: Language term
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3219,13 +3848,22 @@
       description: Form of work
     '0':
       repeat: true
-      description: Record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3247,13 +3885,22 @@
       description: Source of information
     '0':
       repeat: true
-      description: Record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3261,7 +3908,7 @@
 '382':
   repeat: true
   description: MEDIUM OF PERFORMANCE
-  ind1: [" ", "0", "1"]
+  ind1: [" ", "0", "1", "2", "3"]
   ind2: [" ", "0", "1"]
   subfields:
     'a':
@@ -3309,6 +3956,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3316,7 +3966,7 @@
 '383':
   repeat: true
   description: NUMERIC DESIGNATION OF MUSICAL WORK
-  ind1: [" "]
+  ind1: [" ", "0", "1"]
   ind2: [" "]
   subfields:
     'a':
@@ -3337,25 +3987,43 @@
     '2':
       repeat: false
       description: Source
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
-      repeat: false
+      repeat: true
       description: Field link and sequence number
 
 '384':
-  repeat: false
+  repeat: true
   description: KEY
-  ind1: [" ", "0", "1"]
+  ind1: [" ", "0", "1", "2"]
   ind2: [" "]
   subfields:
     'a':
       repeat: false
       description: Key
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3381,6 +4049,9 @@
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
@@ -3390,6 +4061,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3406,6 +4080,9 @@
     'b':
       repeat: true
       description: Creator/contributor code
+    'i':
+      repeat: true
+      description: Relationship information
     'm':
       repeat: false
       description: Demographic group term
@@ -3415,15 +4092,91 @@
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source
     '3':
       repeat: false
       description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'387':
+  repeat: true
+  description: REPRESENTATIVE EXPRESSION CHARACTERISTICS
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: true
+      description: Aspect ratio of representative expression
+    'b':
+      repeat: true
+      description: Color content of representative expression
+    'c':
+      repeat: true
+      description: Content type of representative expression
+    'd':
+      repeat: true
+      description: Date of capture of representative expression
+    'e':
+      repeat: true
+      description: Date of representative expression
+    'f':
+      repeat: true
+      description: Duration of representative expression
+    'g':
+      repeat: true
+      description: Intended audience of representative expression
+    'h':
+      repeat: true
+      description: Language of representative expression
+    'i':
+      repeat: true
+      description: Place of capture of representative expression
+    'j':
+      repeat: true
+      description: Projection of cartographic content of representative expression
+    'k':
+      repeat: true
+      description: Scale of representative expression
+    'l':
+      repeat: true
+      description: Script of representative expression
+    'm':
+      repeat: true
+      description: Sound content of representative expression
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of term
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3440,6 +4193,9 @@
     '0':
       repeat: true
       description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
@@ -3449,223 +4205,9 @@
     '6':
       repeat: false
       description: Linkage
-    '8':
+    '7':
       repeat: true
-      description: Field link and sequence number
-
-'400':
-  repeat: true
-  description: SERIES STATEMENT/ADDED ENTRY--PERSONAL NAME (PRE RDA)
-  ind1: ["0", "1", "3"]
-  ind2: ["0", "1"]
-  subfields:
-    'a':
-      repeat: false
-      description: Personal name
-    'b':
-      repeat: false
-      description: Numeration
-    'c':
-      repeat: true
-      description: Titles and other words associated with a name
-    'd':
-      repeat: false
-      description: Dates associated with a name
-    'e':
-      repeat: true
-      description: Relator term
-    'f':
-      repeat: false
-      description: Date of a work
-    'g':
-      repeat: false
-      description: Miscellaneous information
-    'k':
-      repeat: true
-      description: Form subheading
-    'l':
-      repeat: false
-      description: Language of a work
-    'n':
-      repeat: true
-      description: Number of part/section of a work
-    'p':
-      repeat: true
-      description: Name of part/section of a work
-    't':
-      repeat: false
-      description: Title of a work
-    'u':
-      repeat: false
-      description: Affiliation
-    'v':
-      repeat: false
-      description: Volume number/sequential designation
-    'x':
-      repeat: false
-      description: International Standard Serial Number
-    '4':
-      repeat: true
-      description: Relator code
-    '6':
-      repeat: false
-      description: Linkage
-    '8':
-      repeat: true
-      description: Field link and sequence number
-
-'410':
-  repeat: true
-  description: SERIES STATEMENT/ADDED ENTRY--CORPORATE NAME (PRE RDA)
-  ind1: ["0", "1", "2"]
-  ind2: ["0", "1"]
-  subfields:
-    'a':
-      repeat: false
-      description: Corporate name or jurisdiction name as entry element
-    'b':
-      repeat: true
-      description: Subordinate unit
-    'c':
-      repeat: false
-      description: Location of meeting
-    'd':
-      repeat: true
-      description: Date of meeting or treaty signing
-    'e':
-      repeat: true
-      description: Relator term
-    'f':
-      repeat: false
-      description: Date of a work
-    'g':
-      repeat: false
-      description: Miscellaneous information
-    'k':
-      repeat: true
-      description: Form subheading
-    'l':
-      repeat: false
-      description: Language of a work
-    'n':
-      repeat: true
-      description: Number of part/section/meeting
-    'p':
-      repeat: true
-      description: Name of part/section of a work
-    't':
-      repeat: false
-      description: Title of a work
-    'u':
-      repeat: false
-      description: Affiliation
-    'v':
-      repeat: false
-      description: Volume number/sequential designation
-    'x':
-      repeat: false
-      description: International Standard Serial Number
-    '4':
-      repeat: true
-      description: Relator code
-    '6':
-      repeat: false
-      description: Linkage
-    '8':
-      repeat: true
-      description: Field link and sequence number
-
-'411':
-  repeat: true
-  description: SERIES STATEMENT/ADDED ENTRY--MEETING NAME (PRE RDA)
-  ind1: ["0", "1", "2"]
-  ind2: ["0", "1"]
-  subfields:
-    'a':
-      repeat: false
-      description: Meeting name or jurisdiction name as entry element
-    'c':
-      repeat: false
-      description: Location of meeting
-    'd':
-      repeat: false
-      description: Date of meeting
-    'e':
-      repeat: true
-      description: Subordinate unit
-    'f':
-      repeat: false
-      description: Date of a work
-    'g':
-      repeat: false
-      description: Miscellaneous information
-    'k':
-      repeat: true
-      description: Form subheading
-    'l':
-      repeat: false
-      description: Language of a work
-    'n':
-      repeat: true
-      description: Number of part/section/meeting
-    'p':
-      repeat: true
-      description: Name of part/section of a work
-    'q':
-      repeat: false
-      description: Name of meeting following jurisdiction name entry element
-    't':
-      repeat: false
-      description: Title of a work
-    'u':
-      repeat: false
-      description: Affiliation
-    'v':
-      repeat: false
-      description: Volume number/sequential designation
-    'x':
-      repeat: false
-      description: International Standard Serial Number
-    '4':
-      repeat: true
-      description: Relator code
-    '6':
-      repeat: false
-      description: Linkage
-    '8':
-      repeat: true
-      description: Field link and sequence number
-
-'440':
-  repeat: true
-  description: SERIES STATEMENT/ADDED ENTRY--TITLE [OBSOLETE]
-  ind1: [" "]
-  ind2: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-  subfields:
-    'a':
-      repeat: false
-      description: Title
-    'n':
-      repeat: true
-      description: Number of part/section of a work
-    'p':
-      repeat: true
-      description: Name of part/section of a work
-    'v':
-      repeat: false
-      description: Volume number/sequential designation
-    'x':
-      repeat: false
-      description: International Standard Serial Number
-    'w':
-      repeat: true
-      description: Bibliographic record control number
-    '0':
-      repeat: true
-      description: Authority record control number
-    '6':
-      repeat: false
-      description: Linkage
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3688,12 +4230,21 @@
     'x':
       repeat: false
       description: International Standard Serial Number
+    'y':
+      repeat: true
+      description: Incorrect ISSN
+    'z':
+      repeat: true
+      description: Cancelled ISSN
     '3':
       repeat: false
       description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3716,6 +4267,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3735,6 +4289,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3766,6 +4323,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3813,6 +4373,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3841,9 +4404,21 @@
     'f':
       repeat: true
       description: Standard terminology for access restiction
+    'g':
+      repeat: true
+      description: Availability date
+    'q':
+      repeat: false
+      description: Supplying agency
     'u':
       repeat: true
       description: Uniform Resource Identifier
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
@@ -3862,7 +4437,7 @@
 
 '507':
   repeat: false
-  description: SCALE NOTE FOR GRAPHIC MATERIAL
+  description: SCALE NOTE FOR VISUAL MATERIALS
   ind1: [" "]
   ind2: [" "]
   subfields:
@@ -3888,9 +4463,15 @@
     'a':
       repeat: false
       description: Creation/production credits note
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3910,6 +4491,9 @@
     'c':
       repeat: false
       description: Location within source
+    'u':
+      repeat: true
+      description: Uniform Resource Identifier
     'x':
       repeat: false
       description: International Standard Serial Number
@@ -3919,6 +4503,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -3932,6 +4519,9 @@
     'a':
       repeat: false
       description: Participant or performer note
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
@@ -4025,6 +4615,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4054,12 +4647,33 @@
     'a':
       repeat: false
       description: Date/time and place of an event note
+    'd':
+      repeat: true
+      description: Date of event
+    'o':
+      repeat: true
+      description: Other event information
+    'p':
+      repeat: true
+      description: Place of event
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of term
     '3':
       repeat: false
       description: Materials specified
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4091,6 +4705,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4239,6 +4856,25 @@
       repeat: true
       description: Field link and sequence number
 
+'532':
+  repeat: true
+  description: ACCESSIBILITY NOTE
+  ind1: ["0", "1", "2", "8"]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Summary of accessibility
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
 '533':
   repeat: true
   description: REPRODUCTION NOTE
@@ -4269,6 +4905,9 @@
     'n':
       repeat: true
       description: Note about reproduction
+    'y':
+      repeat: true
+      description: Data provenance
     '3':
       repeat: false
       description: Materials specified
@@ -4333,6 +4972,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '3':
+      repeat: false
+      description: Materials specified
     '6':
       repeat: false
       description: Linkage
@@ -4436,6 +5078,34 @@
       repeat: true
       description: Field link and sequence number
 
+'539':
+  repeat: true
+  description: FIXED-LENGTH DATA ELEMENTS OF REPRODUCTION NOTE
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Type of date/Publication status
+    'b':
+      repeat: false
+      description: Date 1/Beginning date of publication
+    'c':
+      repeat: false
+      description: Date 2/Ending date of publication
+    'd':
+      repeat: false
+      description: Place of publication, production, or execution
+    'e':
+      repeat: false
+      description: Frequency
+    'f':
+      repeat: false
+      description: Regularity
+    'g':
+      repeat: false
+      description: Form of item
+
 '540':
   repeat: true
   description: TERMS GOVERNING USE AND REPRODUCTION NOTE
@@ -4454,9 +5124,27 @@
     'd':
       repeat: false
       description: Authorized users
+    'f':
+      repeat: true
+      description: Standardized terminology for use and reproduction rights
+    'g':
+      repeat: true
+      description: Availability date
+    'q':
+      repeat: false
+      description: Supplying agency
     'u':
       repeat: true
       description: Uniform Resource Identifier
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of term
     '3':
       repeat: false
       description: Materials specified
@@ -4567,6 +5255,9 @@
     'o':
       repeat: false
       description: Research date
+    'p':
+      repeat: true
+      description: Country of publication or creation
     'q':
       repeat: false
       description: Assigning agency
@@ -4663,6 +5354,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4695,6 +5389,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4793,6 +5490,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -4937,6 +5637,18 @@
     'a':
       repeat: false
       description: Methodology note
+    'b':
+      repeat: true
+      description: Controlled term
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of term
     '6':
       repeat: false
       description: Linkage
@@ -4953,6 +5665,9 @@
     'a':
       repeat: false
       description: Linking entry complexity note
+    '5':
+      repeat: false
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
@@ -5048,6 +5763,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5156,6 +5874,801 @@
       repeat: true
       description: Field link and sequence number
 
+'591':
+  repeat: true
+  description: LOCAL NOTE (OCLC)
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Local note
+    'b':
+      repeat: false
+      description: Local note
+    'c':
+      repeat: false
+      description: Local note
+    'd':
+      repeat: false
+      description: Local note
+    'e':
+      repeat: false
+      description: Local note
+    'f':
+      repeat: false
+      description: Local note
+    'g':
+      repeat: false
+      description: Local note
+    'h':
+      repeat: false
+      description: Local note
+    'i':
+      repeat: false
+      description: Local note
+    'j':
+      repeat: false
+      description: Local note
+    'k':
+      repeat: false
+      description: Local note
+    'l':
+      repeat: false
+      description: Local note
+    'm':
+      repeat: false
+      description: Local note
+    'n':
+      repeat: false
+      description: Local note
+    'o':
+      repeat: false
+      description: Local note
+    'p':
+      repeat: false
+      description: Local note
+    'q':
+      repeat: false
+      description: Local note
+    'r':
+      repeat: false
+      description: Local note
+    's':
+      repeat: false
+      description: Local note
+    't':
+      repeat: false
+      description: Local note
+    'u':
+      repeat: false
+      description: Local note
+    'v':
+      repeat: false
+      description: Local note
+    'w':
+      repeat: false
+      description: Local note
+    'x':
+      repeat: false
+      description: Local note
+    'y':
+      repeat: false
+      description: Local note
+    'z':
+      repeat: false
+      description: Local note
+    '6':
+      repeat: false
+      description: Linkage
+
+'592':
+  repeat: true
+  description: LOCAL NOTE (OCLC)
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Local note
+    'b':
+      repeat: false
+      description: Local note
+    'c':
+      repeat: false
+      description: Local note
+    'd':
+      repeat: false
+      description: Local note
+    'e':
+      repeat: false
+      description: Local note
+    'f':
+      repeat: false
+      description: Local note
+    'g':
+      repeat: false
+      description: Local note
+    'h':
+      repeat: false
+      description: Local note
+    'i':
+      repeat: false
+      description: Local note
+    'j':
+      repeat: false
+      description: Local note
+    'k':
+      repeat: false
+      description: Local note
+    'l':
+      repeat: false
+      description: Local note
+    'm':
+      repeat: false
+      description: Local note
+    'n':
+      repeat: false
+      description: Local note
+    'o':
+      repeat: false
+      description: Local note
+    'p':
+      repeat: false
+      description: Local note
+    'q':
+      repeat: false
+      description: Local note
+    'r':
+      repeat: false
+      description: Local note
+    's':
+      repeat: false
+      description: Local note
+    't':
+      repeat: false
+      description: Local note
+    'u':
+      repeat: false
+      description: Local note
+    'v':
+      repeat: false
+      description: Local note
+    'w':
+      repeat: false
+      description: Local note
+    'x':
+      repeat: false
+      description: Local note
+    'y':
+      repeat: false
+      description: Local note
+    'z':
+      repeat: false
+      description: Local note
+    '6':
+      repeat: false
+      description: Linkage
+
+'593':
+  repeat: true
+  description: LOCAL NOTE (OCLC)
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Local note
+    'b':
+      repeat: false
+      description: Local note
+    'c':
+      repeat: false
+      description: Local note
+    'd':
+      repeat: false
+      description: Local note
+    'e':
+      repeat: false
+      description: Local note
+    'f':
+      repeat: false
+      description: Local note
+    'g':
+      repeat: false
+      description: Local note
+    'h':
+      repeat: false
+      description: Local note
+    'i':
+      repeat: false
+      description: Local note
+    'j':
+      repeat: false
+      description: Local note
+    'k':
+      repeat: false
+      description: Local note
+    'l':
+      repeat: false
+      description: Local note
+    'm':
+      repeat: false
+      description: Local note
+    'n':
+      repeat: false
+      description: Local note
+    'o':
+      repeat: false
+      description: Local note
+    'p':
+      repeat: false
+      description: Local note
+    'q':
+      repeat: false
+      description: Local note
+    'r':
+      repeat: false
+      description: Local note
+    's':
+      repeat: false
+      description: Local note
+    't':
+      repeat: false
+      description: Local note
+    'u':
+      repeat: false
+      description: Local note
+    'v':
+      repeat: false
+      description: Local note
+    'w':
+      repeat: false
+      description: Local note
+    'x':
+      repeat: false
+      description: Local note
+    'y':
+      repeat: false
+      description: Local note
+    'z':
+      repeat: false
+      description: Local note
+    '6':
+      repeat: false
+      description: Linkage
+
+'594':
+  repeat: true
+  description: LOCAL NOTE (OCLC)
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Local note
+    'b':
+      repeat: false
+      description: Local note
+    'c':
+      repeat: false
+      description: Local note
+    'd':
+      repeat: false
+      description: Local note
+    'e':
+      repeat: false
+      description: Local note
+    'f':
+      repeat: false
+      description: Local note
+    'g':
+      repeat: false
+      description: Local note
+    'h':
+      repeat: false
+      description: Local note
+    'i':
+      repeat: false
+      description: Local note
+    'j':
+      repeat: false
+      description: Local note
+    'k':
+      repeat: false
+      description: Local note
+    'l':
+      repeat: false
+      description: Local note
+    'm':
+      repeat: false
+      description: Local note
+    'n':
+      repeat: false
+      description: Local note
+    'o':
+      repeat: false
+      description: Local note
+    'p':
+      repeat: false
+      description: Local note
+    'q':
+      repeat: false
+      description: Local note
+    'r':
+      repeat: false
+      description: Local note
+    's':
+      repeat: false
+      description: Local note
+    't':
+      repeat: false
+      description: Local note
+    'u':
+      repeat: false
+      description: Local note
+    'v':
+      repeat: false
+      description: Local note
+    'w':
+      repeat: false
+      description: Local note
+    'x':
+      repeat: false
+      description: Local note
+    'y':
+      repeat: false
+      description: Local note
+    'z':
+      repeat: false
+      description: Local note
+    '6':
+      repeat: false
+      description: Linkage
+
+'595':
+  repeat: true
+  description: LOCAL NOTE (OCLC)
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Local note
+    'b':
+      repeat: false
+      description: Local note
+    'c':
+      repeat: false
+      description: Local note
+    'd':
+      repeat: false
+      description: Local note
+    'e':
+      repeat: false
+      description: Local note
+    'f':
+      repeat: false
+      description: Local note
+    'g':
+      repeat: false
+      description: Local note
+    'h':
+      repeat: false
+      description: Local note
+    'i':
+      repeat: false
+      description: Local note
+    'j':
+      repeat: false
+      description: Local note
+    'k':
+      repeat: false
+      description: Local note
+    'l':
+      repeat: false
+      description: Local note
+    'm':
+      repeat: false
+      description: Local note
+    'n':
+      repeat: false
+      description: Local note
+    'o':
+      repeat: false
+      description: Local note
+    'p':
+      repeat: false
+      description: Local note
+    'q':
+      repeat: false
+      description: Local note
+    'r':
+      repeat: false
+      description: Local note
+    's':
+      repeat: false
+      description: Local note
+    't':
+      repeat: false
+      description: Local note
+    'u':
+      repeat: false
+      description: Local note
+    'v':
+      repeat: false
+      description: Local note
+    'w':
+      repeat: false
+      description: Local note
+    'x':
+      repeat: false
+      description: Local note
+    'y':
+      repeat: false
+      description: Local note
+    'z':
+      repeat: false
+      description: Local note
+    '6':
+      repeat: false
+      description: Linkage
+
+'596':
+  repeat: true
+  description: LOCAL NOTE (OCLC)
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Local note
+    'b':
+      repeat: false
+      description: Local note
+    'c':
+      repeat: false
+      description: Local note
+    'd':
+      repeat: false
+      description: Local note
+    'e':
+      repeat: false
+      description: Local note
+    'f':
+      repeat: false
+      description: Local note
+    'g':
+      repeat: false
+      description: Local note
+    'h':
+      repeat: false
+      description: Local note
+    'i':
+      repeat: false
+      description: Local note
+    'j':
+      repeat: false
+      description: Local note
+    'k':
+      repeat: false
+      description: Local note
+    'l':
+      repeat: false
+      description: Local note
+    'm':
+      repeat: false
+      description: Local note
+    'n':
+      repeat: false
+      description: Local note
+    'o':
+      repeat: false
+      description: Local note
+    'p':
+      repeat: false
+      description: Local note
+    'q':
+      repeat: false
+      description: Local note
+    'r':
+      repeat: false
+      description: Local note
+    's':
+      repeat: false
+      description: Local note
+    't':
+      repeat: false
+      description: Local note
+    'u':
+      repeat: false
+      description: Local note
+    'v':
+      repeat: false
+      description: Local note
+    'w':
+      repeat: false
+      description: Local note
+    'x':
+      repeat: false
+      description: Local note
+    'y':
+      repeat: false
+      description: Local note
+    'z':
+      repeat: false
+      description: Local note
+    '6':
+      repeat: false
+      description: Linkage
+
+'597':
+  repeat: true
+  description: LOCAL NOTE (OCLC)
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Local note
+    'b':
+      repeat: false
+      description: Local note
+    'c':
+      repeat: false
+      description: Local note
+    'd':
+      repeat: false
+      description: Local note
+    'e':
+      repeat: false
+      description: Local note
+    'f':
+      repeat: false
+      description: Local note
+    'g':
+      repeat: false
+      description: Local note
+    'h':
+      repeat: false
+      description: Local note
+    'i':
+      repeat: false
+      description: Local note
+    'j':
+      repeat: false
+      description: Local note
+    'k':
+      repeat: false
+      description: Local note
+    'l':
+      repeat: false
+      description: Local note
+    'm':
+      repeat: false
+      description: Local note
+    'n':
+      repeat: false
+      description: Local note
+    'o':
+      repeat: false
+      description: Local note
+    'p':
+      repeat: false
+      description: Local note
+    'q':
+      repeat: false
+      description: Local note
+    'r':
+      repeat: false
+      description: Local note
+    's':
+      repeat: false
+      description: Local note
+    't':
+      repeat: false
+      description: Local note
+    'u':
+      repeat: false
+      description: Local note
+    'v':
+      repeat: false
+      description: Local note
+    'w':
+      repeat: false
+      description: Local note
+    'x':
+      repeat: false
+      description: Local note
+    'y':
+      repeat: false
+      description: Local note
+    'z':
+      repeat: false
+      description: Local note
+    '6':
+      repeat: false
+      description: Linkage
+
+'598':
+  repeat: true
+  description: LOCAL NOTE (OCLC)
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Local note
+    'b':
+      repeat: false
+      description: Local note
+    'c':
+      repeat: false
+      description: Local note
+    'd':
+      repeat: false
+      description: Local note
+    'e':
+      repeat: false
+      description: Local note
+    'f':
+      repeat: false
+      description: Local note
+    'g':
+      repeat: false
+      description: Local note
+    'h':
+      repeat: false
+      description: Local note
+    'i':
+      repeat: false
+      description: Local note
+    'j':
+      repeat: false
+      description: Local note
+    'k':
+      repeat: false
+      description: Local note
+    'l':
+      repeat: false
+      description: Local note
+    'm':
+      repeat: false
+      description: Local note
+    'n':
+      repeat: false
+      description: Local note
+    'o':
+      repeat: false
+      description: Local note
+    'p':
+      repeat: false
+      description: Local note
+    'q':
+      repeat: false
+      description: Local note
+    'r':
+      repeat: false
+      description: Local note
+    's':
+      repeat: false
+      description: Local note
+    't':
+      repeat: false
+      description: Local note
+    'u':
+      repeat: false
+      description: Local note
+    'v':
+      repeat: false
+      description: Local note
+    'w':
+      repeat: false
+      description: Local note
+    'x':
+      repeat: false
+      description: Local note
+    'y':
+      repeat: false
+      description: Local note
+    'z':
+      repeat: false
+      description: Local note
+    '6':
+      repeat: false
+      description: Linkage
+
+'599':
+  repeat: true
+  description: DIFFERENTIABLE LOCAL NOTE (OCLC)
+  ind1: [" ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  ind2: [" ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  subfields:
+    'a':
+      repeat: false
+      description: Differentiable local note
+    'b':
+      repeat: false
+      description: Differentiable local note
+    'c':
+      repeat: false
+      description: Differentiable local note
+    'd':
+      repeat: false
+      description: Differentiable local note
+    'e':
+      repeat: false
+      description: Differentiable local note
+    'f':
+      repeat: false
+      description: Differentiable local note
+    'g':
+      repeat: false
+      description: Differentiable local note
+    'h':
+      repeat: false
+      description: Differentiable local note
+    'i':
+      repeat: false
+      description: Differentiable local note
+    'j':
+      repeat: false
+      description: Differentiable local note
+    'k':
+      repeat: false
+      description: Differentiable local note
+    'l':
+      repeat: false
+      description: Differentiable local note
+    'm':
+      repeat: false
+      description: Differentiable local note
+    'n':
+      repeat: false
+      description: Differentiable local note
+    'o':
+      repeat: false
+      description: Differentiable local note
+    'p':
+      repeat: false
+      description: Differentiable local note
+    'q':
+      repeat: false
+      description: Differentiable local note
+    'r':
+      repeat: false
+      description: Differentiable local note
+    's':
+      repeat: false
+      description: Differentiable local note
+    't':
+      repeat: false
+      description: Differentiable local note
+    'u':
+      repeat: false
+      description: Differentiable local note
+    'v':
+      repeat: false
+      description: Differentiable local note
+    'w':
+      repeat: false
+      description: Differentiable local note
+    'x':
+      repeat: false
+      description: Differentiable local note
+    'y':
+      repeat: false
+      description: Differentiable local note
+    'z':
+      repeat: false
+      description: Differentiable local note
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
 '600':
   repeat: true
   description: SUBJECT ADDED ENTRY--PERSONAL NAME
@@ -5181,7 +6694,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -5214,7 +6727,7 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -5236,7 +6749,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -5245,10 +6761,13 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5266,7 +6785,7 @@
       repeat: true
       description: Subordinate unit
     'c':
-      repeat: false
+      repeat: true
       description: Location of meeting
     'd':
       repeat: true
@@ -5278,7 +6797,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -5305,7 +6824,7 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -5327,7 +6846,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -5336,10 +6858,13 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5354,11 +6879,11 @@
       repeat: false
       description: Meeting name or jurisdiction name as entry element
     'c':
-      repeat: false
+      repeat: true
       description: Location of meeting
     'd':
-      repeat: false
-      description: Date of meeting
+      repeat: true
+      description: Date of meeting or treaty signing
     'e':
       repeat: true
       description: Subordinate unit
@@ -5366,7 +6891,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -5390,7 +6915,7 @@
       repeat: false
       description: Name of meeting following jurisdiction name entry element
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -5412,7 +6937,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -5421,10 +6949,13 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5448,7 +6979,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -5475,7 +7006,7 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -5494,7 +7025,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -5503,7 +7037,65 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'647':
+  repeat: true
+  description: SUBJECT ADDED ENTRY--NAMED EVENT
+  ind1: [" "]
+  ind2: ["0", "1", "2", "3", "4", "5", "6", "7"]
+  subfields:
+    'a':
+      repeat: false
+      description: Named event
+    'c':
+      repeat: true
+      description: Location of named event
+    'd':
+      repeat: false
+      description: Date of named event
+    'e':
+      repeat: true
+      description: Relator term
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'v':
+      repeat: true
+      description: Form subdivision
+    'x':
+      repeat: true
+      description: General subdivision
+    'y':
+      repeat: true
+      description: Chronological subdivision
+    'z':
+      repeat: true
+      description: Geographic subdivision
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -5520,6 +7112,9 @@
     'a':
       repeat: false
       description: Chronological term
+    'e':
+      repeat: true
+      description: Relator term
     'v':
       repeat: true
       description: Form subdivision
@@ -5534,16 +7129,25 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5569,6 +7173,9 @@
     'e':
       repeat: false
       description: Relator term
+    'g':
+      repeat: true
+      description: Miscellaneous information
     'v':
       repeat: true
       description: Form subdivision
@@ -5583,7 +7190,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -5592,10 +7202,13 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5612,6 +7225,9 @@
     'e':
       repeat: true
       description: Relator term
+    'g':
+      repeat: true
+      description: Miscellaneous information
     'v':
       repeat: true
       description: Form subdivision
@@ -5626,7 +7242,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -5635,10 +7254,13 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5652,9 +7274,21 @@
     'a':
       repeat: true
       description: Uncontrolled term
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '5':
+      repeat: false
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5688,7 +7322,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -5697,7 +7334,7 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -5734,10 +7371,13 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
-      description: Source of term
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
@@ -5747,6 +7387,9 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -5777,7 +7420,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
@@ -5814,7 +7460,10 @@
       description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
@@ -5846,6 +7495,12 @@
     'd':
       repeat: false
       description: Correlation factor
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term or code
@@ -5888,13 +7543,16 @@
       description: Extraterrestrial area
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -5902,11 +7560,174 @@
       repeat: true
       description: Field link and sequence number
 
-'700':
+'688':
   repeat: true
-  description: ADDED ENTRY--PERSONAL NAME
+  description: SUBJECT ADDED ENTRY--TYPE OF ENTITY UNSPECIFIED
+  ind1: [" "]
+  ind2: [" ", "7"]
+  subfields:
+    'a':
+      repeat: false
+      description: Name, title, or term
+    'e':
+      repeat: true
+      description: Relator term
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of name, title, or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'690':
+  repeat: true
+  description: LOCAL SUBJECT ADDED ENTRY--TOPICAL TERM (OCLC)
+  ind1: [" ", "0", "1", "2"]
+  ind2: ["0", "1", "2", "3", "4", "5", "6", "7"]
+  subfields:
+    'a':
+      repeat: false
+      description: Topical term or geographic name entry element
+    'b':
+      repeat: false
+      description: Topical term following geographic name entry element
+    'c':
+      repeat: false
+      description: Location of event
+    'd':
+      repeat: false
+      description: Active dates
+    'e':
+      repeat: false
+      description: Relator term
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'v':
+      repeat: true
+      description: Form subdivision
+    'x':
+      repeat: true
+      description: General subdivision
+    'y':
+      repeat: true
+      description: Chronological subdivision
+    'z':
+      repeat: true
+      description: Geographic subdivision
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Special entry
+
+'691':
+  repeat: true
+  description: LOCAL SUBJECT ADDED ENTRY--GEOGRAPHIC NAME (OCLC)
+  ind1: [" "]
+  ind2: ["0", "1", "2", "3", "4", "5", "6", "7"]
+  subfields:
+    'a':
+      repeat: false
+      description: Geographic name
+    'b':
+      repeat: false
+      description: Geographic element following geographic name
+    'e':
+      repeat: false
+      description: Relator term
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'v':
+      repeat: true
+      description: Form subdivision
+    'x':
+      repeat: true
+      description: General subdivision
+    'y':
+      repeat: true
+      description: Chronological subdivision
+    'z':
+      repeat: true
+      description: Geographic subdivision
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Special entry
+
+'695':
+  repeat: true
+  description: ADDED CLASS NUMBER (OCLC)
+  ind1: [" ", "0", "1"]
+  ind2: ["0", "1", "2", "3", "4", "5", "9"]
+  subfields:
+    'a':
+      repeat: false
+      description: Added class number
+    'b':
+      repeat: true
+      description: Item number
+    'e':
+      repeat: true
+      description: Heading
+    'f':
+      repeat: true
+      description: Filing suffix
+    '2':
+      repeat: false
+      description: Edition number
+
+'696':
+  repeat: true
+  description: LOCAL SUBJECT ADDED ENTRY--PERSONAL NAME (OCLC)
   ind1: ["0", "1", "3"]
-  ind2: [" ", "2"]
+  ind2: ["0", "1", "2", "3", "4", "5", "6", "7"]
   subfields:
     'a':
       repeat: false
@@ -5927,7 +7748,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -5960,7 +7781,7 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -5968,33 +7789,48 @@
     'u':
       repeat: false
       description: Affiliation
+    'v':
+      repeat: true
+      description: Form subdivision
     'x':
-      repeat: false
-      description: International Standard Serial Number
+      repeat: true
+      description: General subdivision
+    'y':
+      repeat: true
+      description: Chronological subdivision
+    'z':
+      repeat: true
+      description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
-    '5':
-      repeat: false
-      description: Institution to which field applies
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
     '8':
       repeat: true
       description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Special entry
 
-'710':
+'697':
   repeat: true
-  description: ADDED ENTRY--CORPORATE NAME
+  description: LOCAL SUBJECT ADDED ENTRY--CORPORATE NAME (OCLC)
   ind1: ["0", "1", "2"]
-  ind2: [" ", "2"]
+  ind2: ["0", "1", "2", "3", "4", "5", "6", "7"]
   subfields:
     'a':
       repeat: false
@@ -6003,7 +7839,7 @@
       repeat: true
       description: Subordinate unit
     'c':
-      repeat: false
+      repeat: true
       description: Location of meeting
     'd':
       repeat: true
@@ -6015,7 +7851,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -6042,7 +7878,7 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -6050,43 +7886,58 @@
     'u':
       repeat: false
       description: Affiliation
+    'v':
+      repeat: true
+      description: Form subdivision
     'x':
-      repeat: false
-      description: International Standard Serial Number
+      repeat: true
+      description: General subdivision
+    'y':
+      repeat: true
+      description: Chronological subdivision
+    'z':
+      repeat: true
+      description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
-    '5':
-      repeat: false
-      description: Institution to which field applies
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
     '8':
       repeat: true
       description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Special entry
 
-'711':
+'698':
   repeat: true
-  description: ADDED ENTRY--MEETING NAME
+  description: LOCAL SUBJECT ADDED ENTRY--MEETING NAME (OCLC)
   ind1: ["0", "1", "2"]
-  ind2: [" ", "2"]
+  ind2: ["0", "1", "2", "3", "4", "5", "6", "7"]
   subfields:
     'a':
       repeat: false
       description: Meeting name or jurisdiction name as entry element
     'c':
-      repeat: false
+      repeat: true
       description: Location of meeting
     'd':
-      repeat: false
-      description: Date of meeting
+      repeat: true
+      description: Date of meeting or treaty signing
     'e':
       repeat: true
       description: Subordinate unit
@@ -6094,7 +7945,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -6118,7 +7969,7 @@
       repeat: false
       description: Name of meeting following jurisdiction name entry element
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -6126,55 +7977,48 @@
     'u':
       repeat: false
       description: Affiliation
+    'v':
+      repeat: true
+      description: Form subdivision
     'x':
-      repeat: false
-      description: International Standard Serial Number
+      repeat: true
+      description: General subdivision
+    'y':
+      repeat: true
+      description: Chronological subdivision
+    'z':
+      repeat: true
+      description: Geographic subdivision
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
-    '5':
-      repeat: false
-      description: Institution to which field applies
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
     '8':
       repeat: true
       description: Field link and sequence number
-
-'720':
-  repeat: true
-  description: ADDED ENTRY--UNCONTROLLED NAME
-  ind1: [" ", "1", "2"]
-  ind2: [" "]
-  subfields:
-    'a':
+    '9':
       repeat: false
-      description: Name
-    'e':
-      repeat: true
-      description: Relator term
-    '4':
-      repeat: true
-      description: Relator code
-    '6':
-      repeat: false
-      description: Linkage
-    '8':
-      repeat: true
-      description: Field link and sequence number
+      description: Special entry
 
-'730':
+'699':
   repeat: true
-  description: ADDED ENTRY--UNIFORM TITLE
+  description: LOCAL SUBJECT ADDED ENTRY--UNIFORM TITLE (OCLC)
   ind1: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-  ind2: [" ", "2"]
+  ind2: ["0", "1", "2", "3", "4", "5", "6", "7"]
   subfields:
     'a':
       repeat: false
@@ -6182,11 +8026,14 @@
     'd':
       repeat: true
       description: Date of treaty signing
+    'e':
+      repeat: true
+      description: Relator term
     'f':
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -6213,7 +8060,411 @@
       repeat: false
       description: Key for music
     's':
+      repeat: true
+      description: Version
+    't':
       repeat: false
+      description: Title of a work
+    'v':
+      repeat: true
+      description: Form subdivision
+    'x':
+      repeat: true
+      description: General subdivision
+    'y':
+      repeat: true
+      description: Chronological subdivision
+    'z':
+      repeat: true
+      description: Geographic subdivision
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Special entry
+
+'700':
+  repeat: true
+  description: ADDED ENTRY--PERSONAL NAME
+  ind1: ["0", "1", "3"]
+  ind2: [" ", "2"]
+  subfields:
+    'a':
+      repeat: false
+      description: Personal name
+    'b':
+      repeat: false
+      description: Numeration
+    'c':
+      repeat: true
+      description: Titles and other words associated with a name
+    'd':
+      repeat: false
+      description: Dates associated with a name
+    'e':
+      repeat: true
+      description: Relator term
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
+    'j':
+      repeat: true
+      description: Attribution qualifier
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'm':
+      repeat: true
+      description: Medium of performance for music
+    'n':
+      repeat: true
+      description: Number of part/section of a work
+    'o':
+      repeat: false
+      description: Arranged statement for music
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'q':
+      repeat: false
+      description: Fuller form of name
+    'r':
+      repeat: false
+      description: Key for music
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'u':
+      repeat: false
+      description: Affiliation
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'710':
+  repeat: true
+  description: ADDED ENTRY--CORPORATE NAME
+  ind1: ["0", "1", "2"]
+  ind2: [" ", "2"]
+  subfields:
+    'a':
+      repeat: false
+      description: Corporate name or jurisdiction name as entry element
+    'b':
+      repeat: true
+      description: Subordinate unit
+    'c':
+      repeat: true
+      description: Location of meeting
+    'd':
+      repeat: true
+      description: Date of meeting or treaty signing
+    'e':
+      repeat: true
+      description: Relator term
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'm':
+      repeat: true
+      description: Medium of performance for music
+    'n':
+      repeat: true
+      description: Number of part/section/meeting
+    'o':
+      repeat: false
+      description: Arranged statement for music
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'r':
+      repeat: false
+      description: Key for music
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'u':
+      repeat: false
+      description: Affiliation
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'711':
+  repeat: true
+  description: ADDED ENTRY--MEETING NAME
+  ind1: ["0", "1", "2"]
+  ind2: [" ", "2"]
+  subfields:
+    'a':
+      repeat: false
+      description: Meeting name or jurisdiction name as entry element
+    'c':
+      repeat: true
+      description: Location of meeting
+    'd':
+      repeat: true
+      description: Date of meeting or treaty signing
+    'e':
+      repeat: true
+      description: Subordinate unit
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
+    'j':
+      repeat: true
+      description: Relator term
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'n':
+      repeat: true
+      description: Number of part/section/meeting
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'q':
+      repeat: false
+      description: Name of meeting following jurisdiction name entry element
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'u':
+      repeat: false
+      description: Affiliation
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'720':
+  repeat: true
+  description: ADDED ENTRY--UNCONTROLLED NAME
+  ind1: [" ", "1", "2"]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Name
+    'e':
+      repeat: true
+      description: Relator term
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'730':
+  repeat: true
+  description: ADDED ENTRY--UNIFORM TITLE
+  ind1: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  ind2: [" ", "2"]
+  subfields:
+    'a':
+      repeat: false
+      description: Uniform title
+    'd':
+      repeat: true
+      description: Date of treaty signing
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'm':
+      repeat: true
+      description: Medium of performance for music
+    'n':
+      repeat: true
+      description: Number of part/section of a work
+    'o':
+      repeat: false
+      description: Arranged statement for music
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'r':
+      repeat: false
+      description: Key for music
+    's':
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -6223,10 +8474,19 @@
       description: International Standard Serial Number
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
     '5':
       repeat: false
       description: Institution to which field applies
@@ -6277,9 +8537,15 @@
     'e':
       repeat: true
       description: Relator term
+    'g':
+      repeat: true
+      description: Miscellaneous information
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
@@ -6288,10 +8554,13 @@
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: true
+      description: Data provenance
     '8':
       repeat: true
       description: Field link and sequence number
@@ -6303,17 +8572,20 @@
   ind2: [" "]
   subfields:
     'a':
-      repeat: false
+      repeat: true
       description: Country or larger entity
     'b':
       repeat: false
       description: First-order political jurisdiction
     'c':
-      repeat: false
+      repeat: true
       description: Intermediate political jurisdiction
     'd':
       repeat: false
       description: City
+    'e':
+      repeat: true
+      description: Relator term
     'f':
       repeat: true
       description: City subsection
@@ -6325,10 +8597,16 @@
       description: Extraterrestrial area
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of heading or term
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6351,6 +8629,15 @@
     'c':
       repeat: false
       description: Operating system
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '6':
       repeat: false
       description: Linkage
@@ -6381,10 +8668,50 @@
       description: Public note
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of taxonomic identification
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'758':
+  repeat: true
+  description: RESOURCE IDENTIFIER
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Label
+    'i':
+      repeat: true
+      description: Relationship information
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
@@ -6412,13 +8739,16 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -6443,6 +8773,9 @@
     'y':
       repeat: false
       description: CODEN designation
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6473,13 +8806,16 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -6504,6 +8840,9 @@
     'y':
       repeat: false
       description: CODEN designation
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6534,16 +8873,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -6577,6 +8919,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6607,16 +8952,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -6650,6 +8998,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6680,16 +9031,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -6723,6 +9077,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6753,16 +9110,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -6796,6 +9156,9 @@
     'z':
       repeat: true
       description: International Stan dard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -6823,16 +9186,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -6875,6 +9241,12 @@
     '3':
       repeat: false
       description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
@@ -6905,16 +9277,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -6948,6 +9323,12 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
@@ -6984,16 +9365,19 @@
       description: Country code
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -7027,6 +9411,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7057,16 +9444,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -7100,6 +9490,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7130,80 +9523,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
-    'k':
-      repeat: true
-      description: Series data for related item
-    'm':
-      repeat: false
-      description: Material-specific details
-    'n':
-      repeat: true
-      description: Note
-    'o':
-      repeat: true
-      description: Other item identifier
-    's':
-      repeat: false
-      description: Uniform title
-    't':
-      repeat: false
-      description: Title
-    'w':
-      repeat: true
-      description: Record control number
-    'x':
-      repeat: false
-      description: International Standard Serial Number
-    'y':
-      repeat: false
-      description: CODEN designation
-    '6':
-      repeat: false
-      description: Linkage
-    '7':
-      repeat: false
-      description: Control subfield
-    '8':
-      repeat: true
-      description: Field link and sequence number
-
-'780':
-  repeat: true
-  description: PRECEDING ENTRY
-  ind1: ["0", "1"]
-  ind2: ["0", "1", "2", "3", "4", "5", "6", "7"]
-  subfields:
-    'a':
-      repeat: false
-      description: Main entry heading
-    'b':
-      repeat: false
-      description: Edition
-    'c':
-      repeat: false
-      description: Qualifying information
-    'd':
-      repeat: false
-      description: Place, publisher, and date of publication
-    'g':
       repeat: true
       description: Relationship information
-    'h':
-      repeat: false
-      description: Physical description
-    'i':
-      repeat: false
-      description: Display text
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -7237,6 +9569,88 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: false
+      description: Control subfield
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'780':
+  repeat: true
+  description: PRECEDING ENTRY
+  ind1: ["0", "1"]
+  ind2: ["0", "1", "2", "3", "4", "5", "6", "7"]
+  subfields:
+    'a':
+      repeat: false
+      description: Main entry heading
+    'b':
+      repeat: false
+      description: Edition
+    'c':
+      repeat: false
+      description: Qualifying information
+    'd':
+      repeat: false
+      description: Place, publisher, and date of publication
+    'g':
+      repeat: true
+      description: Related parts
+    'h':
+      repeat: false
+      description: Physical description
+    'i':
+      repeat: true
+      description: Relationship information
+    'k':
+      repeat: true
+      description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
+    'm':
+      repeat: false
+      description: Material-specific details
+    'n':
+      repeat: true
+      description: Note
+    'o':
+      repeat: true
+      description: Other item identifier
+    'r':
+      repeat: true
+      description: Report number
+    's':
+      repeat: false
+      description: Uniform title
+    't':
+      repeat: false
+      description: Title
+    'u':
+      repeat: false
+      description: Standard Technical Report Number
+    'w':
+      repeat: true
+      description: Record control number
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    'y':
+      repeat: false
+      description: CODEN designation
+    'z':
+      repeat: true
+      description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7267,16 +9681,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -7310,6 +9727,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7340,19 +9760,22 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'j':
       repeat: false
       description: Period of content
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -7392,6 +9815,9 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
     '6':
       repeat: false
       description: Linkage
@@ -7422,16 +9848,19 @@
       description: Place, publisher, and date of publication
     'g':
       repeat: true
-      description: Relationship information
+      description: Related parts
     'h':
       repeat: false
       description: Physical description
     'i':
-      repeat: false
-      description: Display text
+      repeat: true
+      description: Relationship information
     'k':
       repeat: true
       description: Series data for related item
+    'l':
+      repeat: true
+      description: Data provenance
     'm':
       repeat: false
       description: Material-specific details
@@ -7465,6 +9894,12 @@
     'z':
       repeat: true
       description: International Standard Book Number
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
@@ -7474,6 +9909,774 @@
     '8':
       repeat: true
       description: Field link and sequence number
+
+'788':
+  repeat: true
+  description: PARALLEL DESCRIPTION IN ANOTHER LANGUAGE OF CATALOGING
+  ind1: ["0", "1"]
+  ind2: [" ", "8"]
+  subfields:
+    'a':
+      repeat: false
+      description: Main entry heading
+    'b':
+      repeat: false
+      description: Edition
+    'd':
+      repeat: false
+      description: Place, publisher, and date of publication
+    'e':
+      repeat: false
+      description: Language of cataloging
+    'i':
+      repeat: true
+      description: Relationship information
+    'l':
+      repeat: true
+      description: Data provenance
+    'n':
+      repeat: true
+      description: Note
+    's':
+      repeat: false
+      description: Uniform title
+    't':
+      repeat: false
+      description: Title
+    'w':
+      repeat: true
+      description: Record control number
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'790':
+  repeat: true
+  description: LOCAL ADDED ENTRY--PERSONAL NAME (OCLC)
+  ind1: ["0", "1", "3"]
+  ind2: [" ", "2"]
+  subfields:
+    'a':
+      repeat: false
+      description: Personal name
+    'b':
+      repeat: false
+      description: Numeration
+    'c':
+      repeat: true
+      description: Titles and other words associated with a name
+    'd':
+      repeat: false
+      description: Dates associated with a name
+    'e':
+      repeat: true
+      description: Relator term
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
+    'j':
+      repeat: true
+      description: Attribution qualifier
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'm':
+      repeat: true
+      description: Medium of performance for music
+    'n':
+      repeat: true
+      description: Number of part/section of a work
+    'o':
+      repeat: false
+      description: Arranged statement for music
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'q':
+      repeat: false
+      description: Fuller form of name
+    'r':
+      repeat: false
+      description: Key for music
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'u':
+      repeat: false
+      description: Affiliation
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'791':
+  repeat: true
+  description: LOCAL ADDED ENTRY--CORPORATE NAME (OCLC)
+  ind1: ["0", "1", "2"]
+  ind2: [" ", "2"]
+  subfields:
+    'a':
+      repeat: false
+      description: Corporate name or jurisdiction name as entry element
+    'b':
+      repeat: true
+      description: Subordinate unit
+    'c':
+      repeat: true
+      description: Location of meeting
+    'd':
+      repeat: true
+      description: Date of meeting or treaty signing
+    'e':
+      repeat: true
+      description: Relator term
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'm':
+      repeat: true
+      description: Medium of performance for music
+    'n':
+      repeat: true
+      description: Number of part/section/meeting
+    'o':
+      repeat: false
+      description: Arranged statement for music
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'r':
+      repeat: false
+      description: Key for music
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'u':
+      repeat: false
+      description: Affiliation
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'792':
+  repeat: true
+  description: LOCAL ADDED ENTRY--MEETING NAME (OCLC)
+  ind1: ["0", "1", "2"]
+  ind2: [" ", "2"]
+  subfields:
+    'a':
+      repeat: false
+      description: Meeting name or jurisdiction name as entry element
+    'c':
+      repeat: true
+      description: Location of meeting
+    'd':
+      repeat: true
+      description: Date of meeting or treaty signing
+    'e':
+      repeat: true
+      description: Subordinate unit
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
+    'j':
+      repeat: true
+      description: Relator term
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'n':
+      repeat: true
+      description: Number of part/section/meeting
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'q':
+      repeat: false
+      description: Name of meeting following jurisdiction name entry element
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'u':
+      repeat: false
+      description: Affiliation
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'793':
+  repeat: true
+  description: LOCAL ADDED ENTRY--UNIFORM TITLE (OCLC)
+  ind1: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  ind2: [" ", "2"]
+  subfields:
+    'a':
+      repeat: false
+      description: Uniform title
+    'd':
+      repeat: true
+      description: Date of treaty signing
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'm':
+      repeat: true
+      description: Medium of performance for music
+    'n':
+      repeat: true
+      description: Number of part/section of a work
+    'o':
+      repeat: false
+      description: Arranged statement for music
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'r':
+      repeat: false
+      description: Key for music
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'796':
+  repeat: true
+  description: LOCAL ADDED ENTRY--PERSONAL NAME (OCLC)
+  ind1: ["0", "1", "3"]
+  ind2: [" ", "2"]
+  subfields:
+    'a':
+      repeat: false
+      description: Personal name
+    'b':
+      repeat: false
+      description: Numeration
+    'c':
+      repeat: true
+      description: Titles and other words associated with a name
+    'd':
+      repeat: false
+      description: Dates associated with a name
+    'e':
+      repeat: true
+      description: Relator term
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
+    'j':
+      repeat: true
+      description: Attribution qualifier
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'm':
+      repeat: true
+      description: Medium of performance for music
+    'n':
+      repeat: true
+      description: Number of part/section of a work
+    'o':
+      repeat: false
+      description: Arranged statement for music
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'q':
+      repeat: false
+      description: Fuller form of name
+    'r':
+      repeat: false
+      description: Key for music
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'u':
+      repeat: false
+      description: Affiliation
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Special entry
+
+'797':
+  repeat: true
+  description: LOCAL ADDED ENTRY--CORPORATE NAME (OCLC)
+  ind1: ["0", "1", "2"]
+  ind2: [" ", "2"]
+  subfields:
+    'a':
+      repeat: false
+      description: Corporate name or jurisdiction name as entry element
+    'b':
+      repeat: true
+      description: Subordinate unit
+    'c':
+      repeat: true
+      description: Location of meeting
+    'd':
+      repeat: true
+      description: Date of meeting or treaty signing
+    'e':
+      repeat: true
+      description: Relator term
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'm':
+      repeat: true
+      description: Medium of performance for music
+    'n':
+      repeat: true
+      description: Number of part/section/meeting
+    'o':
+      repeat: false
+      description: Arranged statement for music
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'r':
+      repeat: false
+      description: Key for music
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'u':
+      repeat: false
+      description: Affiliation
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Special entry
+
+'798':
+  repeat: true
+  description: LOCAL ADDED ENTRY--MEETING NAME (OCLC)
+  ind1: ["0", "1", "2"]
+  ind2: [" ", "2"]
+  subfields:
+    'a':
+      repeat: false
+      description: Meeting name or jurisdiction name as entry element
+    'c':
+      repeat: true
+      description: Location of meeting
+    'd':
+      repeat: true
+      description: Date of meeting or treaty signing
+    'e':
+      repeat: true
+      description: Subordinate unit
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
+    'j':
+      repeat: true
+      description: Relator term
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'n':
+      repeat: true
+      description: Number of part/section/meeting
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'q':
+      repeat: false
+      description: Name of meeting following jurisdiction name entry element
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'u':
+      repeat: false
+      description: Affiliation
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Special entry
+
+'799':
+  repeat: true
+  description: LOCAL ADDED ENTRY--UNIFORM TITLE (OCLC)
+  ind1: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  ind2: [" ", "2"]
+  subfields:
+    'a':
+      repeat: false
+      description: Uniform title
+    'd':
+      repeat: true
+      description: Date of treaty signing
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'i':
+      repeat: true
+      description: Relationship information
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'm':
+      repeat: true
+      description: Medium of performance for music
+    'n':
+      repeat: true
+      description: Number of part/section of a work
+    'o':
+      repeat: false
+      description: Arranged statement for music
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'r':
+      repeat: false
+      description: Key for music
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Special entry
 
 '800':
   repeat: true
@@ -7500,7 +10703,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -7533,7 +10736,7 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -7550,18 +10753,33 @@
     'x':
       repeat: false
       description: International Standard Serial Number
+    'y':
+      repeat: true
+      description: Data provenance
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
+    '5':
+      repeat: true
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: false
+      description: Control subfield
     '8':
       repeat: true
       description: Field link and sequence number
@@ -7579,7 +10797,7 @@
       repeat: true
       description: Subordinate unit
     'c':
-      repeat: false
+      repeat: true
       description: Location of meeting
     'd':
       repeat: true
@@ -7591,7 +10809,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -7618,7 +10836,7 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -7635,18 +10853,33 @@
     'x':
       repeat: false
       description: International Standard Serial Number
+    'y':
+      repeat: true
+      description: Data provenance
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
+    '5':
+      repeat: true
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: false
+      description: Control subfield
     '8':
       repeat: true
       description: Field link and sequence number
@@ -7661,11 +10894,11 @@
       repeat: false
       description: Meeting name or jurisdiction name as entry element
     'c':
-      repeat: false
+      repeat: true
       description: Location of meeting
     'd':
-      repeat: false
-      description: Date of meeting
+      repeat: true
+      description: Date of meeting or treaty signing
     'e':
       repeat: true
       description: Subordinate unit
@@ -7673,7 +10906,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -7697,7 +10930,7 @@
       repeat: false
       description: Name of meeting following jurisdiction name entry element
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -7714,18 +10947,33 @@
     'x':
       repeat: false
       description: International Standard Serial Number
+    'y':
+      repeat: true
+      description: Data provenance
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
     '4':
       repeat: true
-      description: Relator code
+      description: Relationship
+    '5':
+      repeat: true
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: false
+      description: Control subfield
     '8':
       repeat: true
       description: Field link and sequence number
@@ -7746,7 +10994,7 @@
       repeat: false
       description: Date of a work
     'g':
-      repeat: false
+      repeat: true
       description: Miscellaneous information
     'h':
       repeat: false
@@ -7773,7 +11021,7 @@
       repeat: false
       description: Key for music
     's':
-      repeat: false
+      repeat: true
       description: Version
     't':
       repeat: false
@@ -7787,15 +11035,30 @@
     'x':
       repeat: false
       description: International Standard Serial Number
+    'y':
+      repeat: true
+      description: Data provenance
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
     '3':
       repeat: false
       description: Materials specified
+    '5':
+      repeat: true
+      description: Institution to which field applies
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: false
+      description: Control subfield
     '8':
       repeat: true
       description: Field link and sequence number
@@ -7914,7 +11177,7 @@
       description: Authorized users
     'f':
       repeat: true
-      description: Use and reproduction rights
+      description: Standardized terminology for use and reproduction rights
     'g':
       repeat: true
       description: Availability date
@@ -7924,6 +11187,12 @@
     'u':
       repeat: true
       description: Uniform Resource Identifier
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '2':
       repeat: false
       description: Source of term
@@ -8035,48 +11304,306 @@
       repeat: false
       description: Sequence number
 
+'853':
+  repeat: true
+  description: CAPTIONS AND PATTERN - BASIC BIBLIOGRAPHIC UNIT
+  ind1: ["0", "1", "2", "3"]
+  ind2: ["0", "1", "2", "3"]
+  subfields:
+    'a':
+      repeat: false
+      description: First level of enumeration
+    'b':
+      repeat: false
+      description: Second level of enumeration
+    'c':
+      repeat: false
+      description: Third level of enumeration
+    'd':
+      repeat: false
+      description: Fourth level of enumeration
+    'e':
+      repeat: false
+      description: Fifth level of enumeration
+    'f':
+      repeat: false
+      description: Sixth level of enumeration
+    'g':
+      repeat: false
+      description: Alternative numbering scheme, first level of enumeration
+    'h':
+      repeat: false
+      description: Alternative numbering scheme, second level of enumeration
+    'i':
+      repeat: false
+      description: First level of chronology
+    'j':
+      repeat: false
+      description: Second level of chronology
+    'k':
+      repeat: false
+      description: Third level of chronology
+    'l':
+      repeat: false
+      description: Fourth level of chronology
+    'm':
+      repeat: false
+      description: Alternative numbering scheme, chronology
+    'n':
+      repeat: false
+      description: Pattern note
+    'o':
+      repeat: true
+      description: Type of unit
+    'p':
+      repeat: false
+      description: Number of pieces per issuance
+    't':
+      repeat: false
+      description: Copy
+    'u':
+      repeat: true
+      description: Bibliographic units per next higher level
+    'v':
+      repeat: true
+      description: Numbering continuity
+    'w':
+      repeat: false
+      description: Frequency
+    'x':
+      repeat: false
+      description: Calendar change
+    'y':
+      repeat: true
+      description: Regularity pattern
+    'z':
+      repeat: true
+      description: Numbering scheme
+    '2':
+      repeat: true
+      description: Source of caption abbreviation
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: false
+      description: Field link and sequence number
+
+'854':
+  repeat: true
+  description: CAPTIONS AND PATTERN - SUPPLEMENTARY MATERIAL
+  ind1: ["0", "1", "2", "3"]
+  ind2: ["0", "1", "2", "3"]
+  subfields:
+    'a':
+      repeat: false
+      description: First level of enumeration
+    'b':
+      repeat: false
+      description: Second level of enumeration
+    'c':
+      repeat: false
+      description: Third level of enumeration
+    'd':
+      repeat: false
+      description: Fourth level of enumeration
+    'e':
+      repeat: false
+      description: Fifth level of enumeration
+    'f':
+      repeat: false
+      description: Sixth level of enumeration
+    'g':
+      repeat: false
+      description: Alternative numbering scheme, first level of enumeration
+    'h':
+      repeat: false
+      description: Alternative numbering scheme, second level of enumeration
+    'i':
+      repeat: false
+      description: First level of chronology
+    'j':
+      repeat: false
+      description: Second level of chronology
+    'k':
+      repeat: false
+      description: Third level of chronology
+    'l':
+      repeat: false
+      description: Fourth level of chronology
+    'm':
+      repeat: false
+      description: Alternative numbering scheme, chronology
+    'n':
+      repeat: false
+      description: Pattern note
+    'o':
+      repeat: true
+      description: Type of unit
+    'p':
+      repeat: false
+      description: Number of pieces per issuance
+    't':
+      repeat: false
+      description: Copy
+    'u':
+      repeat: true
+      description: Bibliographic units per next higher level
+    'v':
+      repeat: true
+      description: Numbering continuity
+    'w':
+      repeat: false
+      description: Frequency
+    'x':
+      repeat: false
+      description: Calendar change
+    'y':
+      repeat: true
+      description: Regularity pattern
+    'z':
+      repeat: true
+      description: Numbering scheme
+    '2':
+      repeat: true
+      description: Source of caption abbreviation
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: false
+      description: Field link and sequence number
+
+'855':
+  repeat: true
+  description: CAPTIONS AND PATTERN - INDEXES
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: First level of enumeration
+    'b':
+      repeat: false
+      description: Second level of enumeration
+    'c':
+      repeat: false
+      description: Third level of enumeration
+    'd':
+      repeat: false
+      description: Fourth level of enumeration
+    'e':
+      repeat: false
+      description: Fifth level of enumeration
+    'f':
+      repeat: false
+      description: Sixth level of enumeration
+    'g':
+      repeat: false
+      description: Alternative numbering scheme, first level of enumeration
+    'h':
+      repeat: false
+      description: Alternative numbering scheme, second level of enumeration
+    'i':
+      repeat: false
+      description: First level of chronology
+    'j':
+      repeat: false
+      description: Second level of chronology
+    'k':
+      repeat: false
+      description: Third level of chronology
+    'l':
+      repeat: false
+      description: Fourth level of chronology
+    'm':
+      repeat: false
+      description: Alternative numbering scheme, chronology
+    'n':
+      repeat: false
+      description: Pattern note
+    'o':
+      repeat: true
+      description: Type of unit
+    'p':
+      repeat: false
+      description: Number of pieces per issuance
+    't':
+      repeat: false
+      description: Copy
+    'u':
+      repeat: true
+      description: Bibliographic units per next higher level
+    'v':
+      repeat: true
+      description: Numbering continuity
+    'w':
+      repeat: false
+      description: Frequency
+    'x':
+      repeat: false
+      description: Calendar change
+    'y':
+      repeat: true
+      description: Regularity pattern
+    'z':
+      repeat: true
+      description: Numbering scheme
+    '2':
+      repeat: true
+      description: Source of caption abbreviation
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: false
+      description: Field link and sequence number
+
 '856':
   repeat: true
   description: ELECTRONIC LOCATION AND ACCESS
   ind1: [" ", "0", "1", "2", "3", "4", "7"]
-  ind2: [" ", "0", "1", "2", "8"]
+  ind2: [" ", "0", "1", "2", "3", "4", "8"]
   subfields:
     'a':
       repeat: true
       description: Host name
-    'b':
-      repeat: true
-      description: Access number
     'c':
       repeat: true
       description: Compression information
     'd':
       repeat: true
       description: Path
+    'e':
+      repeat: true
+      description: Data provenance
     'f':
       repeat: true
       description: Electronic name
-    'h':
-      repeat: false
-      description: Processor of request
-    'i':
+    'g':
       repeat: true
-      description: Instruction
-    'j':
-      repeat: false
-      description: Bits per second
-    'k':
-      repeat: false
-      description: Password
+      description: Persistent identifier
+    'h':
+      repeat: true
+      description: Non-functioning Uniform Resource Identifier
     'l':
-      repeat: false
-      description: Logon
+      repeat: true
+      description: Standardized information governing access
     'm':
       repeat: true
       description: Contact for access assistance
     'n':
-      repeat: false
-      description: Name of location of host
+      repeat: true
+      description: Terms governing access
     'o':
       repeat: false
       description: Operating system
@@ -8084,17 +11611,17 @@
       repeat: false
       description: Port
     'q':
-      repeat: false
+      repeat: true
       description: Electronic format type
     'r':
-      repeat: false
-      description: Settings
+      repeat: true
+      description: Standardized information governing use and reproduction
     's':
       repeat: true
       description: File size
     't':
       repeat: true
-      description: Terminal emulation
+      description: Terms governing use and reproduction
     'u':
       repeat: true
       description: Uniform Resource Identifier
@@ -8122,6 +11649,88 @@
     '6':
       repeat: false
       description: Linkage
+    '7':
+      repeat: false
+      description: Access status
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
+'857':
+  repeat: true
+  description: ELECTRONIC ARCHIVE LOCATION AND ACCESS
+  ind1: [" ", "0", "1", "4", "7"]
+  ind2: [" ", "0", "1", "2", "3", "4", "8"]
+  subfields:
+    'b':
+      repeat: false
+      description: Name of archiving agency
+    'c':
+      repeat: false
+      description: Name of Web archive or digital archive repository
+    'd':
+      repeat: false
+      description: Date range of archived materials
+    'e':
+      repeat: true
+      description: Data provenance
+    'f':
+      repeat: false
+      description: Archive completeness
+    'g':
+      repeat: true
+      description: Persistent identifier
+    'h':
+      repeat: true
+      description: Non-functioning Uniform Resource Identifier
+    'l':
+      repeat: true
+      description: Standardized information governing access
+    'm':
+      repeat: true
+      description: Contact for access assistance
+    'n':
+      repeat: true
+      description: Terms governing access
+    'q':
+      repeat: true
+      description: Electronic format type
+    'r':
+      repeat: true
+      description: Standardized information governing use and reproduction
+    's':
+      repeat: true
+      description: File size
+    't':
+      repeat: true
+      description: Terms governing use and reproduction
+    'u':
+      repeat: true
+      description: Uniform Resource Identifier
+    'x':
+      repeat: true
+      description: Nonpublic note
+    'y':
+      repeat: true
+      description: Link text
+    'z':
+      repeat: true
+      description: Public note
+    '2':
+      repeat: false
+      description: Access method
+    '3':
+      repeat: false
+      description: Materials specified
+    '5':
+      repeat: false
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: false
+      description: Access status
     '8':
       repeat: true
       description: Field link and sequence number
@@ -8616,6 +12225,64 @@
       repeat: false
       description: Linkage
 
+'881':
+  repeat: true
+  description: MANIFESTATION STATEMENTS
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: true
+      description: Manifestation statement, high-level/general
+    'b':
+      repeat: true
+      description: Manifestation identifier statement
+    'c':
+      repeat: true
+      description: Manifestation title and responsibility statement
+    'd':
+      repeat: true
+      description: Manifestation edition statement
+    'e':
+      repeat: true
+      description: Manifestation production statement
+    'f':
+      repeat: true
+      description: Manifestation publication statement
+    'g':
+      repeat: true
+      description: Manifestation distribution statement
+    'h':
+      repeat: true
+      description: Manifestation manufacture statement
+    'i':
+      repeat: true
+      description: Manifestation copyright statement
+    'j':
+      repeat: true
+      description: Manifestation frequency statement
+    'k':
+      repeat: true
+      description: Manifestation designation of sequence statement
+    'l':
+      repeat: true
+      description: Manifestation series statement
+    'm':
+      repeat: true
+      description: Manifestation dissertation statement
+    'n':
+      repeat: true
+      description: Manifestation regional encoding statement
+    '3':
+      repeat: false
+      description: Materials specified
+    '6':
+      repeat: false
+      description: Linkage
+    '8':
+      repeat: true
+      description: Field link and sequence number
+
 '882':
   repeat: false
   description: REPLACEMENT RECORD INFORMATION
@@ -8640,22 +12307,22 @@
 
 '883':
   repeat: true
-  description: MACHINE-GENERATED METADATA PROVENANCE
-  ind1: [" ", "0", "1"]
+  description: METADATA PROVENANCE
+  ind1: [" ", "0", "1", "2"]
   ind2: [" "]
   subfields:
     'a':
       repeat: false
-      description: Generation process
+      description: Creation process
     'c':
       repeat: false
       description: Confidence value
     'd':
       repeat: false
-      description: Generation date
+      description: Creation date
     'q':
       repeat: false
-      description: Generation agency
+      description: Assigning or generating agency
     'x':
       repeat: false
       description: Validity end date
@@ -8667,7 +12334,10 @@
       description: Bibliographic record control number
     '0':
       repeat: true
-      description: Authority record control number
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
     '8':
       repeat: true
       description: Field link and sequence number
@@ -8693,6 +12363,46 @@
     'u':
       repeat: true
       description: Uniform Resource Identifier
+
+'885':
+  repeat: true
+  description: MATCHING INFORMATION
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Matching information
+    'b':
+      repeat: false
+      description: Status of matching and its checking
+    'c':
+      repeat: false
+      description: Confidence value
+    'd':
+      repeat: false
+      description: Generation date
+    'w':
+      repeat: false
+      description: Record control number
+    'x':
+      repeat: true
+      description: Nonpublic note
+    'z':
+      repeat: true
+      description: Public note
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source
+    '5':
+      repeat: false
+      description: Institution to which field applies
 
 '886':
   repeat: true
@@ -8808,3 +12518,486 @@
     '9':
       repeat: true
       description: Foreign MARC subfield
+
+'887':
+  repeat: true
+  description: NON-MARC INFORMATION FIELD
+  ind1: [" "]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Content of non-MARC field
+    '2':
+      repeat: false
+      description: Source of data
+
+'891':
+  repeat: true
+  description: PUBLICATION PATTERN DATA (OCLC)
+  ind1: [" ", "0", "1", "2", "3", "4", "5"]
+  ind2: [" ", "0", "1", "2", "3", "4"]
+  subfields:
+    'a':
+      repeat: false
+      description: First level of enumeration
+    'b':
+      repeat: false
+      description: Second level of enumeration
+    'c':
+      repeat: false
+      description: Third level of enumeration
+    'd':
+      repeat: false
+      description: Fourth level of enumeration
+    'e':
+      repeat: false
+      description: Fifth level of enumeration
+    'f':
+      repeat: false
+      description: Sixth level of enumeration
+    'g':
+      repeat: false
+      description: Alternative numbering scheme, first level of enumeration
+    'h':
+      repeat: false
+      description: Alternative numbering scheme, second level of enumeration
+    'i':
+      repeat: false
+      description: First level of chronology
+    'j':
+      repeat: false
+      description: Second level of chronology
+    'k':
+      repeat: false
+      description: Third level of chronology
+    'l':
+      repeat: false
+      description: Fourth level of chronology
+    'm':
+      repeat: false
+      description: Alternative numbering scheme, chronology
+    'n':
+      repeat: false
+      description: Pattern note/Converted Gregorian year
+    'o':
+      repeat: true
+      description: Type of unit
+    'p':
+      repeat: false
+      description: Number of pieces per issuance
+    'u':
+      repeat: true
+      description: Bibliographic units per next higher level
+    'v':
+      repeat: true
+      description: Numbering continuity
+    'w':
+      repeat: false
+      description: Frequency/Break indicator
+    'x':
+      repeat: true
+      description: Calendar change/Nonpublic note
+    'y':
+      repeat: true
+      description: Regularity pattern
+    'z':
+      repeat: true
+      description: Numbering scheme/Public note
+    '2':
+      repeat: true
+      description: Source of caption abbreviation
+    '3':
+      repeat: false
+      description: Materials specified
+    '8':
+      repeat: false
+      description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Tag of the MARC holdings field
+
+'896':
+  repeat: true
+  description: LOCAL SERIES ADDED ENTRY--PERSONAL NAME (OCLC)
+  ind1: ["0", "1", "3"]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Personal name
+    'b':
+      repeat: false
+      description: Numeration
+    'c':
+      repeat: true
+      description: Titles and other words associated with a name
+    'd':
+      repeat: false
+      description: Dates associated with a name
+    'e':
+      repeat: true
+      description: Relator term
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'j':
+      repeat: true
+      description: Attribution qualifier
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'm':
+      repeat: true
+      description: Medium of performance for music
+    'n':
+      repeat: true
+      description: Number of part/section of a work
+    'o':
+      repeat: false
+      description: Arranged statement for music
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'q':
+      repeat: false
+      description: Fuller form of name
+    'r':
+      repeat: false
+      description: Key for music
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'u':
+      repeat: false
+      description: Affiliation
+    'v':
+      repeat: false
+      description: Volume/sequential designation
+    'w':
+      repeat: true
+      description: Bibliographic record control number
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: true
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: false
+      description: Control subfield
+    '8':
+      repeat: true
+      description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Special entry
+
+'897':
+  repeat: true
+  description: LOCAL SERIES ADDED ENTRY--CORPORATE NAME (OCLC)
+  ind1: ["0", "1", "2"]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Corporate name or jurisdiction name as entry element
+    'b':
+      repeat: true
+      description: Subordinate unit
+    'c':
+      repeat: true
+      description: Location of meeting
+    'd':
+      repeat: true
+      description: Date of meeting or treaty signing
+    'e':
+      repeat: true
+      description: Relator term
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'm':
+      repeat: true
+      description: Medium of performance for music
+    'n':
+      repeat: true
+      description: Number of part/section/meeting
+    'o':
+      repeat: false
+      description: Arranged statement for music
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'r':
+      repeat: false
+      description: Key for music
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'u':
+      repeat: false
+      description: Affiliation
+    'v':
+      repeat: false
+      description: Volume/sequential designation
+    'w':
+      repeat: true
+      description: Bibliographic record control number
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: true
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: false
+      description: Control subfield
+    '8':
+      repeat: true
+      description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Special entry
+
+'898':
+  repeat: true
+  description: LOCAL SERIES ADDED ENTRY--MEETING NAME (OCLC)
+  ind1: ["0", "1", "2"]
+  ind2: [" "]
+  subfields:
+    'a':
+      repeat: false
+      description: Meeting name or jurisdiction name as entry element
+    'c':
+      repeat: true
+      description: Location of meeting
+    'd':
+      repeat: true
+      description: Date of meeting or treaty signing
+    'e':
+      repeat: true
+      description: Subordinate unit
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'j':
+      repeat: true
+      description: Relator term
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'n':
+      repeat: true
+      description: Number of part/section/meeting
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'q':
+      repeat: false
+      description: Name of meeting following jurisdiction name entry element
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'u':
+      repeat: false
+      description: Affiliation
+    'v':
+      repeat: false
+      description: Volume/sequential designation
+    'w':
+      repeat: true
+      description: Bibliographic record control number
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '4':
+      repeat: true
+      description: Relationship
+    '5':
+      repeat: true
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: false
+      description: Control subfield
+    '8':
+      repeat: true
+      description: Field link and sequence number
+    '9':
+      repeat: false
+      description: Special entry
+
+'899':
+  repeat: true
+  description: LOCAL SERIES ADDED ENTRY--UNIFORM TITLE (OCLC)
+  ind1: [" "]
+  ind2: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  subfields:
+    'a':
+      repeat: false
+      description: Uniform title
+    'd':
+      repeat: true
+      description: Date of treaty signing
+    'f':
+      repeat: false
+      description: Date of a work
+    'g':
+      repeat: true
+      description: Miscellaneous information
+    'h':
+      repeat: false
+      description: Medium
+    'k':
+      repeat: true
+      description: Form subheading
+    'l':
+      repeat: false
+      description: Language of a work
+    'm':
+      repeat: true
+      description: Medium of performance for music
+    'n':
+      repeat: true
+      description: Number of part/section of a work
+    'o':
+      repeat: false
+      description: Arranged statement for music
+    'p':
+      repeat: true
+      description: Name of part/section of a work
+    'r':
+      repeat: false
+      description: Key for music
+    's':
+      repeat: true
+      description: Version
+    't':
+      repeat: false
+      description: Title of a work
+    'v':
+      repeat: false
+      description: Volume/sequential designation
+    'w':
+      repeat: true
+      description: Bibliographic record control number
+    'x':
+      repeat: false
+      description: International Standard Serial Number
+    '0':
+      repeat: true
+      description: Authority record control number or standard number
+    '1':
+      repeat: true
+      description: Real World Object URI
+    '2':
+      repeat: false
+      description: Source of heading or term
+    '3':
+      repeat: false
+      description: Materials specified
+    '5':
+      repeat: true
+      description: Institution to which field applies
+    '6':
+      repeat: false
+      description: Linkage
+    '7':
+      repeat: false
+      description: Control subfield
+    '8':
+      repeat: true
+      description: Field link and sequence number
+    '7':
+      repeat: false
+      description: Special entry
