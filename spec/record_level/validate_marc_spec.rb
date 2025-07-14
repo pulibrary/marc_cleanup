@@ -186,7 +186,7 @@ RSpec.describe 'validate_marc' do
     let(:record) { MARC::Record.new_from_hash('fields' => fields) }
     it 'validates 880 field against the linked field definition' do
       record_errors = MarcCleanup.validate_marc(record: record)
-      error_message = 'Invalid subfield code b in instance 1'
+      error_message = 'Invalid subfield code b in instance 1 linked to field tag 500'
       expect(record_errors[:invalid_fields]['880']).to include error_message
     end
   end

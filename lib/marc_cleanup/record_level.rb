@@ -1105,6 +1105,7 @@ module MarcCleanup
     end.map(&:tag)
     hash[:invalid_fields] = {}
     record.fields('010'..'899').each do |field|
+      has_link = false
       next unless schema[field.tag]
 
       field_num = record.fields(field.tag).index(field)
@@ -1130,7 +1131,9 @@ module MarcCleanup
           hash[:invalid_fields][field.tag] << error
         else
           tag = field['6'].gsub(/^([0-9]{3})-.*$/, '\1')
-          unless schema[tag]
+          if schema[tag]
+            has_link = true
+          else
             error = "Invalid linked field tag #{tag} in instance #{field_num} of 880"
             hash[:invalid_fields][field.tag] ||= []
             hash[:invalid_fields][field.tag] << error
@@ -1141,11 +1144,13 @@ module MarcCleanup
 
       unless schema[tag]['ind1'].include?(field.indicator1.to_s)
         error = "Invalid indicator1 value #{field.indicator1} in instance #{field_num}"
+        error << " linked to field tag #{tag}" if has_link
         hash[:invalid_fields][field.tag] ||= []
         hash[:invalid_fields][field.tag] << error
       end
       unless schema[tag]['ind2'].include?(field.indicator2.to_s)
         error = "Invalid indicator2 value #{field.indicator2} in instance #{field_num}"
+        error << " linked to field tag #{tag}" if has_link
         hash[:invalid_fields][field.tag] ||= []
         hash[:invalid_fields][field.tag] << error
       end
@@ -1157,10 +1162,14 @@ module MarcCleanup
       subf_hash.each do |code, count|
         if schema[tag]['subfields'][code].nil?
           hash[:invalid_fields][field.tag] ||= []
-          hash[:invalid_fields][field.tag] << "Invalid subfield code #{code} in instance #{field_num}"
+          error = "Invalid subfield code #{code} in instance #{field_num}"
+          error << " linked to field tag #{tag}" if has_link
+          hash[:invalid_fields][field.tag] << error
         elsif schema[tag]['subfields'][code]['repeat'] == false && count > 1
           hash[:invalid_fields][field.tag] ||= []
-          hash[:invalid_fields][field.tag] << "Non-repeatable subfield code #{code} repeated in instance #{field_num}"
+          error = "Non-repeatable subfield code #{code} repeated in instance #{field_num}"
+          error << " linked to field tag #{tag}" if has_link
+          hash[:invalid_fields][field.tag] << error
         end
       end
     end
