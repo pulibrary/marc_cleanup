@@ -16,7 +16,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'marc', '~> 1.0'
   spec.add_dependency "nokogiri"
-  spec.add_dependency 'unf', '0.1.4'
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency "byebug"
 end
