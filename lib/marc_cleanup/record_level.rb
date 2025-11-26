@@ -1094,7 +1094,6 @@ module MarcCleanup
   def data_field_length(field)
     total_length = field.indicator1.to_s.bytesize
     total_length += field.indicator2.to_s.bytesize
-    total_length += 1 # subfield delimiter after indicators
     field.subfields.each do |subfield|
       total_length += subfield.code.bytesize + 1 # include subfield delimiter
       total_length += subfield.value.bytesize
@@ -1120,14 +1119,11 @@ module MarcCleanup
   end
 
   def invalid_record_length?(record)
+    total_length = 0
     total_length += record.leader.bytesize if record.leader
     total_length += directory_length(record)
     record.fields.each do |field|
-      total_length += if field.instance_of?(MARC::ControlField)
-                        control_field_length(field)
-                      else
-                        data_field_length(field)
-                      end
+      total_length += field.instance_of?(MARC::ControlField) ? control_field_length(field) : data_field_length(field)
     end
     (total_length + 1) > 99_999 # include record terminator
   end
