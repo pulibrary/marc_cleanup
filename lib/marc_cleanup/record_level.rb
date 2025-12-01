@@ -1188,6 +1188,12 @@ module MarcCleanup
         end
         next unless schema[tag]
 
+        if invalid_field_length?(field)
+          error = "Field length above 9,999 bytes in instance #{field_num} of #{field.tag}"
+          error << " linked to field tag #{tag}" if has_link
+          hash[:invalid_fields][field.tag] ||= []
+          hash[:invalid_fields][field.tag] << error
+        end
         unless schema[tag]['ind1'].include?(field.indicator1.to_s)
           error = "Invalid indicator1 value #{field.indicator1} in instance #{field_num}"
           error << " linked to field tag #{tag}" if has_link
