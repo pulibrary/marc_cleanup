@@ -1167,85 +1167,133 @@ module MarcCleanup
   def validate_control_fields(record)
     hash = {}
     record.fields.select { |field| field.instance_of?(MARC::ControlField) }.each do |field|
-      if invalid_field_length?(field)
-        field_num = record.fields(field.tag).index(field) + 1
-        error = "Field length above 9,999 bytes in instance #{field_num} of #{field.tag}"
-        hash[field.tag] ||= []
-        hash[field.tag] << error
-      end
+      next unless invalid_field_length?(field)
+
+      field_num = record.fields(field.tag).index(field) + 1
+      error = "Field length above 9,999 bytes in instance #{field_num} of #{field.tag}"
+      hash[field.tag] ||= []
+      hash[field.tag] << error
     end
     hash
+  end
+
+  def field_has_link?(field)
+    field.tag == '880' && field.subfields.select { |subfield| subfield.code == '6' }.size == 1
+  end
+
+  def field_tag(field)
+    if field.tag != '880'
+      field.tag
+    elsif field.subfields.select { |subfield| subfield.code == '6' }.size != 1
+      field.tag
+    elsif field['6'] !~ /^[0-9]{3}-[0-9]+/
+      field.tag
+    else
+      field['6'].gsub(/^([0-9]{3})-.*$/, '\1')
+    end
+  end
+
+  def invalid_subfield_codes(field_info:, tag:)
+    errors = []
+    field_info[:field].subfields.group_by(&:code).each_key do |code|
+      next unless field_info[:schema][tag]['subfields'][code].nil?
+
+      error = "Invalid subfield code #{code} in instance #{field_info[:field_num]}"
+      errors << error
+    end
+    errors
+  end
+
+  def multiple_subfield_instances(field_info:, tag:)
+    field_info[:field].subfields.group_by(&:code).select do |code, subfields|
+      subfields.size > 1 &&
+        field_info[:schema][tag]['subfields'][code] &&
+        field_info[:schema][tag]['subfields'][code]['repeat'] == false
+    end
+  end
+
+  def non_repeatable_subfield_codes(field_info:, tag:)
+    errors = []
+    multiple_subfield_instances(field_info: field_info, tag: tag).each_key do |code|
+      error = "Non-repeatable subfield code #{code} repeated in instance #{field_info[:field_num]}"
+      errors << error
+    end
+    errors
+  end
+
+  def validate_subfields(field_info:, tag:)
+    errors = invalid_subfield_codes(field_info: field_info, tag: tag)
+    errors + non_repeatable_subfield_codes(field_info: field_info, tag: tag)
+  end
+
+  def validate_indicators(field_info:, tag:)
+    errors = []
+    unless field_info[:schema][tag]['ind1'].include?(field_info[:field].indicator1)
+      errors << "Invalid indicator1 value #{field_info[:field].indicator1} in instance #{field_info[:field_num]}"
+    end
+    unless field_info[:schema][tag]['ind2'].include?(field_info[:field].indicator2)
+      errors << "Invalid indicator2 value #{field_info[:field].indicator2} in instance #{field_info[:field_num]}"
+    end
+    errors
+  end
+
+  def validate_field_length(field_info)
+    return [] unless invalid_field_length?(field_info[:field])
+
+    ["Field length above 9,999 bytes in instance #{field_info[:field_num]} of #{field_info[:field].tag}"]
+  end
+
+  def validate_data_field(field_info)
+    tag = field_tag(field_info[:field])
+    return [] unless field_info[:schema][tag]
+    return [] if tag == '880'
+    return [] if ('001'..'009').include?(tag)
+
+    errors = validate_field_length(field_info)
+    errors += validate_indicators(field_info: field_info, tag: tag)
+    errors += validate_subfields(field_info: field_info, tag: tag)
+    errors.map! { |text| text + " linked to field tag #{tag}" } if field_has_link?(field_info[:field])
+    errors
+  end
+
+  def validate_data_fields(record:, schema:)
+    hash = {}
+    record.fields('010'..'999').each do |field|
+      field_num = record.fields(field.tag).index(field) + 1
+      field_errors = validate_data_field({ field: field, field_num: field_num, schema: schema })
+      next unless field_errors.size.positive?
+
+      hash[field.tag] ||= []
+      hash[field.tag] += field_errors
+    end
+    hash
+  end
+
+  def invalid_tags(record:, schema:)
+    record.fields.select do |field|
+      field.tag[0] != '9' &&
+        !schema.keys.include?(field.tag)
+    end.map(&:tag)
+  end
+
+  def invalid_fields(record:, schema:)
+    errors = validate_linked_fields(record: record, schema: schema)
+    errors.merge!(validate_control_fields(record))
+    errors.merge(validate_data_fields(record: record, schema: schema))
   end
 
   ### `schema` is a YAML file loaded as a hash;
   ### schema = YAML.load_file("#{ROOT_DIR}/lib/marc_cleanup/variable_field_schema.yml")
   def validate_marc(record:, schema: RECORD_SCHEMA)
-    hash = {
+    {
       invalid_record_length: invalid_record_length?(record),
       multiple_1xx: multiple_1xx?(record),
       f130_f240: f130_f240?(record),
       multiple_no_f245: multiple_no_f245?(record),
-      non_repeatable_field_errors: non_repeatable_field_errors?(record: record, schema: schema)
+      non_repeatable_field_errors: non_repeatable_field_errors?(record: record, schema: schema),
+      invalid_tags: invalid_tags(record: record, schema: schema),
+      invalid_fields: invalid_fields(record: record, schema: schema)
     }
-    hash[:invalid_tags] = record.fields.select do |field|
-      field.tag[0] != '9' &&
-        !schema.keys.include?(field.tag)
-    end.map(&:tag)
-    hash[:invalid_fields] = validate_linked_fields(record: record, schema: schema)
-    hash[:invalid_fields].merge!(validate_control_fields(record))
-    record.fields.select { |field| field.instance_of?(MARC::DataField) }.each do |field|
-      has_link = false
-      next unless schema[field.tag]
-
-      field_num = record.fields(field.tag).index(field)
-      field_num += 1
-      tag = field.tag
-      if field.tag == '880' && field.subfields.select { |subfield| subfield.code == '6' }.size == 1
-        tag = field['6'].gsub(/^([0-9]{3})-.*$/, '\1')
-        has_link = true
-      end
-      next if ('001'..'009').include?(tag)
-      next if tag == '880'
-      next if schema[tag].nil?
-
-      if invalid_field_length?(field)
-        error = "Field length above 9,999 bytes in instance #{field_num} of #{field.tag}"
-        error << " linked to field tag #{tag}" if has_link
-        hash[:invalid_fields][field.tag] ||= []
-        hash[:invalid_fields][field.tag] << error
-      end
-      unless schema[tag]['ind1'].include?(field.indicator1.to_s)
-        error = "Invalid indicator1 value #{field.indicator1} in instance #{field_num}"
-        error << " linked to field tag #{tag}" if has_link
-        hash[:invalid_fields][field.tag] ||= []
-        hash[:invalid_fields][field.tag] << error
-      end
-      unless schema[tag]['ind2'].include?(field.indicator2.to_s)
-        error = "Invalid indicator2 value #{field.indicator2} in instance #{field_num}"
-        error << " linked to field tag #{tag}" if has_link
-        hash[:invalid_fields][field.tag] ||= []
-        hash[:invalid_fields][field.tag] << error
-      end
-      subf_hash = {}
-      field.subfields.each do |subfield|
-        subf_hash[subfield.code] ||= 0
-        subf_hash[subfield.code] += 1
-      end
-      subf_hash.each do |code, count|
-        if schema[tag]['subfields'][code].nil?
-          hash[:invalid_fields][field.tag] ||= []
-          error = "Invalid subfield code #{code} in instance #{field_num}"
-          error << " linked to field tag #{tag}" if has_link
-          hash[:invalid_fields][field.tag] << error
-        elsif schema[tag]['subfields'][code]['repeat'] == false && count > 1
-          hash[:invalid_fields][field.tag] ||= []
-          error = "Non-repeatable subfield code #{code} repeated in instance #{field_num}"
-          error << " linked to field tag #{tag}" if has_link
-          hash[:invalid_fields][field.tag] << error
-        end
-      end
-    end
-    hash
   end
 
   ### When the 040$e says rda, position 18 of the leader must be c or i.
