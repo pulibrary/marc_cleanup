@@ -20,6 +20,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:multiple_1xx]).to eq true
     end
   end
+
   describe '130/240 conflict' do
     let(:fields) do
       [
@@ -37,6 +38,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:f130_f240]).to eq true
     end
   end
+
   describe 'missing required 245 field' do
     let(:fields) do
       [
@@ -51,6 +53,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:multiple_no_f245]).to eq true
     end
   end
+
   describe 'invalid tag' do
     let(:fields) do
       [
@@ -65,6 +68,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:invalid_tags]).to eq ['011']
     end
   end
+
   describe 'invalid field indicator1' do
     let(:fields) do
       [
@@ -80,6 +84,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:invalid_fields]['246']).to include error_message
     end
   end
+
   describe 'invalid field indicator2' do
     let(:fields) do
       [
@@ -95,6 +100,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:invalid_fields]['246']).to include error_message
     end
   end
+
   describe 'invalid subfield code in valid field' do
     let(:fields) do
       [
@@ -110,6 +116,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:invalid_fields]['250']).to include error_message
     end
   end
+
   describe 'non-repeatable subfield code repeated in valid field' do
     let(:fields) do
       [
@@ -126,6 +133,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:invalid_fields]['255']).to include error_message
     end
   end
+
   describe '880 field with no linking subfield' do
     let(:fields) do
       [
@@ -141,6 +149,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:invalid_fields]['880']).to include error_message
     end
   end
+
   describe '880 field with multiple linking subfields' do
     let(:fields) do
       [
@@ -158,6 +167,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:invalid_fields]['880']).to include error_message
     end
   end
+
   describe '880 field with invalid linkage' do
     let(:fields) do
       [
@@ -174,6 +184,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:invalid_fields]['880']).to include error_message
     end
   end
+
   describe '880 field with valid linkage and linked field error' do
     let(:fields) do
       [
@@ -190,6 +201,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:invalid_fields]['880']).to include error_message
     end
   end
+
   describe '880 field with valid linkage to a fixed field' do
     let(:fields) do
       [
@@ -210,6 +222,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:invalid_fields]['880']).to include error_message
     end
   end
+
   describe '880 field with valid linkage and with invalid linked tag' do
     let(:fields) do
       [
@@ -226,6 +239,7 @@ RSpec.describe 'validate_marc' do
       expect(record_errors[:invalid_fields]['880']).to include error_message
     end
   end
+
   describe 'record has non-numeric tag' do
     let(:fields) do
       [
@@ -238,6 +252,39 @@ RSpec.describe 'validate_marc' do
     it 'identifies the invalid non-numeric tag' do
       record_errors = MarcCleanup.validate_marc(record: record)
       expect(record_errors[:invalid_tags]).to eq ['a35']
+    end
+  end
+
+  describe 'control field is too long' do
+    let(:fields) do
+      [
+        { '009' => ('a' * 9_999).to_s }
+      ]
+    end
+    let(:record) { MARC::Record.new_from_hash('fields' => fields) }
+    it 'identifies the invalid field length' do
+      record_errors = MarcCleanup.validate_marc(record: record)
+      error_message = 'Field length above 9,999 bytes in instance 1 of 009'
+      expect(record_errors[:invalid_fields]['009']).to include error_message
+    end
+  end
+
+  describe 'data field is too long' do
+    let(:fields) do
+      [
+        { '500' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { 'a' => ('a' * 4_997).to_s },
+                       { 'b' => ('b' * 4_996).to_s }
+                     ] } }
+      ]
+    end
+    let(:record) { MARC::Record.new_from_hash('fields' => fields) }
+    it 'identifies the invalid field length' do
+      record_errors = MarcCleanup.validate_marc(record: record)
+      error_message = 'Field length above 9,999 bytes in instance 1 of 500'
+      expect(record_errors[:invalid_fields]['500']).to include error_message
     end
   end
 end
