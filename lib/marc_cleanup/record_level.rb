@@ -1178,7 +1178,7 @@ module MarcCleanup
   end
 
   def field_has_link?(field)
-    field.tag == '880' && field.subfields.select { |subfield| subfield.code == '6' }.size == 1
+    field.tag == '880' && field.subfields.one? { |subfield| subfield.code == '6' }
   end
 
   def field_tag(field)
@@ -1261,7 +1261,7 @@ module MarcCleanup
     record.fields('010'..'999').each do |field|
       field_num = record.fields(field.tag).index(field) + 1
       field_errors = validate_data_field({ field: field, field_num: field_num, schema: schema })
-      next unless field_errors.size.positive?
+      next unless field_errors.any?
 
       hash[field.tag] ||= []
       hash[field.tag] += field_errors
