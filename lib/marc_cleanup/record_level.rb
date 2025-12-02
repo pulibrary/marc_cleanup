@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+### Methods to detect errors that pertain to the record as a whole
 module MarcCleanup
   def non_repeatable_field_errors?(record:, schema: RECORD_SCHEMA)
     field_count = record.fields.group_by(&:tag).map { |key, value| { tag: key, count: value.size } }
@@ -493,10 +494,9 @@ module MarcCleanup
   def remove_duplicate_fields(record)
     field_array = []
     record.fields.reverse_each do |field|
-      field_index = record.fields.index(field)
       string = field.to_s
       if field_array.include?(string)
-        record.fields.delete_at(field_index)
+        record.fields.delete_at(record.fields.index(field))
       else
         field_array << string
       end
