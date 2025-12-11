@@ -1,0 +1,111 @@
+book:
+  - aa
+  - ac
+  - ad
+  - am
+  - ta
+  - tc
+  - td
+  - tm
+
+computer_file:
+  - ma
+  - mb
+  - mc
+  - md
+  - mi
+  - mm
+  - ms
+
+map:
+  - ea
+  - eb
+  - ec
+  - ed
+  - ei
+  - em
+  - es
+  - fa
+  - fb
+  - fc
+  - fd
+  - fi
+  - fm
+  - fs
+
+music:
+  - ca
+  - cb
+  - cc
+  - cd
+  - ci
+  - cm
+  - cs
+  - da
+  - db
+  - dc
+  - dd
+  - di
+  - dm
+  - ds
+  - ia
+  - ib
+  - ic
+  - id
+  - ii
+  - im
+  - is
+  - ja
+  - jb
+  - jc
+  - jd
+  - ji
+  - jm
+  - js
+
+continuing_resource:
+  - ab
+  - ai
+  - as
+  - tb
+  - ti
+  - ts
+
+visual:
+  - ga
+  - gb
+  - gc
+  - gd
+  - gi
+  - gm
+  - gs
+  - ka
+  - kb
+  - kc
+  - kd
+  - ki
+  - km
+  - ks
+  - oa
+  - ob
+  - oc
+  - od
+  - oi
+  - om
+  - os
+  - ra
+  - rb
+  - rc
+  - rd
+  - ri
+  - rm
+  - rs
+
+mixed:
+  - pa
+  - pb
+  - pc
+  - pd
+  - pi
+  - pm
+  - ps
