@@ -16,14 +16,6 @@ module MarcCleanup
     record.fields('008').size != 1
   end
 
-  def place_codes
-    YAML.load_file("#{ROOT_DIR}/yaml/fixed_fields/place_codes.yml")
-  end
-
-  def language_codes
-    YAML.load_file("#{ROOT_DIR}/yaml/fixed_fields/language_codes.yml")
-  end
-
   def illus_codes
     /^[ a-mop]+$/
   end
@@ -139,8 +131,8 @@ module MarcCleanup
     else
       return true unless date2 == '||||' || date2 == '    ' || date2 =~ /^[0-9u]{4}$/
     end
-    return true unless place == '|||' || place_codes.include?(place)
-    return true unless lang == '|||'  || language_codes.include?(lang)
+    return true unless place == '|||' || PLACE_CODES.include?(place)
+    return true unless lang == '|||'  || LANGUAGE_CODES.include?(lang)
     return true unless [' ', 'd', 'o', 'r', 's', 'x', '|'].include?(modified)
     return true unless [' ', 'c', 'd', 'u', '|'].include?(cat_source)
 
@@ -313,8 +305,7 @@ module MarcCleanup
   end
 
   def record_type(leader_portion)
-    types = YAML.load_file("#{ROOT_DIR}/yaml/fixed_fields/record_types.yml")
-    types.find { |_type, values| values.include?(leader_portion) }[0]
+    RECORD_TYPES.find { |_type, values| values.include?(leader_portion) }[0]
   end
 
   def bad_f005?(record)
