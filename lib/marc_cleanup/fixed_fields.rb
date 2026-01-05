@@ -16,915 +16,6 @@ module MarcCleanup
     record.fields('008').size != 1
   end
 
-  def place_codes
-    [
-      'aa ',
-      'abc',
-      'ac ',
-      'aca',
-      'ae ',
-      'af ',
-      'ag ',
-      'ai ',
-      'ai ',
-      'air',
-      'aj ',
-      'ajr',
-      'aku',
-      'alu',
-      'am ',
-      'an ',
-      'ao ',
-      'aq ',
-      'aru',
-      'as ',
-      'at ',
-      'au ',
-      'aw ',
-      'ay ',
-      'azu',
-      'ba ',
-      'bb ',
-      'bcc',
-      'bd ',
-      'be ',
-      'bf ',
-      'bg ',
-      'bh ',
-      'bi ',
-      'bl ',
-      'bm ',
-      'bn ',
-      'bo ',
-      'bp ',
-      'br ',
-      'bs ',
-      'bt ',
-      'bu ',
-      'bv ',
-      'bw ',
-      'bwr',
-      'bx ',
-      'ca ',
-      'cau',
-      'cb ',
-      'cc ',
-      'cd ',
-      'ce ',
-      'cf ',
-      'cg ',
-      'ch ',
-      'ci ',
-      'cj ',
-      'ck ',
-      'cl ',
-      'cm ',
-      'cn ',
-      'co ',
-      'cou',
-      'cp ',
-      'cq ',
-      'cr ',
-      'cs ',
-      'ctu',
-      'cu ',
-      'cv ',
-      'cw ',
-      'cx ',
-      'cy ',
-      'cz ',
-      'dcu',
-      'deu',
-      'dk ',
-      'dm ',
-      'dq ',
-      'dr ',
-      'ea ',
-      'ec ',
-      'eg ',
-      'em ',
-      'enk',
-      'er ',
-      'err',
-      'es ',
-      'et ',
-      'fa ',
-      'fg ',
-      'fi ',
-      'fj ',
-      'fk ',
-      'flu',
-      'fm ',
-      'fp ',
-      'fr ',
-      'fs ',
-      'ft ',
-      'gau',
-      'gb ',
-      'gd ',
-      'ge ',
-      'gg ',
-      'gh ',
-      'gi ',
-      'gl ',
-      'gm ',
-      'gn ',
-      'go ',
-      'gp ',
-      'gr ',
-      'gs ',
-      'gsr',
-      'gt ',
-      'gu ',
-      'gv ',
-      'gw ',
-      'gy ',
-      'gz ',
-      'hiu',
-      'hk ',
-      'hm ',
-      'ho ',
-      'ht ',
-      'hu ',
-      'iau',
-      'ic ',
-      'idu',
-      'ie ',
-      'ii ',
-      'ilu',
-      'im ',
-      'inu',
-      'io ',
-      'iq ',
-      'ir ',
-      'is ',
-      'it ',
-      'iu ',
-      'iv ',
-      'iw ',
-      'iy ',
-      'ja ',
-      'je ',
-      'ji ',
-      'jm ',
-      'jn ',
-      'jo ',
-      'ke ',
-      'kg ',
-      'kgr',
-      'kn ',
-      'ko ',
-      'ksu',
-      'ku ',
-      'kv ',
-      'kyu',
-      'kz ',
-      'kzr',
-      'lau',
-      'lb ',
-      'le ',
-      'lh ',
-      'li ',
-      'lir',
-      'ln ',
-      'lo ',
-      'ls ',
-      'lu ',
-      'lv ',
-      'lvr',
-      'ly ',
-      'mau',
-      'mbc',
-      'mc ',
-      'mdu',
-      'meu',
-      'mf ',
-      'mg ',
-      'mh ',
-      'miu',
-      'mj ',
-      'mk ',
-      'ml ',
-      'mm ',
-      'mnu',
-      'mo ',
-      'mou',
-      'mp ',
-      'mq ',
-      'mr ',
-      'msu',
-      'mtu',
-      'mu ',
-      'mv ',
-      'mvr',
-      'mw ',
-      'mx ',
-      'my ',
-      'mz ',
-      'na ',
-      'nbu',
-      'ncu',
-      'ndu',
-      'ne ',
-      'nfc',
-      'ng ',
-      'nhu',
-      'nik',
-      'nju',
-      'nkc',
-      'nl ',
-      'nm ',
-      'nmu',
-      'nn ',
-      'no ',
-      'np ',
-      'nq ',
-      'nr ',
-      'nsc',
-      'ntc',
-      'nu ',
-      'nuc',
-      'nvu',
-      'nw ',
-      'nx ',
-      'nyu',
-      'nz ',
-      'ohu',
-      'oku',
-      'onc',
-      'oru',
-      'ot ',
-      'pau',
-      'pc ',
-      'pe ',
-      'pf ',
-      'pg ',
-      'ph ',
-      'pic',
-      'pk ',
-      'pl ',
-      'pn ',
-      'po ',
-      'pp ',
-      'pr ',
-      'pt ',
-      'pw ',
-      'py ',
-      'qa ',
-      'qea',
-      'quc',
-      'rb ',
-      're ',
-      'rh ',
-      'riu',
-      'rm ',
-      'ru ',
-      'rur',
-      'rw ',
-      'ry ',
-      'sa ',
-      'sb ',
-      'sc ',
-      'scu',
-      'sd ',
-      'sdu',
-      'se ',
-      'sf ',
-      'sg ',
-      'sh ',
-      'si ',
-      'sj ',
-      'sk ',
-      'sl ',
-      'sm ',
-      'sn ',
-      'snc',
-      'so ',
-      'sp ',
-      'sq ',
-      'sr ',
-      'ss ',
-      'st ',
-      'stk',
-      'su ',
-      'sv ',
-      'sw ',
-      'sx ',
-      'sy ',
-      'sz ',
-      'ta ',
-      'tar',
-      'tc ',
-      'tg ',
-      'th ',
-      'ti ',
-      'tk ',
-      'tkr',
-      'tl ',
-      'tma',
-      'tnu',
-      'to ',
-      'tr ',
-      'ts ',
-      'tt ',
-      'tu ',
-      'tv ',
-      'txu',
-      'tz ',
-      'ua ',
-      'uc ',
-      'ug ',
-      'ui ',
-      'uik',
-      'uk ',
-      'un ',
-      'unr',
-      'up ',
-      'ur ',
-      'us ',
-      'utu',
-      'uv ',
-      'uy ',
-      'uz ',
-      'uzr',
-      'vau',
-      'vb ',
-      'vc ',
-      've ',
-      'vi ',
-      'vm ',
-      'vn ',
-      'vp ',
-      'vra',
-      'vs ',
-      'vtu',
-      'wau',
-      'wb ',
-      'wea',
-      'wf ',
-      'wiu',
-      'wj ',
-      'wk ',
-      'wlk',
-      'ws ',
-      'wvu',
-      'wyu',
-      'xa ',
-      'xb ',
-      'xc ',
-      'xd ',
-      'xe ',
-      'xf ',
-      'xga',
-      'xh ',
-      'xi ',
-      'xj ',
-      'xk ',
-      'xl ',
-      'xm ',
-      'xn ',
-      'xna',
-      'xo ',
-      'xoa',
-      'xp ',
-      'xr ',
-      'xra',
-      'xs ',
-      'xv ',
-      'xx ',
-      'xxc',
-      'xxk',
-      'xxr',
-      'xxu',
-      'ye ',
-      'ykc',
-      'ys ',
-      'yu ',
-      'za '
-    ]
-  end
-
-  def lang_codes
-    %w[
-      aar
-      abk
-      ace
-      ach
-      ada
-      ady
-      afa
-      afh
-      afr
-      ain
-      ajm
-      aka
-      akk
-      alb
-      ale
-      alg
-      alt
-      amh
-      ang
-      anp
-      apa
-      ara
-      arc
-      arg
-      arm
-      arn
-      arp
-      art
-      arw
-      asm
-      ast
-      ath
-      aus
-      ava
-      ave
-      awa
-      aym
-      aze
-      bad
-      bai
-      bak
-      bal
-      bam
-      ban
-      baq
-      bas
-      bat
-      bej
-      bel
-      bem
-      ben
-      ber
-      bho
-      bih
-      bik
-      bin
-      bis
-      bla
-      bnt
-      bos
-      bra
-      bre
-      btk
-      bua
-      bug
-      bul
-      bur
-      byn
-      cad
-      cai
-      cam
-      car
-      cat
-      cau
-      ceb
-      cel
-      cha
-      chb
-      che
-      chg
-      chi
-      chk
-      chm
-      chn
-      cho
-      chp
-      chr
-      chu
-      chv
-      chy
-      cmc
-      cnr
-      cop
-      cor
-      cos
-      cpe
-      cpf
-      cpp
-      cre
-      crh
-      crp
-      csb
-      cus
-      cze
-      dak
-      dan
-      dar
-      day
-      del
-      den
-      dgr
-      din
-      div
-      doi
-      dra
-      dsb
-      dua
-      dum
-      dut
-      dyu
-      dzo
-      efi
-      egy
-      eka
-      elx
-      eng
-      enm
-      epo
-      esk
-      esp
-      est
-      eth
-      ewe
-      ewo
-      fan
-      fao
-      far
-      fat
-      fij
-      fil
-      fin
-      fiu
-      fon
-      fre
-      fri
-      frm
-      fro
-      frr
-      frs
-      fry
-      ful
-      fur
-      gaa
-      gae
-      gag
-      gal
-      gay
-      gba
-      gem
-      geo
-      ger
-      gez
-      gil
-      gla
-      gle
-      glg
-      glv
-      gmh
-      goh
-      gon
-      gor
-      got
-      grb
-      grc
-      gre
-      grn
-      gsw
-      gua
-      guj
-      gwi
-      hai
-      hat
-      hau
-      haw
-      heb
-      her
-      hil
-      him
-      hin
-      hit
-      hmn
-      hmo
-      hrv
-      hsb
-      hun
-      hup
-      iba
-      ibo
-      ice
-      ido
-      iii
-      ijo
-      iku
-      ile
-      ilo
-      ina
-      inc
-      ind
-      ine
-      inh
-      int
-      ipk
-      ira
-      iri
-      iro
-      ita
-      jav
-      jbo
-      jpn
-      jpr
-      jrb
-      kaa
-      kab
-      kac
-      kal
-      kam
-      kan
-      kar
-      kas
-      kau
-      kaw
-      kaz
-      kbd
-      kha
-      khi
-      khm
-      kho
-      kik
-      kin
-      kir
-      kmb
-      kok
-      kom
-      kon
-      kor
-      kos
-      kpe
-      krc
-      krl
-      kro
-      kru
-      kua
-      kum
-      kur
-      kus
-      kut
-      lad
-      lah
-      lam
-      lan
-      lao
-      lap
-      lat
-      lav
-      lez
-      lim
-      lin
-      lit
-      lol
-      loz
-      ltz
-      lua
-      lub
-      lug
-      lui
-      lun
-      luo
-      lus
-      mac
-      mad
-      mag
-      mah
-      mai
-      mak
-      mal
-      man
-      mao
-      map
-      mar
-      mas
-      max
-      may
-      mdf
-      mdr
-      men
-      mga
-      mic
-      min
-      mis
-      mkh
-      mla
-      mlg
-      mlt
-      mnc
-      mni
-      mno
-      moh
-      mol
-      mon
-      mos
-      mul
-      mun
-      mus
-      mwl
-      mwr
-      myn
-      myv
-      nah
-      nai
-      nap
-      nau
-      nav
-      nbl
-      nde
-      ndo
-      nds
-      nep
-      new
-      nia
-      nic
-      niu
-      nno
-      nob
-      nog
-      non
-      nor
-      nqo
-      nso
-      nub
-      nwc
-      nya
-      nym
-      nyn
-      nyo
-      nzi
-      oci
-      oji
-      ori
-      orm
-      osa
-      oss
-      ota
-      oto
-      paa
-      pag
-      pal
-      pam
-      pan
-      pap
-      pau
-      peo
-      per
-      phi
-      phn
-      pli
-      pol
-      pon
-      por
-      pra
-      pro
-      pus
-      que
-      raj
-      rap
-      rar
-      roa
-      roh
-      rom
-      rum
-      run
-      rup
-      rus
-      sad
-      sag
-      sah
-      sai
-      sal
-      sam
-      san
-      sao
-      sas
-      sat
-      scc
-      scn
-      sco
-      scr
-      sel
-      sem
-      sga
-      sgn
-      shn
-      sho
-      sid
-      sin
-      sio
-      sit
-      sla
-      slo
-      slv
-      sma
-      sme
-      smi
-      smj
-      smn
-      smo
-      sms
-      sna
-      snd
-      snh
-      snk
-      sog
-      som
-      son
-      sot
-      spa
-      srd
-      srn
-      srp
-      srr
-      ssa
-      sso
-      ssw
-      suk
-      sun
-      sus
-      sux
-      swa
-      swe
-      swz
-      syc
-      syr
-      tag
-      tah
-      tai
-      taj
-      tam
-      tar
-      tat
-      tel
-      tem
-      ter
-      tet
-      tgk
-      tgl
-      tha
-      tib
-      tig
-      tir
-      tiv
-      tkl
-      tlh
-      tli
-      tmh
-      tog
-      ton
-      tpi
-      tru
-      tsi
-      tsn
-      tso
-      tsw
-      tuk
-      tum
-      tup
-      tur
-      tut
-      tvl
-      twi
-      tyv
-      udm
-      uga
-      uig
-      ukr
-      umb
-      und
-      urd
-      uzb
-      vai
-      ven
-      vie
-      vol
-      vot
-      wak
-      wal
-      war
-      was
-      wel
-      wen
-      wln
-      wol
-      xal
-      xho
-      yao
-      yap
-      yid
-      yor
-      ypk
-      zap
-      zbl
-      zen
-      zha
-      znd
-      zul
-      zun
-      zxx
-      zza
-    ]
-  end
-
   def illus_codes
     /^[ a-mop]+$/
   end
@@ -965,57 +56,8 @@ module MarcCleanup
     /^[ a-gi-kmz]+$/
   end
 
-  def proj_codes
-    [
-      '  ',
-      'aa',
-      'ab',
-      'ac',
-      'ad',
-      'ae',
-      'af',
-      'ag',
-      'am',
-      'an',
-      'ap',
-      'au',
-      'az',
-      'ba',
-      'bb',
-      'bc',
-      'bd',
-      'be',
-      'bf',
-      'bg',
-      'bh',
-      'bi',
-      'bj',
-      'bk',
-      'bl',
-      'bo',
-      'br',
-      'bs',
-      'bu',
-      'bz',
-      'ca',
-      'cb',
-      'cc',
-      'ce',
-      'cp',
-      'cu',
-      'cz',
-      'da',
-      'db',
-      'dc',
-      'dd',
-      'de',
-      'df',
-      'dg',
-      'dh',
-      'dl',
-      'zz',
-      '||'
-    ]
+  def projection_codes
+    YAML.load_file("#{ROOT_DIR}/yaml/fixed_fields/projection_codes.yml")
   end
 
   def map_type_codes
@@ -1027,81 +69,7 @@ module MarcCleanup
   end
 
   def composition_codes
-    %w[
-      an
-      bd
-      bg
-      bl
-      bt
-      ca
-      cb
-      cc
-      cg
-      ch
-      cl
-      cn
-      co
-      cp
-      cr
-      cs
-      ct
-      cy
-      cz
-      df
-      dv
-      fg
-      fl
-      fm
-      ft
-      gm
-      hy
-      jz
-      mc
-      md
-      mi
-      mo
-      mp
-      mr
-      ms
-      mu
-      mz
-      nc
-      nn
-      op
-      or
-      ov
-      pg
-      pm
-      po
-      pp
-      pr
-      ps
-      pt
-      pv
-      rc
-      rd
-      rg
-      ri
-      rp
-      rq
-      sd
-      sg
-      sn
-      sp
-      st
-      su
-      sy
-      tc
-      tl
-      ts
-      uu
-      vi
-      vr
-      wz
-      za
-      zz
-      ||
-    ]
+    YAML.load_file("#{ROOT_DIR}/yaml/fixed_fields/composition_codes.yml")
   end
 
   def music_format_codes
@@ -1144,7 +112,7 @@ module MarcCleanup
     /^[a-dfgik-tvwz|]$/
   end
 
-  def all_f008(field)
+  def global_f008_error?(field)
     date_entered = field[0..5]
     date_type = field[6]
     date1 = field[7..10]
@@ -1163,15 +131,15 @@ module MarcCleanup
     else
       return true unless date2 == '||||' || date2 == '    ' || date2 =~ /^[0-9u]{4}$/
     end
-    return true unless place == '|||' || place_codes.include?(place)
-    return true unless lang == '|||'  || lang_codes.include?(lang)
+    return true unless place == '|||' || PLACE_CODES.include?(place)
+    return true unless lang == '|||'  || LANGUAGE_CODES.include?(lang)
     return true unless [' ', 'd', 'o', 'r', 's', 'x', '|'].include?(modified)
     return true unless [' ', 'c', 'd', 'u', '|'].include?(cat_source)
 
     false
   end
 
-  def book_f008(field)
+  def book_f008_error?(field)
     illus = field[0..3]
     audience = field[4]
     item_form = field[5]
@@ -1198,7 +166,7 @@ module MarcCleanup
     false
   end
 
-  def comp_f008(field)
+  def comp_f008_error?(field)
     undef1 = field[0..3]
     audience = field[4]
     item_form = field[5]
@@ -1219,7 +187,7 @@ module MarcCleanup
     false
   end
 
-  def map_f008(field)
+  def map_f008_error?(field)
     relief = field[0..3]
     proj = field[4..5]
     undef1 = field[6]
@@ -1232,7 +200,7 @@ module MarcCleanup
     undef4 = field[14]
     format = field[15..16]
     return true unless relief == '||||' || relief =~ relief_codes
-    return true unless proj_codes.include?(proj)
+    return true unless projection_codes.include?(proj)
     return true unless [' ', '|'].include?(undef1)
     return true unless type =~ map_type_codes
     return true unless ['||', '  '].include?(undef2)
@@ -1246,7 +214,7 @@ module MarcCleanup
     false
   end
 
-  def music_f008(field)
+  def music_f008_error?(field)
     comp_form = field[0..1]
     music_format = field[2]
     parts = field[3]
@@ -1271,7 +239,7 @@ module MarcCleanup
     false
   end
 
-  def continuing_resource_f008(field)
+  def continuing_resource_f008_error?(field)
     freq = field[0]
     reg = field[1]
     undef1 = field[2]
@@ -1302,7 +270,7 @@ module MarcCleanup
     false
   end
 
-  def visual_f008(field)
+  def visual_f008_error?(field)
     runtime = field[0..2]
     undef1 = field[3]
     audience = field[4]
@@ -1325,7 +293,7 @@ module MarcCleanup
     false
   end
 
-  def mix_mat_f008(field)
+  def mix_mat_f008_error?(field)
     undef1 = field[0..4]
     item_form = field[5]
     undef2 = field[6..16]
@@ -1336,137 +304,8 @@ module MarcCleanup
     false
   end
 
-  def book
-    %w[
-      aa
-      ac
-      ad
-      am
-      ta
-      tc
-      td
-      tm
-    ]
-  end
-
-  def comp_file
-    %w[
-      ma
-      mb
-      mc
-      md
-      mi
-      mm
-      ms
-    ]
-  end
-
-  def map
-    %w[
-      ea
-      eb
-      ec
-      ed
-      ei
-      em
-      es
-      fa
-      fb
-      fc
-      fd
-      fi
-      fm
-      fs
-    ]
-  end
-
-  def music
-    %w[
-      ca
-      cb
-      cc
-      cd
-      ci
-      cm
-      cs
-      da
-      db
-      dc
-      dd
-      di
-      dm
-      ds
-      ia
-      ib
-      ic
-      id
-      ii
-      im
-      is
-      ja
-      jb
-      jc
-      jd
-      ji
-      jm
-      js
-    ]
-  end
-
-  def continuing_resource
-    %w[
-      ab
-      ai
-      as
-      tb
-      ti
-      ts
-    ]
-  end
-
-  def visual
-    %w[
-      ga
-      gb
-      gc
-      gd
-      gi
-      gm
-      gs
-      ka
-      kb
-      kc
-      kd
-      ki
-      km
-      ks
-      oa
-      ob
-      oc
-      od
-      oi
-      om
-      os
-      ra
-      rb
-      rc
-      rd
-      ri
-      rm
-      rs
-    ]
-  end
-
-  def mixed
-    %w[
-      pa
-      pb
-      pc
-      pd
-      pi
-      pm
-      ps
-    ]
+  def record_type(leader_portion)
+    RECORD_TYPES.find { |_type, values| values.include?(leader_portion) }[0]
   end
 
   def bad_f005?(record)
@@ -1488,19 +327,19 @@ module MarcCleanup
       specific_f006 = field.value[1..]
       case rec_type
       when 'a', 't'
-        return true if book_f008(specific_f006)
+        return true if book_f008_error?(specific_f006)
       when 'm'
-        return true if comp_f008(specific_f006)
+        return true if comp_f008_error?(specific_f006)
       when 'e', 'f'
-        return true if map_f008(specific_f006)
+        return true if map_f008_error?(specific_f006)
       when 'c', 'd', 'i', 'j'
-        return true if music_f008(specific_f006)
+        return true if music_f008_error?(specific_f006)
       when 's'
-        return true if continuing_resource_f008(specific_f006)
+        return true if continuing_resource_f008_error?(specific_f006)
       when 'g', 'k', 'o', 'r'
-        return true if visual_f008(specific_f006)
+        return true if visual_f008_error?(specific_f006)
       when 'p'
-        return true if mix_mat_f008(specific_f006)
+        return true if mix_mat_f008_error?(specific_f006)
       end
     end
     false
@@ -1639,50 +478,7 @@ module MarcCleanup
   end
 
   def remote_data_types
-    %w[
-      aa
-      da
-      db
-      dc
-      dd
-      de
-      df
-      dv
-      dz
-      ga
-      gb
-      gc
-      gd
-      ge
-      gf
-      gg
-      gu
-      gz
-      ja
-      jb
-      jc
-      jv
-      jz
-      ma
-      mb
-      mm
-      nn
-      pa
-      pb
-      pc
-      pd
-      pe
-      pz
-      ra
-      rb
-      rc
-      rd
-      sa
-      ta
-      uu
-      zz
-      ||
-    ]
+    YAML.load_file("#{ROOT_DIR}/yaml/fixed_fields/remote_data_types.yml")
   end
 
   def remote_f007(field)
@@ -1790,39 +586,47 @@ module MarcCleanup
     false
   end
 
+  def specific_f008_error?(record_type:, specific_f008:)
+    case record_type
+    when 'book'
+      book_f008_error?(specific_f008)
+    when 'computer_file'
+      comp_f008_error?(specific_f008)
+    when 'map'
+      map_f008_error?(specific_f008)
+    when 'music'
+      music_f008_error?(specific_f008)
+    when 'continuing_resource'
+      continuing_resource_f008_error?(specific_f008)
+    when 'visual'
+      visual_f008_error?(specific_f008)
+    when 'mixed'
+      mix_mat_f008_error?(specific_f008)
+    end
+  end
+
   def bad_f008?(record)
     hash = {}
     hash[:valid] = true
     hash[:errors] = []
-    errors = [
-      'Invalid 008 length',
-      'Invalid value in global 008 (positions 0-17, 35-39)',
-      'Invalid value in the specific 008 (positions 18-34)'
-    ]
     field = record['008'].value
 
     if field.length != 40
       hash[:valid] = false
-      hash[:errors] << errors[0]
+      hash[:errors] << 'Invalid 008 length'
       return hash
     end
 
-    if all_f008(field)
+    if global_f008_error?(field)
       hash[:valid] = false
-      hash[:errors] << errors[1]
+      hash[:errors] << 'Invalid value in global 008 (positions 0-17, 35-39)'
     end
 
-    rec_type = record.leader[6..7]
+    record_type = record_type(record.leader[6..7])
     specific_f008 = field[18..34]
-    if book.include?(rec_type) && book_f008(specific_f008) ||
-       comp_file.include?(rec_type) && comp_f008(specific_f008) ||
-       map.include?(rec_type) && map_f008(specific_f008) ||
-       music.include?(rec_type) && music_f008(specific_f008) ||
-       continuing_resource.include?(rec_type) && continuing_resource_f008(specific_f008) ||
-       visual.include?(rec_type) && visual_f008(specific_f008) ||
-       mixed.include?(rec_type) && mix_mat_f008(specific_f008)
+    if specific_f008_error?(record_type: record_type, specific_f008: specific_f008)
       hash[:valid] = false
-      hash[:errors] << errors[2]
+      hash[:errors] << 'Invalid value in the specific 008 (positions 18-34)'
     end
     hash
   end
@@ -2369,35 +1173,38 @@ module MarcCleanup
     record
   end
 
+  def fix_specific_f008(record_type:, specific_f008:)
+    case record_type
+    when 'book'
+      fix_book_f008(specific_f008)
+    when 'computer_file'
+      fix_comp_f008(specific_f008)
+    when 'map'
+      fix_map_f008(specific_f008)
+    when 'music'
+      fix_music_f008(specific_f008)
+    when 'continuing_resource'
+      fix_continuing_resource_f008(specific_f008)
+    when 'visual'
+      fix_visual_f008(specific_f008)
+    when 'mixed'
+      fix_mix_mat_f008(specific_f008)
+    end
+  end
+
   ### Replace obsolete values with current values when possible
   def fix_f008(record)
     target_fields = record.fields('008')
-    rec_type = record.leader[6..7]
+    record_type = record_type(record.leader[6..7])
     return record if target_fields.size != 1
-    return record unless rec_type =~ /^[ac-gijkmoprt][abcdims]$/
+    return record unless record_type
 
     field = target_fields.first
     return record if field.value.size != 40
 
     field_index = record.fields.index(field)
     new_value = field.value[0..17]
-    specific_f008 = field.value[18..34]
-    fixed_specific_f008 = if book.include? rec_type
-                            fix_book_f008(specific_f008)
-                          elsif comp_file.include? rec_type
-                            fix_comp_f008(specific_f008)
-                          elsif map.include? rec_type
-                            fix_map_f008(specific_f008)
-                          elsif music.include? rec_type
-                            fix_music_f008(specific_f008)
-                          elsif continuing_resource.include? rec_type
-                            fix_continuing_resource_f008(specific_f008)
-                          elsif visual.include? rec_type
-                            fix_visual_f008(specific_f008)
-                          elsif mixed.include? rec_type
-                            fix_mix_mat_f008(specific_f008)
-                          end
-    new_value << fixed_specific_f008
+    new_value << fix_specific_f008(record_type: record_type, specific_f008: field.value[18..34])
     new_value << field.value[35..37]
     modified = field.value[38]
     modified = '|' if modified == 'u'
