@@ -8,7 +8,7 @@ module MarcCleanup
   def fixed_field_char_errors?(record)
     fields = record.fields('001'..'009').map(&:value)
     bad_fields = fields.reject { |value| value.bytesize == value.chars.size }
-    bad_fields += fields.select { |value| value =~ /[^a-z0-9 |.A-Z-]/ }
+    bad_fields += fields.grep(/[^a-z0-9 |.A-Z-]/)
     !bad_fields.empty?
   end
 
@@ -16,292 +16,146 @@ module MarcCleanup
     record.fields('008').size != 1
   end
 
-  def illus_codes
-    /^[ a-mop]+$/
+  def date2_f008_error?(date2, date_type)
+    case date_type
+    when 'e'
+      date2 =~ /^[0-9]+\s*$/ ? false : true
+    else
+      ['||||', '    '].include?(date2) || date2 =~ /^[0-9u]{4}$/ ? false : true
+    end
   end
 
-  def audience_codes
-    /[ a-gj|]/
-  end
-
-  def item_form_codes
-    /[ a-dfoq-s|]/
-  end
-
-  def item_orig_form_codes
-    /[ a-foqs|]/
-  end
-
-  def contents_codes
-    /^[ a-gi-wyz256]+$/
-  end
-
-  def gov_pub_codes
-    /[ acfilmosuz|]/
-  end
-
-  def lit_form_codes
-    /[01c-fhijmpsu|]/
-  end
-
-  def biog_codes
-    /[ abcd|]/
-  end
-
-  def comp_type_codes
-    /[a-jmuz|]/
-  end
-
-  def relief_codes
-    /^[ a-gi-kmz]+$/
-  end
-
-  def projection_codes
-    YAML.load_file("#{ROOT_DIR}/yaml/fixed_fields/projection_codes.yml")
-  end
-
-  def map_type_codes
-    /[a-guz|]/
-  end
-
-  def map_special_format_codes
-    /[ ejklnoprz]+/
-  end
-
-  def composition_codes
-    YAML.load_file("#{ROOT_DIR}/yaml/fixed_fields/composition_codes.yml")
-  end
-
-  def music_format_codes
-    /[a-eg-npuz|]/
-  end
-
-  def music_part_codes
-    /[ defnu|]/
-  end
-
-  def accompany_codes
-    /^[ a-ikrsz]+$/
-  end
-
-  def lit_text_codes
-    /^[ a-prstz]+$/
-  end
-
-  def transpose_codes
-    /[ abcnu|]/
-  end
-
-  def freq_codes
-    /[ a-kmqstuwz|]/
-  end
-
-  def cr_type_codes
-    /[ dlmnpw|]/
-  end
-
-  def cr_contents_codes
-    /^[ a-ik-wyz56]+/
-  end
-
-  def orig_script_codes
-    /[ a-luz|]/
-  end
-
-  def visual_type_codes
-    /^[a-dfgik-tvwz|]$/
-  end
-
-  def global_f008_error?(field)
-    date_entered = field[0..5]
+  def date_f008_error?(field)
     date_type = field[6]
     date1 = field[7..10]
     date2 = field[11..14]
-    place = field[15..17]
-    lang = field[35..37]
-    modified = field[38]
-    cat_source = field[39]
-    return true unless date_entered =~ /^[0-9]{6}$/
-    return true unless %w[b c d e i k m n p q r s t u |].include?(date_type)
-    return true unless date1 == '||||' || date1 == '    ' || date1 =~ /^[0-9u]{4}$/
+    return true unless ['||||', '    '].include?(date1) || date1 =~ /^[0-9u]{4}$/
+    return true unless date_type =~ /[b-eikmnp-u|]/
 
-    case date_type
-    when 'e'
-      return true unless date2 =~ /^[0-9]+\s*$/
-    else
-      return true unless date2 == '||||' || date2 == '    ' || date2 =~ /^[0-9u]{4}$/
-    end
-    return true unless place == '|||' || PLACE_CODES.include?(place)
-    return true unless lang == '|||'  || LANGUAGE_CODES.include?(lang)
-    return true unless [' ', 'd', 'o', 'r', 's', 'x', '|'].include?(modified)
-    return true unless [' ', 'c', 'd', 'u', '|'].include?(cat_source)
+    date2_f008_error?(date2, date_type)
+  end
+
+  def global_f008_error?(field)
+    return true unless field[0..5] =~ /^[0-9]{6}$/ # date entered
+    return true if date_f008_error?(field)
+    return true unless (PLACE_CODES + ['|||']).include?(field[15..17]) # place of publication
+    return true unless (LANGUAGE_CODES + ['|||']).include?(field[35..37]) # language code
+    return true unless [' ', 'd', 'o', 'r', 's', 'x', '|'].include?(field[38]) # modified record
+    return true unless [' ', 'c', 'd', 'u', '|'].include?(field[39]) # cataloging source
 
     false
+  end
+
+  def ideal_book_f008
+    /
+      ^(?:[|]{4}|[#{BOOK_ILLUSTRATION_CODES.join}]{4})
+      [#{AUDIENCE_CODES.join}][#{ITEM_FORM_CODES.join}]
+      (?:[|]{4}|[#{BOOK_CONTENTS_CODES.join}]{4})
+      [#{GOV_PUB_CODES.join}]
+      [01|]{3} # conference, festschrift, index
+      [ |] # undefined
+      [#{BOOK_LIT_FORM_CODES.join}][#{BOOK_BIOGRAPHY_CODES.join}]$
+    /x
   end
 
   def book_f008_error?(field)
-    illus = field[0..3]
-    audience = field[4]
-    item_form = field[5]
-    contents = field[6..9]
-    gov_pub = field[10]
-    conf_pub = field[11]
-    festschrift = field[12]
-    index = field[13]
-    undefined = field[14]
-    lit_form = field[15]
-    biog = field[16]
-    return true unless illus == '||||' || illus =~ illus_codes
-    return true unless audience =~ audience_codes
-    return true unless item_form =~ item_form_codes
-    return true unless contents == '||||' || contents =~ contents_codes
-    return true unless gov_pub =~ gov_pub_codes
-    return true unless %w[0 1 |].include?(conf_pub)
-    return true unless %w[0 1 |].include?(festschrift)
-    return true unless %w[0 1 |].include?(index)
-    return true unless undefined == ' '
-    return true unless lit_form =~ lit_form_codes
-    return true unless biog =~ biog_codes
+    !ideal_book_f008.match?(field)
+  end
 
-    false
+  def ideal_comp_f008
+    /
+      ^(?:[|]{4}|[ ]{4}) # undefined
+      [#{AUDIENCE_CODES.join}]
+      [ oq|] # limited item form for computer file
+      (?:[|]{2}|[ ]{2}) # undefined
+      [#{COMPUTER_FILE_TYPE_CODES.join}]
+      [ |] # undefined
+      [#{GOV_PUB_CODES.join}]
+      (?:[|]{6}|[ ]{6})$ # undefined
+    /x
   end
 
   def comp_f008_error?(field)
-    undef1 = field[0..3]
-    audience = field[4]
-    item_form = field[5]
-    undef2 = field[6..7]
-    type = field[8]
-    undef3 = field[9]
-    gov_pub = field[10]
-    undef4 = field[11..16]
-    return true unless ['||||', '    '].include?(undef1)
-    return true unless audience =~ audience_codes
-    return true unless item_form =~ /[ oq|]/
-    return true unless ['  ', '||'].include?(undef2)
-    return true unless type =~ comp_type_codes
-    return true unless [' ', '|'].include?(undef3)
-    return true unless gov_pub =~ gov_pub_codes
-    return true unless ['||||||', '      '].include?(undef4)
+    !ideal_comp_f008.match?(field)
+  end
 
-    false
+  def ideal_map_f008
+    /
+      (?:[|]{4}|[#{MAP_RELIEF_CODES.join}]{4})(?:#{MAP_PROJECTION_CODES.join('|')}|[|]{2})
+      [| ][#{MAP_TYPE_CODES.join}] # first character is undefined
+      (?:[|]{2}|\s{2}) # undefined
+      [#{GOV_PUB_CODES.join}][#{ITEM_FORM_CODES.join}]
+      [| ] # undefined
+      [01|] # index
+      [| ] # undefined
+      (?:[|]{2}|[#{MAP_SPECIAL_FORMAT_CODES.join}]{2})$
+    /x
   end
 
   def map_f008_error?(field)
-    relief = field[0..3]
-    proj = field[4..5]
-    undef1 = field[6]
-    type = field[7]
-    undef2 = field[8..9]
-    gov_pub = field[10]
-    item_form = field[11]
-    undef3 = field[12]
-    index = field[13]
-    undef4 = field[14]
-    format = field[15..16]
-    return true unless relief == '||||' || relief =~ relief_codes
-    return true unless projection_codes.include?(proj)
-    return true unless [' ', '|'].include?(undef1)
-    return true unless type =~ map_type_codes
-    return true unless ['||', '  '].include?(undef2)
-    return true unless gov_pub =~ gov_pub_codes
-    return true unless item_form =~ item_form_codes
-    return true unless [' ', '|'].include?(undef3)
-    return true unless %w[0 1 |].include?(index)
-    return true unless [' ', '|'].include?(undef4)
-    return true unless format == '||' || format =~ map_special_format_codes
+    !ideal_map_f008.match?(field)
+  end
 
-    false
+  def ideal_music_f008
+    /
+      ^(?:#{MUSIC_COMPOSITION_CODES.join('|')}|[|]{2})
+      [#{MUSIC_FORMAT_CODES.join}][#{MUSIC_PART_CODES.join}]
+      [#{AUDIENCE_CODES.join}][#{ITEM_FORM_CODES.join}]
+      (?:[|]{6}|[#{MUSIC_ACCOMPANY_CODES.join}]{6})
+      (?:[|]{2}|[#{MUSIC_LITERARY_TEXT_CODES.join}]{2})
+      [| ] # undefined
+      [#{MUSIC_TRANSPOSITION_CODES.join}]
+      [| ]$ # undefined
+    /x
   end
 
   def music_f008_error?(field)
-    comp_form = field[0..1]
-    music_format = field[2]
-    parts = field[3]
-    audience = field[4]
-    item_form = field[5]
-    accompanying = field[6..11]
-    lit_text = field[12..13]
-    undef1 = field[14]
-    transpose = field[15]
-    undef2 = field[16]
-    return true unless composition_codes.include?(comp_form)
-    return true unless music_format =~ music_format_codes
-    return true unless parts =~ music_part_codes
-    return true unless audience =~ audience_codes
-    return true unless item_form =~ item_form_codes
-    return true unless accompanying == '||||||' || accompanying =~ accompany_codes
-    return true unless lit_text == '||' || lit_text =~ lit_text_codes
-    return true unless [' ', '|'].include?(undef1)
-    return true unless transpose =~ transpose_codes
-    return true unless [' ', '|'].include?(undef2)
+    !ideal_music_f008.match?(field)
+  end
 
-    false
+  def ideal_continuing_resource_f008
+    /
+      ^[#{CR_FREQUENCY_CODES.join}][#{CR_REGULARITY_CODES.join}]
+      [| ] # undefined
+      [#{CR_TYPE_CODES.join}][#{CR_ORIGINAL_FORM_CODES.join}]
+      [#{ITEM_FORM_CODES.join}][#{CR_WORK_NATURE_CODES.join}]
+      (?:[#{CR_CONTENTS_CODES.join}]{3}|[|]{3})
+      [#{GOV_PUB_CODES.join}][01|] # conference publication
+      (?:[ ]{3}|[|]{3}) # undefined
+      [#{CR_ORIGINAL_SCRIPT_CODES.join}][012|]$ # entry convention
+    /x
   end
 
   def continuing_resource_f008_error?(field)
-    freq = field[0]
-    reg = field[1]
-    undef1 = field[2]
-    cr_type = field[3]
-    item_orig_form = field[4]
-    item_form = field[5]
-    work_nature = field[6]
-    contents = field[7..9]
-    gov_pub = field[10]
-    conf_pub = field[11]
-    undef2 = field[12..14]
-    orig_script = field[15]
-    entry = field[16]
-    return true unless freq =~ freq_codes
-    return true unless %w[n r u x |].include?(reg)
-    return true unless [' ', '|'].include?(undef1)
-    return true unless cr_type =~ cr_type_codes
-    return true unless item_orig_form =~ item_orig_form_codes
-    return true unless item_form =~ item_form_codes
-    return true unless work_nature == '|' || work_nature =~ cr_contents_codes
-    return true unless contents == '|||' || contents =~ cr_contents_codes
-    return true unless gov_pub =~ gov_pub_codes
-    return true unless ['0', '1', '|'].include?(conf_pub)
-    return true unless ['   ', '|||'].include?(undef2)
-    return true unless orig_script =~ orig_script_codes
-    return true unless %w[0 1 2 |].include?(entry)
+    !ideal_continuing_resource_f008.match?(field)
+  end
 
-    false
+  def ideal_visual_f008
+    /
+      ^(?:n{3}|-{3}|[|]{3}|[0-9]{3}) # runtime
+      [| ] # undefined
+      [#{AUDIENCE_CODES.join}]
+      (?:[ ]{5}|[|]{5}) # undefined
+      [#{GOV_PUB_CODES.join}][#{ITEM_FORM_CODES.join}]
+      (?:[ ]{3}|[|]{3}) # undefined
+      [#{VISUAL_TYPE_CODES.join}][#{VISUAL_TECHNIQUE_CODES.join}]$
+    /x
   end
 
   def visual_f008_error?(field)
-    runtime = field[0..2]
-    undef1 = field[3]
-    audience = field[4]
-    undef2 = field[5..9]
-    gov_pub = field[10]
-    item_form = field[11]
-    undef3 = field[12..14]
-    visual_type = field[15]
-    technique = field[16]
-    return true unless %w[nnn --- |||].include?(runtime) || runtime =~ /^[0-9]{3}$/
-    return true unless [' ', '|'].include?(undef1)
-    return true unless audience =~ audience_codes
-    return true unless ['     ', '|||||'].include?(undef2)
-    return true unless gov_pub =~ gov_pub_codes
-    return true unless item_form =~ item_form_codes
-    return true unless ['   ', '|||'].include?(undef3)
-    return true unless visual_type =~ visual_type_codes
-    return true unless %w[a c l n u z |].include?(technique)
+    !ideal_visual_f008.match?(field)
+  end
 
-    false
+  def ideal_mix_mat_f008
+    /
+      (?:[ ]{5}|[|]{5}) # undefined
+      [#{ITEM_FORM_CODES.join}]
+      (?:[ ]{11}|[|]{11})$ # undefined
+    /x
   end
 
   def mix_mat_f008_error?(field)
-    undef1 = field[0..4]
-    item_form = field[5]
-    undef2 = field[6..16]
-    return true unless ['     ', '|||||'].include?(undef1)
-    return true unless item_form =~ item_form_codes
-    return true unless ['           ', '|||||||||||'].include?(undef2)
-
-    false
+    !ideal_mix_mat_f008.match?(field)
   end
 
   def record_type(leader_portion)
@@ -474,11 +328,7 @@ module MarcCleanup
   def kit_mus_f007(field)
     return true unless field.length == 1
 
-    %w[u |].include?(field[0]) ? false : true
-  end
-
-  def remote_data_types
-    YAML.load_file("#{ROOT_DIR}/yaml/fixed_fields/remote_data_types.yml")
+    !%w[u |].include?(field[0])
   end
 
   def remote_f007(field)
@@ -491,7 +341,7 @@ module MarcCleanup
     return true unless field[5] =~ /[a-inuz|]/
     return true unless field[6] =~ /[abcmnuz|]/
     return true unless field[7] =~ /[abuz|]/
-    return true unless remote_data_types.include? field[8..9]
+    return true unless REMOTE_DATA_TYPES.include? field[8..9]
 
     false
   end
@@ -518,7 +368,7 @@ module MarcCleanup
   def text_f007(field)
     return true unless field.length == 1
 
-    %w[a b c d u z |].include?(field[0]) ? false : true
+    !%w[a b c d u z |].include?(field[0])
   end
 
   def video_f007(field)
@@ -538,7 +388,7 @@ module MarcCleanup
   def unspec_f007(field)
     return true unless field.length == 1
 
-    %w[m u z |].include?(field[0]) ? false : true
+    !%w[m u z |].include?(field[0])
   end
 
   def bad_f007?(record)
@@ -789,14 +639,14 @@ module MarcCleanup
     mat_designation = mat_designation.gsub(/[^abcduz|]/, 'u')
     writing = specific_f007[2..3]
     unless writing == '||'
-      writing_chars = writing.chars.select { |c| c =~ /[a-emnuz]/ }.sort.join('')
+      writing_chars = writing.chars.grep(/[a-emnuz]/).sort.join
       writing = writing_chars.ljust(2)
     end
     contraction = specific_f007[4]
     contraction = contraction.gsub(/[^abmnuz|]/, 'u')
     music = specific_f007[5..7]
     unless music == '|||'
-      music_chars = music.chars.select { |c| c =~ /[a-lnuz]/ }.sort.join('')
+      music_chars = music.chars.grep(/[a-lnuz]/).sort.join
       music = music_chars.ljust(3)
     end
     special = specific_f007[8]
@@ -853,7 +703,7 @@ module MarcCleanup
     reduction_range = reduction_range.gsub(/[^a-euv|]/, 'u')
     reduction_ratio = specific_f007[5..7]
     unless %w[--- |||].include? reduction_ratio
-      reduction_nums = reduction_ratio.chars.select { |c| c =~ /[0-9]/ }.join('')
+      reduction_nums = reduction_ratio.chars.grep(/[0-9]/).join
       reduction_ratio = reduction_nums.ljust(3, '-')
     end
     color = specific_f007[8]
@@ -1003,7 +853,7 @@ module MarcCleanup
     sensor = specific_f007[7]
     sensor = sensor.gsub(/[^abuz|]/, 'u')
     data_type = specific_f007[8..9]
-    data_type = 'uu' unless remote_data_types.include? data_type
+    data_type = 'uu' unless REMOTE_DATA_TYPES.include? data_type
     fixed_field << mat_designation
     fixed_field << ' '
     fixed_field << altitude
@@ -1117,10 +967,6 @@ module MarcCleanup
     mat_designation.gsub(/[^muz|]/, 'u')
   end
 
-  def contents_chars
-    %w[a b c d e f g h i k l m n o p q r s t u v w y z 5 6]
-  end
-
   def fix_contents_chars(contents)
     return contents if contents =~ /\|+$/
 
@@ -1136,7 +982,7 @@ module MarcCleanup
         contents[index] = 'q'
       end
     end
-    contents_values = contents.chars.select { |c| contents_chars.include? c }.sort.join('')
+    contents_values = contents.chars.select { |code| (BOOK_CONTENTS_CODES - [' ']).include?(code) }.sort.join
     contents_values.ljust(contents.size)
   end
 
@@ -1235,7 +1081,7 @@ module MarcCleanup
     lit_form = field[15]
     biog = field[16]
     unless illus == '||||'
-      illus_chars = illus.chars.select { |c| %w[a b c d e f g h i j k l m o p].include? c }.sort.join('')
+      illus_chars = illus.chars.select { |c| %w[a b c d e f g h i j k l m o p].include? c }.sort.join
       illus = illus_chars.ljust(4)
     end
     fixed_field << illus
@@ -1286,7 +1132,7 @@ module MarcCleanup
     format = field[15..16]
     unless relief == '||||'
       relief = relief.gsub('h', 'c')
-      relief_chars = relief.chars.select { |c| %w[a b c d e f g i j k m z].include? c }.sort.join('')
+      relief_chars = relief.chars.select { |c| %w[a b c d e f g i j k m z].include? c }.sort.join
       relief = relief_chars.ljust(4)
     end
     fixed_field << relief
@@ -1301,7 +1147,7 @@ module MarcCleanup
     fixed_field << index_code
     fixed_field << ' '
     unless format == '||'
-      format_chars = format.chars.select { |c| %w[e j k l n o p r z].include? c }.sort.join('')
+      format_chars = format.chars.select { |c| %w[e j k l n o p r z].include? c }.sort.join
       format = format_chars.ljust(2)
     end
     fixed_field << format
@@ -1326,14 +1172,14 @@ module MarcCleanup
     fixed_field << item_form
     unless accompanying == '||||||'
       accompanying = accompanying.gsub('j', 'i')
-      accompanying_chars = accompanying.chars.select { |c| %w[a b c d e f g h i k r s z].include? c }.sort.join('')
+      accompanying_chars = accompanying.chars.select { |c| %w[a b c d e f g h i k r s z].include? c }.sort.join
       accompanying = accompanying_chars.ljust(6)
     end
     fixed_field << accompanying
     unless ['||', '  '].include? lit_text
       lit_text_chars = lit_text.chars.select do |c|
         %w[a b c d e f g h i j k l m n o p r s t z].include? c
-      end.sort.join('')
+      end.sort.join
       lit_text = lit_text_chars.ljust(2)
     end
     fixed_field << lit_text
