@@ -70,7 +70,7 @@ tab_newline_fix - Replace tab characters and newline characters with single spac
 
 empty_subfield_fix - Remove all empty subfields.
 
-field_delete - Delete fields with specified tags.
+field_delete_by_tags - Delete fields with specified tags.
 
 ### Fixes for raw MARC:
 controlcharfix - Remove extra end-of-field, end-of-subfield, or end-of-record characters.
