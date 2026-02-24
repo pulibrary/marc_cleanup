@@ -229,8 +229,8 @@ RSpec.describe 'fields 007 methods' do
 
     describe 'fix_electronic_f007' do
       let(:leader) { '01104nma a2200289 i 4500' }
-      let(:fields) { [ { '007' => 'caaaaa001aaaaa' } ] }
-      it { expect(MarcCleanup.fix_f007(record)['007'].value).to eq 'ca aaa001aaaaa' }
+      let(:fields) { [ { '007' => 'caaaaa001xaaaa' } ] }
+      it { expect(MarcCleanup.fix_f007(record)['007'].value).to eq 'ca aaa001uaaaa' }
     end
 
     describe 'fix_globe_f007' do
