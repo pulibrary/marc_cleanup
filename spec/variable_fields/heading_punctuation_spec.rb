@@ -226,6 +226,19 @@ RSpec.describe 'heading_end_punct?' do
     end
   end
 
+  context '700 field has no heading subfields' do
+    let(:fields) do
+      [
+        { '700' => { 'ind1' => '0',
+                     'ind2' => ' ',
+                     'subfields' => [{ '4' => 'edt' }] } }
+      ]
+    end
+    it 'does not return an error' do
+      expect(MarcCleanup.heading_end_punct?(record)).to be false
+    end
+  end
+
   context '700 field does not have proper end punctuation' do
     let(:fields) do
       [

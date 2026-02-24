@@ -159,7 +159,7 @@ module MarcCleanup
   end
 
   def record_type(leader_portion)
-    RECORD_TYPES.find { |_type, values| values.include?(leader_portion) }[0]
+    RECORD_TYPES.find { |_type, values| values.include?(leader_portion) }.to_a[0]
   end
 
   def bad_f005?(record)
