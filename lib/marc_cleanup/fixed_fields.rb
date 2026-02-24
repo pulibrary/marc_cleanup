@@ -48,13 +48,13 @@ module MarcCleanup
 
   def ideal_book_f008
     /
-      ^(?:[|]{4}|[#{BOOK_ILLUSTRATION_CODES.join}]{4})
+      ^(?:[|]{4}|[#{BOOK_ILLUSTRATION.join}]{4})
       [#{AUDIENCE_CODES.join}][#{ITEM_FORM_CODES.join}]
-      (?:[|]{4}|[#{BOOK_CONTENTS_CODES.join}]{4})
-      [#{GOV_PUB_CODES.join}]
+      (?:[|]{4}|[#{BOOK_CONTENTS.join}]{4})
+      [#{GOV_PUB.join}]
       [01|]{3} # conference, festschrift, index
       [ |] # undefined
-      [#{BOOK_LIT_FORM_CODES.join}][#{BOOK_BIOGRAPHY_CODES.join}]$
+      [#{BOOK_LIT_FORM.join}][#{BOOK_BIOGRAPHY.join}]$
     /x
   end
 
@@ -68,9 +68,9 @@ module MarcCleanup
       [#{AUDIENCE_CODES.join}]
       [ oq|] # limited item form for computer file
       (?:[|]{2}|[ ]{2}) # undefined
-      [#{COMPUTER_FILE_TYPE_CODES.join}]
+      [#{COMPUTER_FILE_TYPE.join}]
       [ |] # undefined
-      [#{GOV_PUB_CODES.join}]
+      [#{GOV_PUB.join}]
       (?:[|]{6}|[ ]{6})$ # undefined
     /x
   end
@@ -81,14 +81,14 @@ module MarcCleanup
 
   def ideal_map_f008
     /
-      (?:[|]{4}|[#{MAP_RELIEF_CODES.join}]{4})(?:#{MAP_PROJECTION_CODES.join('|')}|[|]{2})
-      [| ][#{MAP_TYPE_CODES.join}] # first character is undefined
+      (?:[|]{4}|[#{MAP_RELIEF.join}]{4})(?:#{MAP_PROJECTION.join('|')}|[|]{2})
+      [| ][#{MAP_TYPE.join}] # first character is undefined
       (?:[|]{2}|\s{2}) # undefined
-      [#{GOV_PUB_CODES.join}][#{ITEM_FORM_CODES.join}]
+      [#{GOV_PUB.join}][#{ITEM_FORM_CODES.join}]
       [| ] # undefined
       [01|] # index
       [| ] # undefined
-      (?:[|]{2}|[#{MAP_SPECIAL_FORMAT_CODES.join}]{2})$
+      (?:[|]{2}|[#{MAP_SPECIAL_FORMAT.join}]{2})$
     /x
   end
 
@@ -98,13 +98,13 @@ module MarcCleanup
 
   def ideal_music_f008
     /
-      ^(?:#{MUSIC_COMPOSITION_CODES.join('|')}|[|]{2})
-      [#{MUSIC_FORMAT_CODES.join}][#{MUSIC_PART_CODES.join}]
+      ^(?:#{MUSIC_COMPOSITION.join('|')}|[|]{2})
+      [#{MUSIC_FORMAT.join}][#{MUSIC_PART.join}]
       [#{AUDIENCE_CODES.join}][#{ITEM_FORM_CODES.join}]
-      (?:[|]{6}|[#{MUSIC_ACCOMPANY_CODES.join}]{6})
-      (?:[|]{2}|[#{MUSIC_LITERARY_TEXT_CODES.join}]{2})
+      (?:[|]{6}|[#{MUSIC_ACCOMPANY.join}]{6})
+      (?:[|]{2}|[#{MUSIC_LITERARY_TEXT.join}]{2})
       [| ] # undefined
-      [#{MUSIC_TRANSPOSITION_CODES.join}]
+      [#{MUSIC_TRANSPOSITION.join}]
       [| ]$ # undefined
     /x
   end
@@ -115,14 +115,14 @@ module MarcCleanup
 
   def ideal_continuing_resource_f008
     /
-      ^[#{CR_FREQUENCY_CODES.join}][#{CR_REGULARITY_CODES.join}]
+      ^[#{CR_FREQUENCY.join}][#{CR_REGULARITY.join}]
       [| ] # undefined
-      [#{CR_TYPE_CODES.join}][#{CR_ORIGINAL_FORM_CODES.join}]
-      [#{ITEM_FORM_CODES.join}][#{CR_WORK_NATURE_CODES.join}]
-      (?:[#{CR_CONTENTS_CODES.join}]{3}|[|]{3})
-      [#{GOV_PUB_CODES.join}][01|] # conference publication
+      [#{CR_TYPE.join}][#{CR_ORIGINAL_FORM.join}]
+      [#{ITEM_FORM_CODES.join}][#{CR_WORK_NATURE.join}]
+      (?:[#{CR_CONTENTS.join}]{3}|[|]{3})
+      [#{GOV_PUB.join}][01|] # conference publication
       (?:[ ]{3}|[|]{3}) # undefined
-      [#{CR_ORIGINAL_SCRIPT_CODES.join}][012|]$ # entry convention
+      [#{CR_ORIGINAL_SCRIPT.join}][012|]$ # entry convention
     /x
   end
 
@@ -136,9 +136,9 @@ module MarcCleanup
       [| ] # undefined
       [#{AUDIENCE_CODES.join}]
       (?:[ ]{5}|[|]{5}) # undefined
-      [#{GOV_PUB_CODES.join}][#{ITEM_FORM_CODES.join}]
+      [#{GOV_PUB.join}][#{ITEM_FORM_CODES.join}]
       (?:[ ]{3}|[|]{3}) # undefined
-      [#{VISUAL_TYPE_CODES.join}][#{VISUAL_TECHNIQUE_CODES.join}]$
+      [#{VISUAL_TYPE.join}][#{VISUAL_TECHNIQUE.join}]$
     /x
   end
 
@@ -159,7 +159,7 @@ module MarcCleanup
   end
 
   def record_type(leader_portion)
-    RECORD_TYPES.find { |_type, values| values.include?(leader_portion) }[0]
+    RECORD_TYPES.find { |_type, values| values.include?(leader_portion) }.to_a[0]
   end
 
   def bad_f005?(record)
@@ -169,226 +169,262 @@ module MarcCleanup
     field.value =~ /^[0-9]{14}\.[0-9]$/ ? false : true
   end
 
+  def record_type_f006
+    {
+      'book' => %w[a t],
+      'computer_file' => %w[m],
+      'map' => %w[e f],
+      'music' => %w[c d i j],
+      'continuing_resource' => %w[s],
+      'visual' => %w[g k o r],
+      'mixed' => %w[p]
+    }
+  end
+
   # Uses same methods as the specific 008 methods
   def bad_f006?(record)
     fields = record.fields('006')
-    return false if fields.empty?
+    return true if fields.any? { |field| field.value.size != 18 }
 
     fields.each do |field|
-      return true if field.value.length != 18
-
-      rec_type = field.value[0]
-      specific_f006 = field.value[1..]
-      case rec_type
-      when 'a', 't'
-        return true if book_f008_error?(specific_f006)
-      when 'm'
-        return true if comp_f008_error?(specific_f006)
-      when 'e', 'f'
-        return true if map_f008_error?(specific_f006)
-      when 'c', 'd', 'i', 'j'
-        return true if music_f008_error?(specific_f006)
-      when 's'
-        return true if continuing_resource_f008_error?(specific_f006)
-      when 'g', 'k', 'o', 'r'
-        return true if visual_f008_error?(specific_f006)
-      when 'p'
-        return true if mix_mat_f008_error?(specific_f006)
-      end
+      record_type = record_type_f006.find { |_value, codes| codes.include?(field.value[0]) }[0]
+      return true if specific_f008_error?(record_type: record_type, specific_f008: field.value[1..])
     end
     false
   end
 
-  def map_f007(field)
-    return true unless field.length == 7
-    return true unless %w[d g j k q r s u y z |].include?(field[0])
-    return true unless field[1] == ' '
-    return true unless %w[a c |].include?(field[2])
-    return true unless %w[a b c d e f g i j l n p q r s t u v w x y z |].include?(field[3])
-    return true unless %w[f n u z |].include?(field[4])
-    return true unless %w[a b c d u z |].include?(field[5])
-    return true unless %w[a b m n |].include?(field[6])
-
-    false
+  def ideal_map_f007
+    /
+      ^[#{MAP_MATERIAL_DESIGNATION.join}]
+      [ ] # undefined
+      [#{MAP_COLOR.join}]
+      [#{MAP_PHYSICAL_MEDIUM.join}]
+      [#{MAP_REPRODUCTION_TYPE.join}]
+      [#{MAP_REPRODUCTION_DETAILS.join}]
+      [#{MAP_POSITIVE_ASPECT.join}]$
+    /x
   end
 
-  def elec_f007(field)
-    return true unless field.length == 13
-    return true unless %w[a b c d e f h j k m o r s u z |].include?(field[0])
-    return true unless field[1] == ' '
-    return true unless %w[a b c g m n u z |].include?(field[2])
-    return true unless %w[a e g i j n o u v z |].include?(field[3])
-    return true unless [' ', 'a', 'u', '|'].include?(field[4])
-    return true unless %w[mmm nnn --- |||].include?(field[5..7]) || field[5..7] =~ /^[0-9]{3}$/
-    return true unless %w[a m u |].include?(field[8])
-    return true unless %w[a n p u |].include?(field[9])
-    return true unless %w[a b c d m n u |].include?(field[10])
-    return true unless %w[a b d m u |].include?(field[11])
-    return true unless %w[a n p r u |].include?(field[12])
-
-    false
+  def map_f007_error?(field)
+    !ideal_map_f007.match?(field)
   end
 
-  def globe_f007(field)
-    return true unless field.length == 5
-    return true unless %w[a b c e u z |].include?(field[0])
-    return true unless field[1] == ' '
-    return true unless %w[a c |].include?(field[2])
-    return true unless %w[a b c d e f g i l n p u v w z |].include?(field[3])
-    return true unless %w[f n u z |].include?(field[4])
-
-    false
+  def ideal_elec_f007
+    /
+      ^[#{ELECTRONIC_MATERIAL_DESIGNATION.join}]
+      [ ] # undefined
+      [#{ELECTRONIC_COLOR.join}][#{ELECTRONIC_DIMENSION.join}]
+      [#{ELECTRONIC_SOUND.join}]
+      (?:m{3}|n{3}|-{3}|[|]{3}|[0-9]{3}) # image bit depth
+      [#{ELECTRONIC_FILE_FORMAT.join}][#{ELECTRONIC_QA.join}]
+      [#{ELECTRONIC_SOURCE.join}][#{ELECTRONIC_COMPRESSION.join}]
+      [#{ELECTRONIC_REFORMATTING.join}]$
+    /x
   end
 
-  def tactile_f007(field)
-    return true unless field.length == 9
-    return true unless %w[a b c d u z |].include?(field[0])
-    return true unless field[1] == ' '
-    return true unless field[2..3] == '||' || field[2..3] =~ /^[abcdemnuz ]{2}$/
-    return true unless %w[a b m n u z |].include?(field[4])
-    return true unless field[5..7] == '||' || field[5..7] =~ /^[abcdefghijklnuz ]{3}$/
-    return true unless %w[a b n u z |].include?(field[8])
-
-    false
+  def elec_f007_error?(field)
+    !ideal_elec_f007.match?(field)
   end
 
-  def proj_graphic_f007(field)
-    return true unless field.length == 8
-    return true unless %w[c d f o s t u z |].include?(field[0])
-    return true unless field[1] == ' '
-    return true unless %w[a b c h m n u z |].include?(field[2])
-    return true unless %w[d e j k m o u z |].include?(field[3])
-    return true unless [' ', 'a', 'b', 'u', '|'].include?(field[4])
-    return true unless [' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'u', 'z', '|'].include?(field[5])
-    return true unless %w[a b c d e f g j k s t v w x y u z |].include?(field[6])
-    return true unless [' ', 'c', 'd', 'e', 'h', 'j', 'k', 'm', 'u', 'z', '|'].include?(field[7])
-
-    false
+  def ideal_globe_f007
+    /
+      ^[#{GLOBE_MATERIAL_DESIGNATION.join}]
+      [ ] # undefined
+      [#{GLOBE_COLOR.join}]
+      [#{GLOBE_PHYSICAL_MEDIUM.join}]
+      [#{GLOBE_REPRODUCTION_TYPE.join}]$
+    /x
   end
 
-  def microform_f007(field)
-    return true unless field.length == 12
-    return true unless %w[a b c d e f g h j u z |].include?(field[0])
-    return true unless field[1] == ' '
-    return true unless %w[a b m u |].include?(field[2])
-    return true unless %w[a d f g h l m o p u z |].include?(field[3])
-    return true unless %w[a b c d e u v |].include?(field[4])
-    return true unless field[5..7] == '|||' || field[5..7] =~ /^[0-9]+-*$/
-    return true unless %w[b c m u z |].include?(field[8])
-    return true unless %w[a b c m n u z |].include?(field[9])
-    return true unless %w[a b c m u |].include?(field[10])
-    return true unless %w[a c d i m n p r t u z |].include?(field[11])
-
-    false
+  def globe_f007_error?(field)
+    !ideal_globe_f007.match?(field)
   end
 
-  def nonproj_graphic_f007(field)
-    return true unless field.length == 5
-    return true unless %w[a c d e f g h i j k l n o p q r s u v z |].include?(field[0])
-    return true unless field[1] == ' '
-    return true unless %w[a b c h m u z |].include?(field[2])
-    return true unless %w[a b c d e f g h i l m n o p q r s t u v w z |].include?(field[3])
-    return true unless [' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-                        'u', 'v', 'w', 'z', '|'].include?(field[4])
-
-    false
+  def ideal_tactile_f007
+    /
+      ^[#{TACTILE_MATERIAL_DESIGNATION.join}]
+      [ ] # undefined
+      (?:[|]{2}|[#{TACTILE_BRAILLE_CLASS.join}]{2})
+      [#{TACTILE_CONTRACTION.join}]
+      (?:[|]{3}|[#{TACTILE_BRAILLE_MUSIC.join}]{3})
+      [#{TACTILE_PHYSICAL_CHARACTERISTICS.join}]$
+    /x
   end
 
-  def motion_pict_f007(field)
-    return true unless field.length > 6
-    return true unless %w[c f o r u z |].include?(field[0])
-    return true unless field[1] == ' '
-    return true unless %w[b c h m n u z |].include?(field[2])
-    return true unless %w[a b c d e f u z |].include?(field[3])
-    return true unless [' ', 'a', 'b', 'u', '|'].include?(field[4])
-    return true unless [' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'u', 'z', '|'].include?(field[5])
-    return true unless %w[a b c d e f g u z |].include?(field[6])
-    return true unless field[7].nil? || field[7] =~ /[kmnqsuz|]/
-    return true unless field[8].nil? || field[8] =~ /[a-gnz|]/
-    return true unless field[9].nil? || field[9] =~ /[abnuz|]/
-    return true unless field[10].nil? || field[10] =~ /[deoruz|]/
-    return true unless field[11].nil? || field[11] =~ /[acdimnprtuz|]/
-    return true unless field[12].nil? || field[12] =~ /[a-np-vz|]/
-    return true unless field[13].nil? || field[13] =~ /[abcdnuz|]/
-    return true unless field[14].nil? || field[14] =~ /[a-hklm|]/
-    return true unless field[15].nil? || field[15] =~ /[cinu|]/
+  def tactile_f007_error?(field)
+    !ideal_tactile_f007.match?(field)
+  end
 
-    inspect_date = field[16..21]
-    case inspect_date
-    when '||||||', '------'
-      false
-    when /^[0-9]+-*$/
-      false
-    else
-      true
-    end
+  def ideal_proj_graphic_f007
+    /
+      ^[#{PROJ_GRAPHIC_MATERIAL_DESIGNATION.join}]
+      [ ] # undefined
+      [#{PROJ_GRAPHIC_COLOR.join}]
+      [#{PROJ_GRAPHIC_EMULSION.join}]
+      [#{PROJ_GRAPHIC_SOUND_SEPARATE.join}]
+      [#{SOUND_MEDIUM.join}]
+      [#{PROJ_GRAPHIC_DIMENSION.join}]
+      [#{PROJ_GRAPHIC_SUPPORT.join}]$
+    /x
+  end
+
+  def proj_graphic_f007_error?(field)
+    !ideal_proj_graphic_f007.match?(field)
+  end
+
+  def ideal_microform_f007
+    /
+      ^[#{MICROFORM_MATERIAL_DESIGNATION.join}]
+      [ ] # undefined
+      [#{MICROFORM_POSITIVE_ASPECT.join}]
+      [#{MICROFORM_DIMENSION.join}][#{MICROFORM_REDUCTION_RANGE.join}]
+      (?:[0-9]--|[0-9]{2}-|[0-9]{3}|-{3}|[|]{3})
+      [#{MICROFORM_COLOR.join}][#{MICROFORM_EMULSION.join}]
+      [#{MICROFORM_GENERATION.join}]
+      [#{MICROFORM_BASE.join}]$
+    /x
+  end
+
+  def microform_f007_error?(field)
+    !ideal_microform_f007.match?(field)
+  end
+
+  def ideal_nonproj_graphic_f007
+    /
+      ^[#{NONPROJ_GRAPHIC_MATERIAL_DESIGNATION.join}]
+      [ ] # undefined
+      [#{NONPROJ_GRAPHIC_COLOR.join}]
+      [#{NONPROJ_GRAPHIC_PRIMARY_SUPPORT.join}]
+      [#{NONPROJ_GRAPHIC_SECONDARY_SUPPORT.join}]$
+    /x
+  end
+
+  def nonproj_graphic_f007_error?(field)
+    !ideal_nonproj_graphic_f007.match?(field)
+  end
+
+  def ideal_required_motion_pict_f007
+    /
+      ^[#{MOTION_PICT_MATERIAL_DESIGNATION.join}]
+      [ ] # undefined
+      [#{MOTION_PICT_COLOR.join}]
+      [#{MOTION_PICT_FORMAT.join}]
+      [#{MOTION_PICT_SOUND_SEPARATE.join}]
+      [#{SOUND_MEDIUM.join}]
+      [#{MOTION_PICT_DIMENSION.join}]
+    /x
+  end
+
+  def ideal_optional_motion_pict_f007
+    /
+      ^[#{MOTION_PICT_PLAYBACK_CHANNEL.join}]
+      [#{MOTION_PICT_PROD_ELEMENTS.join}]?
+      [#{MOTION_PICT_POSITIVE_ASPECT.join}]?
+      [#{MOTION_PICT_GENERATION.join}]?[#{MOTION_PICT_BASE.join}]?
+      [#{MOTION_PICT_REFINED_COLOR.join}]?[#{MOTION_PICT_COLOR_STOCK.join}]?
+      [#{MOTION_PICT_DETERIORATION.join}]?
+      [#{MOTION_PICT_COMPLETENESS.join}]?
+      (?:[0-9]{1,6}-*|-{6}|[|]{6})?$ # film inspection date
+    /x
+  end
+
+  def motion_pict_f007_error?(field)
+    return true unless ideal_required_motion_pict_f007.match?(field)
+
+    !ideal_optional_motion_pict_f007.match?(field[7..]) && field.size > 6
   end
 
   # Kit and notated music are tested with the same method
-  def kit_mus_f007(field)
+  def kit_mus_f007_error?(field)
     return true unless field.length == 1
 
     !%w[u |].include?(field[0])
   end
 
-  def remote_f007(field)
-    return true unless field.length == 10
-    return true unless field[0] =~ /[u|]/
-    return true unless field[1] == ' '
-    return true unless field[2] =~ /[abcnuz|]/
-    return true unless field[3] =~ /[abcnu|]/
-    return true unless field[4] =~ /[0-9nu|]/
-    return true unless field[5] =~ /[a-inuz|]/
-    return true unless field[6] =~ /[abcmnuz|]/
-    return true unless field[7] =~ /[abuz|]/
-    return true unless REMOTE_DATA_TYPES.include? field[8..9]
-
-    false
+  def ideal_remote_f007
+    /
+      ^[u|] # specific material designation
+      [ ] # undefined
+      [#{REMOTE_ALTITUDE.join}]
+      [#{REMOTE_ATTITUDE.join}]
+      [#{REMOTE_CLOUD_COVER.join}]
+      [#{REMOTE_PLATFORM_TYPE.join}]
+      [#{REMOTE_PLATFORM_USE.join}]
+      [#{REMOTE_SENSOR_TYPE.join}]
+      #{REMOTE_DATA_TYPES.join('|')}|[|]{2}$
+    /x
   end
 
-  def recording_f007(field)
-    return true unless field.length == 13
-    return true unless %w[d e g i q r s t u w z |].include?(field[0])
-    return true unless field[1] == ' '
-    return true unless field[2] =~ /[a-fhik-pruz|]/
-    return true unless field[3] =~ /[mqsuz|]/
-    return true unless field[4] =~ /[mnsuz|]/
-    return true unless field[5] =~ /[a-gjnosuz|]/
-    return true unless field[6] =~ /[l-puz|]/
-    return true unless field[7] =~ /[a-fnuz|]/
-    return true unless field[8] =~ /[abdimnrstuz|]/
-    return true unless field[9] =~ /[abcgilmnprswuz|]/
-    return true unless field[10] =~ /[hlnu|]/
-    return true unless field[11] =~ /[a-hnuz|]/
-    return true unless field[12] =~ /[abdeuz|]/
-
-    false
+  def remote_f007_error?(field)
+    !ideal_remote_f007.match?(field)
   end
 
-  def text_f007(field)
-    return true unless field.length == 1
-
-    !%w[a b c d u z |].include?(field[0])
+  def ideal_sound_recording_f007
+    /
+      ^[#{SOUND_RECORDING_MATERIAL_DESIGNATION.join}]
+      [ ] # undefined
+      [#{SOUND_RECORDING_SPEED.join}][#{SOUND_RECORDING_PLAYBACK_CHANNELS.join}]
+      [#{SOUND_RECORDING_GROOVE_WIDTH.join}][#{SOUND_RECORDING_DIMENSIONS.join}]
+      [#{SOUND_RECORDING_TAPE_WIDTH.join}][#{SOUND_RECORDING_TAPE_CONFIGURATION.join}]
+      [#{SOUND_RECORDING_DISC_KIND.join}][#{SOUND_RECORDING_MATERIAL_KIND.join}]
+      [#{SOUND_RECORDING_CUTTING_KIND.join}][#{SOUND_RECORDING_PLAYBACK_CHARACTERISTICS.join}]
+      [#{SOUND_RECORDING_CAPTURE_STORAGE_TECHNIQUE.join}]$
+    /x
   end
 
-  def video_f007(field)
-    return true unless field.length == 8
-    return true unless %w[c d f r u z |].include?(field[0])
-    return true unless field[1] == ' '
-    return true unless %w[a b c m n u z |].include?(field[2])
-    return true unless field[3] =~ /[a-kmopqsuvz|]/
-    return true unless [' ', 'a', 'b', 'u', '|'].include?(field[4])
-    return true unless [' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'u', 'z', '|'].include?(field[5])
-    return true unless %w[a m o p q r u z |].include?(field[6])
-    return true unless %w[k m n q s u z |].include?(field[7])
-
-    false
+  def sound_recording_f007_error?(field)
+    !ideal_sound_recording_f007.match?(field)
   end
 
-  def unspec_f007(field)
-    return true unless field.length == 1
+  def text_f007_error?(field)
+    regex = /
+              ^[#{TEXT_MATERIAL_DESIGNATION.join}]$
+            /x
+    !regex.match?(field)
+  end
 
-    !%w[m u z |].include?(field[0])
+  def ideal_video_f007
+    /
+      ^[#{VIDEO_MATERIAL_DESIGNATION.join}]
+      [ ] # undefined
+      [#{VIDEO_COLOR.join}]
+      [#{VIDEO_FORMAT.join}]
+      [#{VIDEO_SOUND_SEPARATE.join}]
+      [#{SOUND_MEDIUM.join}]
+      [#{VIDEO_DIMENSIONS.join}]
+      [#{VIDEO_PLAYBACK_CHANNELS.join}]$
+    /x
+  end
+
+  def video_f007_error?(field)
+    !ideal_video_f007.match?(field)
+  end
+
+  def unspec_f007_error?(field)
+    regex = /
+              ^[#{UNSPECIFIED_MATERIAL_DESIGNATION.join}]$
+            /x
+    !regex.match?(field)
+  end
+
+  def f007_rec_type_to_error_method_name
+    { 'a' => 'map_f007_error?', 'c' => 'elec_f007_error?',
+      'd' => 'globe_f007_error?', 'f' => 'tactile_f007_error?',
+      'g' => 'proj_graphic_f007_error?', 'h' => 'microform_f007_error?',
+      'k' => 'nonproj_graphic_f007_error?', 'm' => 'motion_pict_f007_error?',
+      'o' => 'kit_mus_f007_error?', 'q' => 'kit_mus_f007_error?',
+      'r' => 'remote_f007_error?', 's' => 'sound_recording_f007_error?',
+      't' => 'text_f007_error?', 'v' => 'video_f007_error?',
+      'z' => 'unspec_f007_error?' }
+  end
+
+  def specific_f007_error?(rec_type:, specific_f007:)
+    error_method_name = f007_rec_type_to_error_method_name[rec_type]
+    if error_method_name
+      send(error_method_name, specific_f007)
+    else
+      true
+    end
   end
 
   def bad_f007?(record)
@@ -398,67 +434,34 @@ module MarcCleanup
     fields.each do |field|
       rec_type = field.value[0]
       specific_f007 = field.value[1..]
-      return true unless specific_f007
-
-      case rec_type
-      when 'a'
-        return true if map_f007(specific_f007)
-      when 'c'
-        return true if elec_f007(specific_f007)
-      when 'd'
-        return true if globe_f007(specific_f007)
-      when 'f'
-        return true if tactile_f007(specific_f007)
-      when 'g'
-        return true if proj_graphic_f007(specific_f007)
-      when 'h'
-        return true if microform_f007(specific_f007)
-      when 'k'
-        return true if nonproj_graphic_f007(specific_f007)
-      when 'm'
-        return true if motion_pict_f007(specific_f007)
-      when 'o' || 'q'
-        return true if kit_mus_f007(specific_f007)
-      when 'r'
-        return true if remote_f007(specific_f007)
-      when 's'
-        return true if recording_f007(specific_f007)
-      when 't'
-        return true if text_f007(specific_f007)
-      when 'v'
-        return true if video_f007(specific_f007)
-      when 'z'
-        return true if unspec_f007(specific_f007)
-      else
-        return true
-      end
+      return true if specific_f007_error?(rec_type: rec_type, specific_f007: specific_f007)
     end
     false
   end
 
+  def f008_record_type_to_error_method_name
+    {
+      'book' => 'book_f008_error?',
+      'computer_file' => 'comp_f008_error?',
+      'map' => 'map_f008_error?',
+      'music' => 'music_f008_error?',
+      'continuing_resource' => 'continuing_resource_f008_error?',
+      'visual' => 'visual_f008_error?',
+      'mixed' => 'mix_mat_f008_error?'
+    }
+  end
+
   def specific_f008_error?(record_type:, specific_f008:)
-    case record_type
-    when 'book'
-      book_f008_error?(specific_f008)
-    when 'computer_file'
-      comp_f008_error?(specific_f008)
-    when 'map'
-      map_f008_error?(specific_f008)
-    when 'music'
-      music_f008_error?(specific_f008)
-    when 'continuing_resource'
-      continuing_resource_f008_error?(specific_f008)
-    when 'visual'
-      visual_f008_error?(specific_f008)
-    when 'mixed'
-      mix_mat_f008_error?(specific_f008)
+    error_method_name = f008_record_type_to_error_method_name[record_type]
+    if error_method_name
+      send(error_method_name, specific_f008)
+    else
+      true
     end
   end
 
   def bad_f008?(record)
-    hash = {}
-    hash[:valid] = true
-    hash[:errors] = []
+    hash = { valid: true, errors: [] }
     field = record['008'].value
 
     if field.length != 40
@@ -473,8 +476,7 @@ module MarcCleanup
     end
 
     record_type = record_type(record.leader[6..7])
-    specific_f008 = field[18..34]
-    if specific_f008_error?(record_type: record_type, specific_f008: specific_f008)
+    if specific_f008_error?(record_type: record_type, specific_f008: field[18..34])
       hash[:valid] = false
       hash[:errors] << 'Invalid value in the specific 008 (positions 18-34)'
     end
@@ -853,7 +855,7 @@ module MarcCleanup
     sensor = specific_f007[7]
     sensor = sensor.gsub(/[^abuz|]/, 'u')
     data_type = specific_f007[8..9]
-    data_type = 'uu' unless REMOTE_DATA_TYPES.include? data_type
+    data_type = 'uu' unless (REMOTE_DATA_TYPES + ['||']).include? data_type
     fixed_field << mat_designation
     fixed_field << ' '
     fixed_field << altitude
@@ -982,7 +984,7 @@ module MarcCleanup
         contents[index] = 'q'
       end
     end
-    contents_values = contents.chars.select { |code| (BOOK_CONTENTS_CODES - [' ']).include?(code) }.sort.join
+    contents_values = contents.chars.select { |code| (BOOK_CONTENTS - [' ']).include?(code) }.sort.join
     contents_values.ljust(contents.size)
   end
 

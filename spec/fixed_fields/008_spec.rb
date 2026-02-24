@@ -50,6 +50,20 @@ RSpec.describe 'field 008 methods' do
       end
     end
 
+    describe 'invalid record type 008' do
+      let(:leader) { '01104nae a2200289 i 4500' }
+
+      context 'when the global 008 values are valid' do
+        let(:fields) { [{ '008' => '230414s9999||||xx |||||||||||||| ||eng||' }] }
+        it {
+          expect(MarcCleanup.bad_f008?(record)).to eq valid: false,
+                                                      errors: [
+                                                        'Invalid value in the specific 008 (positions 18-34)'
+                                                      ]
+        }
+      end
+    end
+
     describe 'global and specific 008 check' do
       let(:leader) { '01104npa a2200289 i 4500' }
 
