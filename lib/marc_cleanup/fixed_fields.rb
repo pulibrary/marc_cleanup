@@ -460,157 +460,95 @@ module MarcCleanup
     end
   end
 
-  def bad_f008?(record)
-    hash = { valid: true, errors: [] }
+  def f008_errors(record)
     field = record['008'].value
+    return { valid: false, errors: ['Invalid 008 length'] } if field.length != 40
 
-    if field.length != 40
-      hash[:valid] = false
-      hash[:errors] << 'Invalid 008 length'
-      return hash
+    errors = []
+    errors << 'Invalid value in global 008 (positions 0-17, 35-39)' if global_f008_error?(field)
+    if specific_f008_error?(record_type: record_type(record.leader[6..7]), specific_f008: field[18..34])
+      errors << 'Invalid value in the specific 008 (positions 18-34)'
     end
+    { valid: errors.empty?, errors: errors }
+  end
 
-    if global_f008_error?(field)
-      hash[:valid] = false
-      hash[:errors] << 'Invalid value in global 008 (positions 0-17, 35-39)'
-    end
-
-    record_type = record_type(record.leader[6..7])
-    if specific_f008_error?(record_type: record_type, specific_f008: field[18..34])
-      hash[:valid] = false
-      hash[:errors] << 'Invalid value in the specific 008 (positions 18-34)'
-    end
-    hash
+  def f007_rec_type_to_fix_method_name
+    {
+      'a' => 'fix_map_f007', 'c' => 'fix_electronic_f007',
+      'd' => 'fix_globe_f007', 'f' => 'fix_tactile_f007',
+      'g' => 'fix_proj_f007', 'h' => 'fix_microform_f007',
+      'k' => 'fix_nonproj_f007', 'm' => 'fix_motion_pic_f007',
+      'o' => 'fix_kit_f007', 'q' => 'fix_notated_mus_f007',
+      'r' => 'fix_remote_f007', 's' => 'fix_sound_rec_f007',
+      't' => 'fix_text_f007', 'v' => 'fix_video_f007',
+      'z' => 'fix_unspec_f007'
+    }
   end
 
   ### Replace obsolete values with current values when possible
   def fix_f007(record)
-    target_fields = record.fields('007')
-    return record if target_fields.empty?
+    record.fields('007').each do |field|
+      rec_type = field.value[0]
+      method_name = f007_rec_type_to_fix_method_name[rec_type]
+      next unless method_name
 
-    target_fields.each do |field|
-      field_index = record.fields.index(field)
-      field_value = field.value
-      rec_type = field_value[0]
-      next unless %w[a c d f g h k m o q r s t v z].include? rec_type
-
-      specific_f007 = field_value[1..]
-      next unless specific_f007
-
-      fixed_f007 = ''.dup
-      fixed_f007 << rec_type
-      case rec_type
-      when 'a'
-        fixed_f007 << fix_map_f007(specific_f007)
-      when 'c'
-        fixed_f007 << fix_electronic_f007(specific_f007)
-      when 'd'
-        fixed_f007 << fix_globe_f007(specific_f007)
-      when 'f'
-        fixed_f007 << fix_tactile_f007(specific_f007)
-      when 'g'
-        fixed_f007 << fix_proj_f007(specific_f007)
-      when 'h'
-        fixed_f007 << fix_microform_f007(specific_f007)
-      when 'k'
-        fixed_f007 << fix_nonproj_f007(specific_f007)
-      when 'm'
-        fixed_f007 << fix_motion_pic_f007(specific_f007)
-      when 'o'
-        fixed_f007 << fix_kit_f007(specific_f007)
-      when 'q'
-        fixed_f007 << fix_notated_mus_f007(specific_f007)
-      when 'r'
-        fixed_f007 << fix_remote_f007(specific_f007)
-      when 's'
-        fixed_f007 << fix_sound_rec_f007(specific_f007)
-      when 't'
-        fixed_f007 << fix_text_f007(specific_f007)
-      when 'v'
-        fixed_f007 << fix_video_f007(specific_f007)
-      when 'z'
-        fixed_f007 << fix_unspec_f007(specific_f007)
-      end
-      record.fields[field_index] = MARC::ControlField.new('007', fixed_f007)
+      fixed_f007 = rec_type.dup
+      fixed_f007 << send(method_name, field.value[1..])
+      record.fields[record.fields.index(field)] = MARC::ControlField.new('007', fixed_f007)
     end
     record
   end
 
   def fix_map_f007(specific_f007)
-    return specific_f007 unless specific_f007.length == 7
+    return specific_f007 unless specific_f007.size == 7
 
-    fixed_field = ''.dup
-    mat_designation = specific_f007[0]
-    color = specific_f007[2]
-    color = color.gsub('b', 'c')
-    medium = specific_f007[3]
-    medium = medium.gsub(/[^a-gijlnp-z|]/, 'u')
-    repro_type = specific_f007[4]
-    repro_type = repro_type.gsub(/[^fnuz|]/, 'u')
-    prod_details = specific_f007[5]
-    prod_details = prod_details.gsub(/[^abcduz|]/, 'u')
-    aspect = specific_f007[6]
-    aspect = aspect.gsub('u', '|')
-    fixed_field << mat_designation
-    fixed_field << ' '
-    fixed_field << color
-    fixed_field << medium
-    fixed_field << repro_type
-    fixed_field << prod_details
-    fixed_field << aspect
-    fixed_field
+    [
+      specific_f007[0], # material designation
+      ' ', # undefined
+      specific_f007[2].gsub('b', 'c'), # color
+      specific_f007[3].gsub(/[^a-gijlnp-z|]/, 'u'), # physical medium
+      specific_f007[4].gsub(/[^fnuz|]/, 'u'), # type of reproduction
+      specific_f007[5].gsub(/[^abcduz|]/, 'u'), # reproduction details
+      specific_f007[6].gsub('u', '|') # positive aspect
+    ].join
   end
 
+  def fix_electronic_bit_depth(bit_depth)
+    return bit_depth if %w[mmm nnn --- |||].include?(bit_depth)
+
+    bit_depth =~ /^[0-9]{3}$/ ? bit_depth : '---'
+  end
+
+  def sanitize_invalid_value(character, allowed_regex)
+    if character.match?(allowed_regex)
+      character
+    else
+      'u'
+    end
+  end
+
+  def allowed_electronic_f007_values
+    {
+      0 => /[a-fhjkmorsuz|]/, 2 => /[abcghmnuz|]/,
+      3 => /[aegijnouvz|]/, 4 => /[ au|]/,
+      8 => /[amu|]/, 9 => /[anpu|]/,
+      10 => /[abcdmnu|]/, 11 => /[abdmu|]/,
+      12 => /[anpru|]/
+    }
+  end
+
+  # See https://loc.gov/marc/bibliographic/bd007c.html for descriptions of the positions
   def fix_electronic_f007(specific_f007)
     return specific_f007 unless specific_f007.length > 4
 
-    fixed_field = ''.dup
-    mat_designation = specific_f007[0]
-    mat_designation = mat_designation.gsub(/[^a-fhjkmorsuz|]/, 'u')
-    color = specific_f007[2]
-    color = color.gsub(/[^abcghmnuz|]/, 'u')
-    dimensions = specific_f007[3]
-    dimensions = dimensions.gsub(/[^aegijnouvz|]/, 'u')
-    sound = specific_f007[4]
-    sound = sound.gsub(/[^ au|]/, 'u')
-    fixed_field << mat_designation
-    fixed_field << ' '
-    fixed_field << color
-    fixed_field << dimensions
-    fixed_field << sound
-    return fixed_field if specific_f007.length == 5
-
-    bit_depth = specific_f007[5..7]
-    unless %w[mmm nnn --- |||].include? bit_depth
-      bit_depth =~ /^[0-9]{3}$/ ? bit_depth : '---'
-    end
-    fixed_field << bit_depth
-    formats = specific_f007[8]
-    return fixed_field unless formats
-
-    formats = formats.gsub(/[^amu|]/, 'u')
-    fixed_field << formats
-    quality = specific_f007[9]
-    return fixed_field unless quality
-
-    quality = quality.gsub(/[^anpu|]/, 'u')
-    fixed_field << quality
-    source = specific_f007[10]
-    return fixed_field unless source
-
-    source = source.gsub(/[^abcdmnu|]/, 'u')
-    fixed_field << source
-    compression = specific_f007[11]
-    return fixed_field unless compression
-
-    compression = compression.gsub(/[^abdmu|]/, 'u')
-    fixed_field << compression
-    reformatting = specific_f007[12]
-    return fixed_field unless reformatting
-
-    reformatting = reformatting.gsub(/[^anpru|]/, 'u')
-    fixed_field << reformatting
-    fixed_field
+    chars = specific_f007.chars
+    chars.each_with_index.map do |character, index|
+      if (5..7).cover?(index)
+        index == 5 ? fix_electronic_bit_depth(chars[5..7].join) : ''
+      else
+        index == 1 ? ' ' : sanitize_invalid_value(character, allowed_electronic_f007_values[index])
+      end
+    end.join
   end
 
   def fix_globe_f007(specific_f007)
