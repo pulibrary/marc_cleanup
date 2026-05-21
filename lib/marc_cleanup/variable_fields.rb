@@ -356,15 +356,25 @@ module MarcCleanup
     return record if blocked_f880_26x?(record)
 
     f880_26x = record.fields('880').find { |field| field['6'] =~ /^26[04]/ }
-    field_index = record.fields.index(f880_26x)
-    record.fields[field_index].subfields.find do |subfield|
-      subfield.code == '6'
-    end.value = "#{f26x_tag(record)}-#{extra_subf6_info(f880_26x)}"
+    extra_subf6_info = subf6_info(f880_26x)
+    f26x_info = f26x_info(record)
+    fix_f880_26x_linked_field(f880_26x, f26x_info, extra_subf6_info)
     record
   end
 
-  def f26x_tag(record)
-    record.fields(%w[260 264]).find { |field| field['6'] =~ /^880/ }.tag
+  def fix_f880_26x_linked_field(field, f26x_info, extra_subf6_info)
+    field.indicator2 = f26x_info[:indicator2]
+    field.subfields.find do |subfield|
+      subfield.code == '6'
+    end.value = "#{f26x_info[:tag]}-#{extra_subf6_info[:sequence_number]}#{extra_subf6_info[:char_info]}"
+  end
+
+  def f26x_info(record)
+    field = record.fields(%w[260 264]).find { |field| field['6'] =~ /^880/ }
+    {
+      tag: field.tag,
+      indicator2: field.indicator2
+    }
   end
 
   def blocked_f880_26x?(record)
@@ -438,8 +448,11 @@ module MarcCleanup
     end
   end
 
-  def extra_subf6_info(field)
-    field['6'].gsub(/^[0-9]+-[0-9]+([^0-9]*.*$)/, '\1')
+  def subf6_info(field)
+    {
+      sequence_number: field['6'].gsub(/^.*-([0-9]+)[^0-9]*.*$/, '\1'),
+      char_info: field['6'].gsub(/^.*-[0-9]+([^0-9]*.*)$/, '\1')
+    }
   end
 
   ### Scenario 7: One $6 per tag in non-880 fields, and one $6 per tag in 880 fields:
@@ -466,7 +479,7 @@ module MarcCleanup
     return unless paired_field
 
     paired_field.subfields.find { |subfield| subfield.code == '6' }
-                .value = "#{tag}-#{sequence}#{extra_subf6_info(paired_field)}"
+                .value = "#{tag}-#{sequence}#{subf6_info(paired_field)[:char_info]}"
   end
 
   def blocked_f880_resequence?(record)

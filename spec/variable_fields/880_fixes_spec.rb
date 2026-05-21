@@ -219,6 +219,7 @@ RSpec.describe 'fix_f880_subf6_paired_fields' do
     end
   end
 end
+
 RSpec.describe 'fix_f880_subf6_variable_fields' do
   let(:record) { MARC::Record.new_from_hash('fields' => fields) }
 
@@ -250,6 +251,93 @@ RSpec.describe 'fix_f880_subf6_variable_fields' do
       changed_record = fix_f880_subf6_variable_fields(record)
       expect(changed_record['245']['6']).to eq '880-01'
       expect(changed_record['720']['6']).to be_nil
+    end
+  end
+end
+
+RSpec.describe 'fix_f880_26x' do
+  let(:record) { MARC::Record.new_from_hash('fields' => fields) }
+
+  context 'one 264 field and one linked 880 for 260' do
+    let(:fields) do
+      [
+        { '880' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { '6' => '260-01/(S' },
+                       { 'a' => 'Τίτλος' }
+                     ] } },
+        { '264' => { 'ind1' => ' ',
+                     'ind2' => '1',
+                     'subfields' => [
+                       { '6' => '880-01' },
+                       { 'a' => 'Titlos' }
+                     ] } }
+      ]
+    end
+
+    it 'pairs the fields and updates the second indicator of the 880 to match the 264 field' do
+      changed_record = fix_f880_26x(record)
+      expect(changed_record['264']['6']).to eq '880-01'
+      expect(changed_record['880']['6']).to eq '264-01/(S'
+      expect(changed_record['880'].indicator2).to eq '1'
+    end
+  end
+
+  context 'one 260 field and one linked 880 for 264' do
+    let(:fields) do
+      [
+        { '880' => { 'ind1' => ' ',
+                     'ind2' => '1',
+                     'subfields' => [
+                       { '6' => '264-01/(S' },
+                       { 'a' => 'Τίτλος' }
+                     ] } },
+        { '260' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { '6' => '880-01' },
+                       { 'a' => 'Titlos' }
+                     ] } }
+      ]
+    end
+
+    it 'pairs the fields and updates the second indicator of the 880 to match the 260 field' do
+      changed_record = fix_f880_26x(record)
+      expect(changed_record['260']['6']).to eq '880-01'
+      expect(changed_record['880']['6']).to eq '260-01/(S'
+      expect(changed_record['880'].indicator2).to eq ' '
+    end
+  end
+
+  context 'one 260 field and two linked 880 for 264' do
+    let(:fields) do
+      [
+        { '880' => { 'ind1' => ' ',
+                     'ind2' => '1',
+                     'subfields' => [
+                       { '6' => '264-01/(S' },
+                       { 'a' => 'Τίτλος' }
+                     ] } },
+        { '880' => { 'ind1' => ' ',
+                     'ind2' => '0',
+                     'subfields' => [
+                       { '6' => '264-02/(S' },
+                       { 'a' => 'Τίτλος2' }
+                     ] } },
+        { '260' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { '6' => '880-01' },
+                       { 'a' => 'Titlos' }
+                     ] } }
+      ]
+    end
+
+    it 'does not modify the record' do
+      original_record = record.to_s.dup
+      changed_record = fix_f880_26x(record)
+      expect(changed_record.to_s).to eq original_record
     end
   end
 end
