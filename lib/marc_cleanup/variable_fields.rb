@@ -442,25 +442,6 @@ module MarcCleanup
     field['6'].gsub(/^[0-9]+-[0-9]+([^0-9]*.*$)/, '\1')
   end
 
-  def resequence_paired_field(sequence, tag, record)
-    paired_field = record.fields('880').find { |field| field['6'] =~ /#{tag}-(?!00)/ }
-    return unless paired_field
-
-    paired_field.subfields.find { |subfield| subfield.code == '6' }
-                .value = "#{tag}-#{sequence}#{extra_subf6_info(paired_field)}"
-  end
-
-  def resequence_field_tag(sequence:, tag:, record:)
-    f880 = record.fields(tag).find { |field| field['6'] }
-    f880.subfields.find { |subfield| subfield.code == '6' }.value = "880-#{sequence}"
-    resequence_paired_field(sequence, tag, record)
-  end
-
-  def blocked_f880_resequence?(record)
-    f880_pairings(record).group_by { |tag| tag[0..2] }.tally.any? { |_tag, count| count > 1 } ||
-      linked_field_pairings(record).group_by { |tag| tag[0..2] }.tally.any? { |_tag, count| count > 1 }
-  end
-
   ### Scenario 7: One $6 per tag in non-880 fields, and one $6 per tag in 880 fields:
   ###   Reorder sequence of 880s; if there is a $6 in a variable field and no corresponding 880, reserve
   ###   that field sequence for the variable field
@@ -472,6 +453,25 @@ module MarcCleanup
       resequence_field_tag(sequence: format('%02d', index + 1), tag: tag, record: record)
     end
     record
+  end
+
+  def resequence_field_tag(sequence:, tag:, record:)
+    f880 = record.fields(tag).find { |field| field['6'] }
+    f880.subfields.find { |subfield| subfield.code == '6' }.value = "880-#{sequence}"
+    resequence_paired_field(sequence, tag, record)
+  end
+
+  def resequence_paired_field(sequence, tag, record)
+    paired_field = record.fields('880').find { |field| field['6'] =~ /#{tag}-(?!00)/ }
+    return unless paired_field
+
+    paired_field.subfields.find { |subfield| subfield.code == '6' }
+                .value = "#{tag}-#{sequence}#{extra_subf6_info(paired_field)}"
+  end
+
+  def blocked_f880_resequence?(record)
+    f880_pairings(record).group_by { |tag| tag[0..2] }.any? { |_tag, fields| fields.size > 1 } ||
+      linked_field_pairings(record).group_by { |tag| tag[0..2] }.any? { |_tag, fields| fields.size > 1 }
   end
 
   def orphan_linked_fields(record)
