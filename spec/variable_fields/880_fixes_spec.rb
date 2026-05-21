@@ -98,3 +98,124 @@ RSpec.describe 'resequence_f880_pairs' do
     end
   end
 end
+
+RSpec.describe 'fix_unlinked_f880' do
+  let(:record) { MARC::Record.new_from_hash('fields' => fields) }
+
+  context 'has an 880 field without a corresponding linked tag' do
+    let(:fields) do
+      [
+        { '880' => { 'ind1' => '1',
+                     'ind2' => '0',
+                     'subfields' => [
+                       { '6' => '245-01/(S' },
+                       { 'a' => 'Τίτλος' }
+                     ] } },
+        { '245' => { 'ind1' => '1',
+                     'ind2' => '0',
+                     'subfields' => [
+                       { '6' => '880-01' },
+                       { 'a' => 'Titlos' }
+                     ] } },
+        { '880' => { 'ind1' => '1',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { '6' => '700-02/Cyrl' },
+                       { 'a' => 'Останній, Перший' }
+                     ] } }
+      ]
+    end
+
+    it 'changes the unlinked 880 field sequence to -00' do
+      changed_record = fix_unlinked_f880(record)
+      author_f880 = changed_record.fields('880').find { |field| field['6'][0..2] == '700' }
+      expect(author_f880['6']).to eq '700-00/Cyrl'
+    end
+  end
+end
+
+RSpec.describe 'fix_f880_subf6_paired_fields' do
+  let(:record) { MARC::Record.new_from_hash('fields' => fields) }
+
+  context 'unique linked field has a missing $6' do
+    let(:fields) do
+      [
+        { '880' => { 'ind1' => '1',
+                     'ind2' => '0',
+                     'subfields' => [
+                       { '6' => '245-01/(S' },
+                       { 'a' => 'Τίτλος' }
+                     ] } },
+        { '245' => { 'ind1' => '1',
+                     'ind2' => '0',
+                     'subfields' => [
+                       { 'a' => 'Titlos' }
+                     ] } }
+      ]
+    end
+
+    it 'links the unique field to the 880' do
+      changed_record = fix_f880_subf6_paired_fields(record)
+      expect(changed_record['245']['6']).to eq '880-01'
+    end
+  end
+
+  context 'non-unique linked field has a missing $6' do
+    let(:fields) do
+      [
+        { '720' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { 'a' => 'Title 2' }
+                     ] } },
+        { '720' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { 'a' => 'Titlos' }
+                     ] } },
+        { '880' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { '6' => '720-02/Cyrl' },
+                       { 'a' => 'Останній' }
+                     ] } }
+      ]
+    end
+
+    it 'does not attempt to link the fields' do
+      changed_record = fix_f880_subf6_paired_fields(record)
+      expect(changed_record['880']['6']).to eq '720-02/Cyrl'
+      expect(changed_record.fields('720').any? { |field| field['6'] }).to be false
+    end
+  end
+
+  context 'linked field with non-unique 880 has a missing $6' do
+    let(:fields) do
+      [
+        { '880' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { '6' => '720-01/(S' },
+                       { 'a' => 'Τίτλος' }
+                     ] } },
+        { '720' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { 'a' => 'Titlos' }
+                     ] } },
+        { '880' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { '6' => '720-02/Cyrl' },
+                       { 'a' => 'Останній' }
+                     ] } }
+      ]
+    end
+
+    it 'does not attempt to link the fields' do
+      changed_record = fix_f880_subf6_paired_fields(record)
+      expect(changed_record.fields('880').map { |field| field['6'] }.sort).to eq ['720-01/(S', '720-02/Cyrl']
+      expect(changed_record.fields('720').any? { |field| field['6'] }).to be false
+    end
+  end
+end

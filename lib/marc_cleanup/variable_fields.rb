@@ -335,7 +335,7 @@ module MarcCleanup
     fix_f880_26x(record)
     fix_f880_subf6_variable_fields(record)
     fix_f880_subf6_paired_fields(record)
-    fix_f880_unlinked_f880(record)
+    fix_unlinked_f880(record)
     resequence_f880_pairs(record)
   end
 
@@ -411,7 +411,7 @@ module MarcCleanup
   def fix_unmatched_paired_tag(record, tag)
     return if blocked_unmatched_pair?(record, tag)
 
-    record.fields('880').find { |field| field['6'] =~ /^#{tag}/ }
+    paired_field = record.fields('880').find { |field| field['6'] =~ /^#{tag}/ }
     sequence_number = paired_field['6'].gsub(/^#{tag}-([0-9]{2}).*/, '\1')
     record.fields.find do |field|
       field.tag == tag
@@ -420,7 +420,7 @@ module MarcCleanup
 
   ### Scenario 6: 880 field has a tag in $6 that is not represented in a variable field:
   ###   Change sequence number to '00' to make it an unlinked 880
-  def fix_f880_unlinked_f880(record)
+  def fix_unlinked_f880(record)
     linked_field_tags = record.fields(LINKED_FIELD_TAGS).map(&:tag).uniq
     f880_subf6 = f880_pairings(record).map { |tag| tag[0..2] }.uniq
     unmatched_paired_subf6 = f880_subf6 - linked_field_tags
