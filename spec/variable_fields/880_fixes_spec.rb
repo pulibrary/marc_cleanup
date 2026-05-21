@@ -219,3 +219,37 @@ RSpec.describe 'fix_f880_subf6_paired_fields' do
     end
   end
 end
+RSpec.describe 'fix_f880_subf6_variable_fields' do
+  let(:record) { MARC::Record.new_from_hash('fields' => fields) }
+
+  context 'some linked fields are missing 880 pairing' do
+    let(:fields) do
+      [
+        { '880' => { 'ind1' => '1',
+                     'ind2' => '0',
+                     'subfields' => [
+                       { '6' => '245-01/(S' },
+                       { 'a' => 'Τίτλος' }
+                     ] } },
+        { '245' => { 'ind1' => '1',
+                     'ind2' => '0',
+                     'subfields' => [
+                       { '6' => '880-01' },
+                       { 'a' => 'Titlos' }
+                     ] } },
+        { '720' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { '6' => '880-02' },
+                       { 'a' => 'Titlos' }
+                     ] } }
+      ]
+    end
+
+    it 'only touches the missing 880 pairing' do
+      changed_record = fix_f880_subf6_variable_fields(record)
+      expect(changed_record['245']['6']).to eq '880-01'
+      expect(changed_record['720']['6']).to be_nil
+    end
+  end
+end
