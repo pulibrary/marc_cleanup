@@ -184,11 +184,16 @@ module MarcCleanup
     false
   end
 
+  def extra_space_subfield_test(subfield, subfields_to_ignore = [])
+    (!subfields_to_ignore.include?(subfield.code) && subfield.value =~ BLANK_REGEX) ||
+    subfield.code == '6' && subfield.value =~ /[[:blank:]]/
+  end
+
   def extra_space_f880_f533(record)
     record.fields('880').select do |field|
       field['6'] =~ /^533/ &&
         field.subfields.any? do |subfield|
-          subfield.code != '7' && subfield.value =~ BLANK_REGEX
+          extra_space_subfield_test(subfield, %w[7])
         end
     end
   end
@@ -196,7 +201,7 @@ module MarcCleanup
   def extra_space_f533(record)
     fields = record.fields('533').select do |field|
       field.subfields.any? do |subfield|
-        subfield.code != '7' && subfield.value =~ BLANK_REGEX
+        extra_space_subfield_test(subfield, %w[7])
       end
     end
     fields + extra_space_f880_f533(record)
@@ -204,10 +209,9 @@ module MarcCleanup
 
   def extra_space_f880_f76x_f830(record)
     record.fields('880').select do |field|
-      field['6'] &&
-        ('760'..'830').include?(field['6'][0..2]) &&
+      ('760'..'830').include?(field['6'].gsub(/^[^0-9]*([0-9]+)[^0-9]*.*$/, '\1')) &&
         field.subfields.any? do |subfield|
-          subfield.code != '7' && subfield.value =~ BLANK_REGEX
+          extra_space_subfield_test(subfield, %w[7])
         end
     end
   end
@@ -215,19 +219,18 @@ module MarcCleanup
   def extra_space_f76x_f830(record)
     fields = record.fields('760'..'830').select do |field|
       field.subfields.any? do |subfield|
-        !%w[w 7].include?(subfield.code) && subfield.value =~ BLANK_REGEX
+        extra_space_subfield_test(subfield, %w[w 7])
       end
     end
     fields + extra_space_f880_f76x_f830(record)
   end
 
   def extra_space_f880_other_fields(record)
-    tag_regex = /[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
+    tag_regex = /^[^0-9]*[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
     record.fields('880').select do |field|
-      field['6'] &&
-        field['6'][0..2] =~ tag_regex &&
+      field['6'] =~ tag_regex &&
         field.subfields.any? do |subfield|
-          subfield.value =~ BLANK_REGEX
+          extra_space_subfield_test(subfield)
         end
     end
   end
@@ -237,7 +240,7 @@ module MarcCleanup
     fields = record.fields.select do |field|
       field.tag =~ tag_regex &&
         field.subfields.any? do |subfield|
-          subfield.value =~ BLANK_REGEX
+          (subfield.code != '6' && subfield.value =~ BLANK_REGEX) || (subfield.code == '6' && subfield.value =~ /[[:blank:]]/)
         end
     end
     fields + extra_space_f880_other_fields(record)
@@ -256,12 +259,20 @@ module MarcCleanup
     string.gsub(/^[[:blank:]]+(.*)$/, '\1')
   end
 
+  def subf6_extra_space_gsub(string)
+    string.gsub(/[[:blank:]]/, '')
+  end
+
   def extra_space_fix_field(field:, skip_subfields: [])
     field.subfields.each do |subfield|
       next if skip_subfields.include?(subfield.code)
       next unless subfield.value
 
-      subfield.value = extra_space_gsub(subfield.value.dup)
+      if subfield.code == '6'
+        subfield.value = subf6_extra_space_gsub(subfield.value.dup)
+      else
+        subfield.value = extra_space_gsub(subfield.value.dup)
+      end
     end
     field
   end
@@ -316,7 +327,7 @@ module MarcCleanup
   end
 
   ### Scenario 1: $6 value contains spaces in 880 field or variable field:
-  ###   Remove all space characters
+  ###   Remove all space characters [handled by extra_space_fix]
   ### Scenario 2: One 264 field exists with $6, and one 880 field with $6 260:
   ###   Change $6 value in 880 to 264
   ### Scenario 3: One 260 field exists, and one 880 field with $6 264:
@@ -331,21 +342,13 @@ module MarcCleanup
   ###   Reorder sequence of 880s; if there is a $6 in a variable field and no corresponding 880, reserve
   ###   that field sequence for the variable field
   def fix_f880(record)
-    fix_subf6_spaces(record)
+    extra_space_fix(record)
     fix_f880_26x(record)
     fix_f880_subf6_variable_fields(record)
     fix_f880_subf6_paired_fields(record)
     fix_unlinked_f880(record)
     resequence_f880_pairs(record)
-  end
-
-  ### Scenario 1: $6 value contains spaces in 880 field or variable field:
-  ###   Remove all space characters
-  def fix_subf6_spaces(record)
-    target_fields = record.fields('010'..'899').select { |field| field['6'] =~ /\s/ }
-    target_fields.each do |field|
-      record.fields[field_index].subfields.find { |subfield| subfield.code == '6' }.value = field['6'].gsub(/\s/, '')
-    end
+    record
   end
 
   ### Scenario 2: One 264 field exists with $6, and one 880 field with $6 260:

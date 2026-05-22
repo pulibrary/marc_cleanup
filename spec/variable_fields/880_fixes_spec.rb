@@ -341,3 +341,48 @@ RSpec.describe 'fix_f880_26x' do
     end
   end
 end
+
+RSpec.describe 'fix_f880' do
+  let(:record) { MARC::Record.new_from_hash('fields' => fields) }
+
+  context 'has an out-of-order sequence, a 260/264 mismatch, and extra spaces' do
+    let(:fields) do
+      [
+        { '880' => { 'ind1' => '1',
+                     'ind2' => '0',
+                     'subfields' => [
+                       { '6' => ' 245-01/(S' },
+                       { 'a' => 'Τίτλος' }
+                     ] } },
+        { '245' => { 'ind1' => '1',
+                     'ind2' => '0',
+                     'subfields' => [
+                       { '6' => '880- 02' },
+                       { 'a' => 'Titlos' }
+                     ] } },
+        { '880' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { '6' => '260 -02/Cyrl' },
+                       { 'a' => 'Останній, Перший' }
+                     ] } },
+        { '264' => { 'ind1' => ' ',
+                     'ind2' => '1',
+                     'subfields' => [
+                       { '6' => '880-01 ' },
+                       { 'a' => 'Last, First' }
+                     ] } }
+      ]
+    end
+
+    it 'corrects the record' do
+      changed_record = fix_f880(record)
+      title_f880 = changed_record.fields('880').find { |field| field['6'][0..2] == '245' }
+      pub_f880 = changed_record.fields('880').find { |field| field['6'][0..2] == '264' }
+      expect(changed_record['245'].to_s).to eq '245 10 $6 880-01 $a Titlos '
+      expect(changed_record['264'].to_s).to eq '264  1 $6 880-02 $a Last, First '
+      expect(pub_f880.to_s).to eq '880  1 $6 264-02/Cyrl $a Останній, Перший '
+      expect(title_f880.to_s).to eq '880 10 $6 245-01/(S $a Τίτλος '
+    end
+  end
+end
