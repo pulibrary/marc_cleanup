@@ -134,7 +134,7 @@ RSpec.describe 'fix_unlinked_f880' do
   end
 end
 
-RSpec.describe 'fix_f880_subf6_paired_fields' do
+RSpec.describe 'fix_f880_subf6_linked_fields' do
   let(:record) { MARC::Record.new_from_hash('fields' => fields) }
 
   context 'unique linked field has a missing $6' do
@@ -155,7 +155,7 @@ RSpec.describe 'fix_f880_subf6_paired_fields' do
     end
 
     it 'links the unique field to the 880' do
-      changed_record = fix_f880_subf6_paired_fields(record)
+      changed_record = fix_f880_subf6_linked_fields(record)
       expect(changed_record['245']['6']).to eq '880-01'
     end
   end
@@ -183,7 +183,7 @@ RSpec.describe 'fix_f880_subf6_paired_fields' do
     end
 
     it 'does not attempt to link the fields' do
-      changed_record = fix_f880_subf6_paired_fields(record)
+      changed_record = fix_f880_subf6_linked_fields(record)
       expect(changed_record['880']['6']).to eq '720-02/Cyrl'
       expect(changed_record.fields('720').any? { |field| field['6'] }).to be false
     end
@@ -213,7 +213,7 @@ RSpec.describe 'fix_f880_subf6_paired_fields' do
     end
 
     it 'does not attempt to link the fields' do
-      changed_record = fix_f880_subf6_paired_fields(record)
+      changed_record = fix_f880_subf6_linked_fields(record)
       expect(changed_record.fields('880').map { |field| field['6'] }.sort).to eq ['720-01/(S', '720-02/Cyrl']
       expect(changed_record.fields('720').any? { |field| field['6'] }).to be false
     end
@@ -258,7 +258,7 @@ end
 RSpec.describe 'fix_f880_26x' do
   let(:record) { MARC::Record.new_from_hash('fields' => fields) }
 
-  context 'one 264 field and one linked 880 for 260' do
+  context 'one 264 field and one linked 880 for 260 with non-zero sequence' do
     let(:fields) do
       [
         { '880' => { 'ind1' => ' ',
@@ -277,6 +277,32 @@ RSpec.describe 'fix_f880_26x' do
     end
 
     it 'pairs the fields and updates the second indicator of the 880 to match the 264 field' do
+      changed_record = fix_f880_26x(record)
+      expect(changed_record['264']['6']).to eq '880-01'
+      expect(changed_record['880']['6']).to eq '264-01/(S'
+      expect(changed_record['880'].indicator2).to eq '1'
+    end
+  end
+
+  context 'one 264 field and one linked 880 for 260 with 00 sequence in 880' do
+    let(:fields) do
+      [
+        { '880' => { 'ind1' => ' ',
+                     'ind2' => ' ',
+                     'subfields' => [
+                       { '6' => '260-00/(S' },
+                       { 'a' => 'Τίτλος' }
+                     ] } },
+        { '264' => { 'ind1' => ' ',
+                     'ind2' => '1',
+                     'subfields' => [
+                       { '6' => '880-01' },
+                       { 'a' => 'Titlos' }
+                     ] } }
+      ]
+    end
+
+    it 'pairs the fields, corrects the sequence, and updates the second indicator of the 880 to match the 264 field' do
       changed_record = fix_f880_26x(record)
       expect(changed_record['264']['6']).to eq '880-01'
       expect(changed_record['880']['6']).to eq '264-01/(S'
