@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+### Error detection and fixes for variable fields that are not paired
 module MarcCleanup
   BLANK_REGEX = /^.*[[:blank:]]{2,}.*$|^.*[[:blank:]]+$|^[[:blank:]]+(.*)$/
   ### Remove non-numerical strings and append a new 020$q with the string
@@ -184,11 +185,16 @@ module MarcCleanup
     false
   end
 
+  def extra_space_subfield_test(subfield, subfields_to_ignore = [])
+    (!subfields_to_ignore.include?(subfield.code) && subfield.value =~ BLANK_REGEX) ||
+      (subfield.code == '6' && subfield.value =~ /[[:blank:]]/)
+  end
+
   def extra_space_f880_f533(record)
     record.fields('880').select do |field|
       field['6'] =~ /^533/ &&
         field.subfields.any? do |subfield|
-          subfield.code != '7' && subfield.value =~ BLANK_REGEX
+          extra_space_subfield_test(subfield, %w[7])
         end
     end
   end
@@ -196,7 +202,7 @@ module MarcCleanup
   def extra_space_f533(record)
     fields = record.fields('533').select do |field|
       field.subfields.any? do |subfield|
-        subfield.code != '7' && subfield.value =~ BLANK_REGEX
+        extra_space_subfield_test(subfield, %w[7])
       end
     end
     fields + extra_space_f880_f533(record)
@@ -204,10 +210,9 @@ module MarcCleanup
 
   def extra_space_f880_f76x_f830(record)
     record.fields('880').select do |field|
-      field['6'] &&
-        ('760'..'830').include?(field['6'][0..2]) &&
+      ('760'..'830').include?(field['6'].to_s.gsub(/^[^0-9]*([0-9]+)[^0-9]*.*$/, '\1')) &&
         field.subfields.any? do |subfield|
-          subfield.code != '7' && subfield.value =~ BLANK_REGEX
+          extra_space_subfield_test(subfield, %w[7])
         end
     end
   end
@@ -215,19 +220,18 @@ module MarcCleanup
   def extra_space_f76x_f830(record)
     fields = record.fields('760'..'830').select do |field|
       field.subfields.any? do |subfield|
-        !%w[w 7].include?(subfield.code) && subfield.value =~ BLANK_REGEX
+        extra_space_subfield_test(subfield, %w[w 7])
       end
     end
     fields + extra_space_f880_f76x_f830(record)
   end
 
   def extra_space_f880_other_fields(record)
-    tag_regex = /[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
+    tag_regex = /^[^0-9]*[1-469]..|0[2-9].|01[1-9]|7[0-5].|5[0-24-9].|53[0-24-9]/
     record.fields('880').select do |field|
-      field['6'] &&
-        field['6'][0..2] =~ tag_regex &&
+      field['6'] =~ tag_regex &&
         field.subfields.any? do |subfield|
-          subfield.value =~ BLANK_REGEX
+          extra_space_subfield_test(subfield)
         end
     end
   end
@@ -237,7 +241,8 @@ module MarcCleanup
     fields = record.fields.select do |field|
       field.tag =~ tag_regex &&
         field.subfields.any? do |subfield|
-          subfield.value =~ BLANK_REGEX
+          (subfield.code != '6' && subfield.value =~ BLANK_REGEX) ||
+            (subfield.code == '6' && subfield.value =~ /[[:blank:]]/)
         end
     end
     fields + extra_space_f880_other_fields(record)
@@ -256,12 +261,20 @@ module MarcCleanup
     string.gsub(/^[[:blank:]]+(.*)$/, '\1')
   end
 
+  def subf6_extra_space_gsub(string)
+    string.gsub(/[[:blank:]]/, '')
+  end
+
   def extra_space_fix_field(field:, skip_subfields: [])
     field.subfields.each do |subfield|
       next if skip_subfields.include?(subfield.code)
       next unless subfield.value
 
-      subfield.value = extra_space_gsub(subfield.value.dup)
+      subfield.value = if subfield.code == '6'
+                         subf6_extra_space_gsub(subfield.value.dup)
+                       else
+                         extra_space_gsub(subfield.value.dup)
+                       end
     end
     field
   end
@@ -301,7 +314,7 @@ module MarcCleanup
       codes = field.subfields.map(&:code)
       field_a = field['a']
       (field_a && !subf_a_values.include?(field_a)) ||
-        (field_a.to_s.empty? && (subf_codes & codes).size.positive?)
+        (field_a.to_s.empty? && subf_codes.intersect?(codes))
     end
   end
 
@@ -313,32 +326,6 @@ module MarcCleanup
     return true unless record['040'] && record['040']['c']
 
     false
-  end
-
-  def pair_880_errors?(record)
-    return true if record.fields('880').select { |field| field['6'].nil? }.size.positive?
-
-    pair_880s = f880_pairings(record)
-    linked_fields = linked_field_pairings(record)
-    pair_880s.uniq != pair_880s || pair_880s.uniq.sort != linked_fields.uniq.sort
-  end
-
-  def f880_pairings(record)
-    target_fields = record.fields('880').select do |field|
-      field['6'] =~ /^[0-9]{3}-[0-9][1-9]/
-    end
-    target_fields.map do |field|
-      field['6'].gsub(/^([0-9]{3}-[0-9]{2}).*$/, '\1')
-    end
-  end
-
-  def linked_field_pairings(record)
-    target_fields = record.fields('010'..'899').select do |field|
-      field.tag != '880' && field['6']
-    end
-    target_fields.map do |field|
-      "#{field.tag}-#{field['6'].gsub(/^880-([0-9]{2}).*$/, '\1')}"
-    end
   end
 
   def f130_f240?(record)
