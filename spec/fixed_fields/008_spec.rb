@@ -48,6 +48,11 @@ RSpec.describe 'field 008 methods' do
           it { expect(MarcCleanup.f008_errors(record)).to eq valid: true, errors: [] }
         end
       end
+
+      context 'when the language code is not supplied' do
+        let(:fields) { [{ '008' => '230414s9999||||xx |||||||||||||| ||   ||' }] }
+        it { expect(MarcCleanup.f008_errors(record)).to eq valid: true, errors: [] }
+      end
     end
 
     describe 'invalid record type 008' do
