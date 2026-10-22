@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    marc_cleanup (1.0.1)
+    marc_cleanup (1.0.3)
       marc (~> 1.0)
       nokogiri
 

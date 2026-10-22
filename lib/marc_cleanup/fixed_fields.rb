@@ -39,7 +39,7 @@ module MarcCleanup
     return true unless field[0..5] =~ /^[0-9]{6}$/ # date entered
     return true if date_f008_error?(field)
     return true unless (PLACE_CODES + ['|||']).include?(field[15..17]) # place of publication
-    return true unless (LANGUAGE_CODES + ['|||']).include?(field[35..37]) # language code
+    return true unless (LANGUAGE_CODES + ['|||', '   ']).include?(field[35..37]) # language code
     return true unless [' ', 'd', 'o', 'r', 's', 'x', '|'].include?(field[38]) # modified record
     return true unless [' ', 'c', 'd', 'u', '|'].include?(field[39]) # cataloging source
 
