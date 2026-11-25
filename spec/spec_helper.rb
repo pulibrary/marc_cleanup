@@ -17,7 +17,7 @@ require 'coveralls'
 require 'simplecov'
 
 SimpleCov.start do
-    add_filter 'spec'
+    skip 'spec'
 end
 Coveralls.wear!
 
